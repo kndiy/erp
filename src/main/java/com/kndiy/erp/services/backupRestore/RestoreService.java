@@ -261,7 +261,6 @@ public class RestoreService {
     }
     private void persistingItemCodeSupplier(JsonObject fieldMap) {
 
-
         String idSupplierFromBackup = fieldMap.get("idSupplier").getAsString();
         String supplierNameEn = root.get("Company").getAsJsonObject().get(idSupplierFromBackup).getAsJsonObject().get("nameEn").getAsString();
         Company supplier = companyClusterService.findCompanyByCompanyNameEn(results, supplierNameEn);

@@ -40,9 +40,6 @@ public class Company implements Serializable {
     private String abbreviation;
     @ManyToMany(mappedBy = "supplierList")
     private SortedSet<ItemCode> itemCodeList;
-    @Fetch(FetchMode.JOIN)
-    @OneToMany(mappedBy = "supplier") //reference to ItemCodeSupplier.supplier
-    private List<ItemCodeSupplier> itemCodeSuppliers;
     public static enum CompanyTypeEnum {
         SELF, SUPPLIER, CUSTOMER, PARTNER, BANK
     }
