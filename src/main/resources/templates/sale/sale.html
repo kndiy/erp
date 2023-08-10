@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Sales Section</title>
+
+    <link th:href="@{/styles/template.css}" rel="stylesheet">
+    <link th:href="@{/styles/sale-template.css}" rel="stylesheet">
+
+    <script type="text/javascript" th:src="@{/scripts/sale-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/sale-article-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/sale-container-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/sale-lot-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/sale-inventory-out-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/api/Generals.js}"></script>
+</head>
+<body>
+    <div th:insert="~{/fragments/header-footer :: header}"></div>
+    <div th:insert="~{/fragments/sale-modals :: new-sale}"></div>
+    <div th:insert="~{/fragments/sale-modals :: edit-sale}"></div>
+    <div th:insert="~{/fragments/sale-modals :: delete-sale}"></div>
+    <div th:insert="~{/fragments/sale-article-modals :: new-article}"></div>
+    <div th:insert="~{/fragments/sale-article-modals :: edit-article}"></div>
+    <div th:insert="~{/fragments/sale-article-modals :: delete-article}"></div>
+    <div th:insert="~{/fragments/sale-container-modals :: new-container}"></div>
+    <div th:insert="~{/fragments/sale-container-modals :: edit-container}"></div>
+    <div th:insert="~{/fragments/sale-container-modals :: delete-container}"></div>
+    <div th:insert="~{/fragments/sale-lot-modals :: new-lot}"></div>
+    <div th:insert="~{/fragments/sale-lot-modals :: edit-lot}"></div>
+    <div th:insert="~{/fragments/sale-lot-modals :: delete-lot}"></div>
+    <div th:insert="~{/fragments/sale-inventory-out-modals :: delete-inventory-out}"></div>
+
+    <div class="everything-container">
+        <div th:if="${results != null && !results.isEmpty()}">
+            <div th:each="result : ${results}">
+                <ul>
+                    <li th:text="${result}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div th:if="${errors != null && !errors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${errors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="ultra-grid">
+            <div class="ultra-square sale">
+                <div class="ultra-square-table-header" id="sale-grid-header">
+                    <span>Sales Data</span>
+                    &nbsp
+                    <input type="button" value="New" onclick="openNewSaleModal()">
+                    &nbsp
+                    <input class="hidden-button" type="button" value="Edt" onclick="openEditSaleModal()" style="display:none;">
+                    &nbsp
+                    <input class="hidden-button" type="button" value="Dlt" onclick="openDeleteSaleModal()" style="display:none;">
+                </div>
+                <div class="grid grid-sale grid-sale-header">
+                    <div class="square square-sale square-table-header flex-center">
+                        <span>Id</span>
+                    </div>
+                    <div class="square square-sale square-table-header">
+                        <span>Date</span>
+                    </div>
+                    <div class="square square-sale square-table-header">
+                        <span>From</span>
+                    </div>
+                    <div class="square square-sale square-table-header">
+                        <span>Customer</span>
+                    </div>
+                </div>
+                <div class="grid grid-sale main" th:each="sale : ${sales}" onclick="onclickSale(this)">
+                    <div class="square-center square-flex square-sale square-check-radio">
+                        <span class="check-radio"></span>
+                        <span class="input-source check-radio-id id" th:text="${sale.idSale}"></span>
+                    </div>
+                    <div class="square square-flex square-sale">
+                        <span class="input-source" th:text="${#temporals.format(sale.orderDate, 'yy/MM/dd')}"></span>
+                    </div>
+                    <div class="square square-flex square-sale">
+                        <span class="input-source" th:text="${sale.companySource.idCompany}" style="display:none;"></span>
+                        <span th:text="${sale.companySource.abbreviation}"></span>
+                    </div>
+                    <div class="square square-flex square-sale">
+                        <span class="input-source" th:text="${sale.customer.idCompany}" style="display:none;"></span>
+                        <span th:text="${sale.customer.abbreviation}" class="sale-abbreviation"></span>
+                    </div>
+                    <div class="square square-flex square-sale">
+                        <span class="input-source" th:text="${sale.orderName}"></span>
+                    </div>
+                    <div class="square square-flex square-sale">
+                        <span class="input-source" th:text="${sale.note}"></span>
+                    </div>
+                    <div class="square square-flex square-sale">
+                        <span class="input-source" th:text="${sale.orderBatch}"></span>
+                    </div>
+
+                    <div class="square square-flex square-sale">
+                        <span class="input-source" th:text="${sale.orderPlacer.idContact}" style="display:none;"></span>
+                        <span th:text="${sale.orderPlacer.contactName}"></span>
+                    </div>
+                    <div class="square square-flex square-sale" style="display: none;" >
+                        <input class="check-box" type="checkbox" th:checked="${sale.doneDelivery}" readonly>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="ultra-square sale-article">
+                <div class="ultra-square-table-header" id="article-grid-header">
+                    <span>Articles Data</span>
+                    &nbsp
+                    <input type="button" value="New" onclick="openNewArticleModal()" style="display: none;" class="hidden-button">
+                    <input type="button" value="Edt" onclick="openEditArticleModal()" class="hidden-button" style="display: none;">
+                    &nbsp
+                    <input type="button" value="Dlt" onclick="openDeleteArticleModal()" class="hidden-button" style="display: none;">
+                </div>
+                <div class="grid grid-sale-article grid-sale-header">
+                    <div class="square square-sale-article square-table-header flex-center"></div>
+                    <div class="square square-sale-article square-table-header flex-center">
+                        <span>Id</span>
+                    </div>
+                    <div class="square square-sale-article square-table-header">
+                        <span>ItemCode/ETD</span>
+                    </div>
+                    <div class="square square-sale-article square-table-header">
+                        <span>Alw</span>
+                    </div>
+                </div>
+
+                <div th:each="idSale : ${idSaleSet}" class="id-sale-key" style="display: none;">
+                    <span th:text="${idSale}" style="display: none;"></span>
+                    <div class="grid grid-sale-article main" onclick="onclickArticle(this)" th:each="article : ${saleArticleMap.get(idSale).articleList}">
+                        <div class="square square-flex square-article">
+                            <span>Sale</span>
+                        </div>
+                        <div class="square square-flex square-article flex-center">
+                            <span th:text="${idSale}"></span>
+                        </div>
+                        <div class="square square-flex square-article">
+                            <span class="input-source" th:text="${article.itemCode.itemCodeString}"></span>
+                        </div>
+                        <div class="square square-flex square-article main">
+                            <span class="input-source allowed-surplus" th:text="${#numbers.formatDecimal(article.allowedSurplus, 0, 'COMMA', 2, 'POINT')}"></span>
+                        </div>
+                        <div class="square square-flex square-article">
+                            <span>Arti </span>
+                        </div>
+                        <div class="square square-flex square-article flex-center square-check-radio">
+                            <span class="check-radio"></span>
+                            <span class="input-source check-radio-id id" th:text="${article.idSaleArticle}"></span>
+                        </div>
+                        <div class="square square-flex square-article">
+                            <span class="input-source" th:text="${#temporals.format(article.requestDeliveryDate, 'yyyy/MMM/dd')}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ultra-square sale-container">
+                <div class="ultra-square-table-header" id="container-grid-header">
+                    <span>Containers Data</span>
+                    &nbsp
+                    <input type="button" value="New" onclick="openNewContainerModal()" style="display: none;" class="hidden-button">
+                    <input type="button" value="Edt" onclick="openEditContainerModal()" class="hidden-button" style="display: none;">
+                    &nbsp
+                    <input type="button" value="Dlt" onclick="openDeleteContainerModal()" class="hidden-button" style="display: none;">
+                </div>
+
+                <div class="grid grid-sale-container grid-sale-header">
+                    <div class="square square-sale-container square-table-header">
+                    </div>
+                    <div class="square square-sale-container square-table-header flex-center">
+                        <span>Id</span>
+                    </div>
+                    <div class="square square-sale-container square-table-header">
+                        <span>Cont/Clm</span>
+                    </div>
+                    <div class="square square-sale-container square-table-header">
+                        <span>ORD/Alw</span>
+                    </div>
+                    <div class="square square-sale-container square-table-header">
+
+                    </div>
+                    <div class="square square-sale-container square-table-header">
+                        <span>R/M Deli</span>
+                    </div>
+                </div>
+
+                <div th:each="idArticle : ${idSaleArticleSet}" class="id-article-key" style="display: none;">
+                    <span th:text="${idArticle}" style="display: none;"></span>
+                    <div class="grid grid-sale-container main" th:each="container : ${saleContainerMap.get(idArticle).saleContainerList}"
+                         onclick="onclickSaleContainer(this)">
+                        <div class="square square-flex square-container main">
+                            <span>Art</span>
+                        </div>
+                        <div class="square square-flex square-container main flex-center">
+                            <span th:text="${container.saleArticle.idSaleArticle}"></span>
+                        </div>
+                        <div class="square square-flex square-container main">
+                            <span th:text="${container.container}" class="input-source"></span>
+                        </div>
+                        <div class="square square-flex square-container main">
+                            <span>0</span>
+                        </div>
+                        <div class="square square-flex square-container main">
+                            <span th:text="${container.orderUnit}" class="input-source"></span>
+                        </div>
+                        <div class="square square-flex square-container main">
+                            <span th:text="${saleContainerQuantityMap.get(__${container.idSaleContainer}__) == null ? '0.00' : saleContainerQuantityMap.get(__${container.idSaleContainer}__).toString()}"></span>
+                        </div>
+                        <div class="square square-flex square-container main">
+                            <span>Con</span>
+                        </div>
+                        <div class="square square-flex square-container main flex-center square-check-radio">
+                            <span class="check-radio"></span>
+                            <span class="check-radio-id id" th:text="${container.idSaleContainer}"></span>
+                        </div>
+                        <div class="square square-flex square-container main">
+                            <span>Clm</span>
+                            <input type="checkbox" th:checked="${container.forClaim}" onclick="return false;" class="input-source">
+                        </div>
+                        <div class="square square-flex square-container main">
+                            <span class="container-calculated"></span>
+                        </div>
+                        <div class="square square-flex square-container main">
+                            <span>0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="ultra-square sale-lot grid-sale-header">
+                <div class="ultra-square-table-header" id="lot-grid-header">
+                    <span>Lots Data</span>
+                    &nbsp
+                    <input type="button" value="New" onclick="openNewLotModal()" style="display: none;" class="hidden-button">
+                    <input type="button" value="Edt" onclick="openEditLotModal()" style="display: none;" class="hidden-button">
+                    &nbsp
+                    <input type="button" value="Dlt" onclick="openDeleteLotModal()" style="display: none;" class="hidden-button">
+                </div>
+
+                <div class="grid grid-sale-lot">
+                    <div class="square square-sale-lot square-table-header flex-center">
+                        <span>Lot</span>
+                    </div>
+                    <div class="square square-sale-lot square-table-header">
+                        <span>ODR/STL/CLR</span>
+                    </div>
+                    <div class="square square-sale-lot square-table-header">
+                        <span>Rl/MdfQtt.</span>
+                    </div>
+                    <div class="square square-sale-lot square-table-header">
+                        <span>DLDate/Trn</span>
+                    </div>
+                    <div class="square square-sale-lot square-table-header">
+                        <span>Delivery Info</span>
+                    </div>
+                </div>
+
+                <div th:each="idContainer : ${idSaleContainerSet}" class="id-container-key" style="display:none;">
+                    <span th:text="${idContainer}" style="display:none;"></span>
+                    <div class="grid grid-sale-lot main" th:each="lot : ${saleLotMap.get(idContainer).saleLotList}"
+                         onclick="onclickSaleLot(this)">
+                        <div class="square square-flex square-sale-lot flex-center main square-check-radio">
+                            <span class="check-radio"></span>
+                            <span class="id" th:text="${lot.idSaleLot}" style="display: none;"></span>
+                            <span class="check-radio-id input-source" th:text="${lot.lotName}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span class="input-source order-quantity" th:text="${lot.orderQuantity}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span th:text="${saleLotQuantityMap.get(__${lot.idSaleLot}__) == null ? '0.00' : saleLotQuantityMap.get(__${lot.idSaleLot}__).toString()}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span class="input-source" th:text="${#temporals.format(lot.deliveryDate, 'yyyy/MMM/dd')}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span>From:</span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span class="input-source" th:text="${lot.fromAddress == null ? '' : lot.fromAddress.addressName}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot flex-center main">
+                            <span>CT</span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span class="input-source" th:text="${lot.orderStyle}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span class="settled-quantity"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span class="input-source" th:text="${lot.deliveryTurn}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span>To:</span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span class="input-source" th:text="${lot.toAddress == null ? '' : lot.toAddress.addressName}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main flex-center">
+                            <span th:text="${lot.inventoryOutList == null ? 0 : lot.inventoryOutList.size()}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span class="input-source" th:text="${lot.orderColor}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span>Note:&nbsp</span><span class="input-source" th:text="${lot.note}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span>Supp:&nbsp</span><span class="input-source" th:text="${lot.supplier.abbreviation}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span>CTC:</span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main">
+                            <span class="input-source" th:text="${lot.receiver == null? '' : lot.receiver.contactName}"></span>
+                        </div>
+                        <div class="square square-flex square-sale-lot main" style="display:none;">
+                            <input class="checkbox input-source" type="checkbox" th:checked="${lot.supplierSettled}">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="ultra-square inventory-out grid-sale-header">
+                <form th:action="@{sales/}" method="get" id="add-inventory-out-form">
+                    <div class="ultra-square-table-header" id="inventory-out-grid-header">
+                        <span>Inventories Out</span>
+                        &nbsp
+                        <input type="button" value="Add" onclick="openNewInventoryOutWindow()" class="hidden-button" style="display: none;">
+                        &nbsp
+                        <input type="button" value="Rmv" onclick="openDeleteInventoryOutModal()" class="hidden-button" style="display: none;">
+                    </div>
+                </form>
+                <div class="grid grid-inventory-out grid-sale-header">
+                    <div class="square flex-center square-inventory-out square-table-header">
+                        <span>No.</span>
+                    </div>
+                    <div class="square square-inventory-out square-table-header">
+                        <span>Quantity</span>
+                    </div>
+                    <div class="square square-inventory-out square-table-header">
+                        <span>Unit</span>
+                    </div>
+                    <div class="square square-inventory-out square-table-header">
+                        <span>Equiv.</span>
+                    </div>
+                    <div class="square square-inventory-out square-table-header">
+                        <span>Unit</span>
+                    </div>
+                    <div class="square square-inventory-out square-table-header">
+                        <span>Prod.Code</span>
+                    </div>
+                </div>
+
+                <div class="id-lot-key" th:each="idSaleLot : ${idSaleLotSet}" style="display: none;">
+                    <span th:text="${idSaleLot}" style="display: none;"></span>
+                    <div class="grid grid-inventory-out"
+                         th:each="inventoryOut : ${inventoryOutMap.get(idSaleLot).inventoryOutList}"
+                         onclick="onclickInventoryOut(this)">
+                        <div class="square flex-center square-flex square-inventory-out main square-check-radio">
+                            <span class="check-radio"></span>
+                            <span class="id" th:text="${inventoryOut.idInventoryOut}" style="display: none;"></span>
+                            <span class="check-radio-id inventory-out-number"></span>
+                        </div>
+                        <div class="square square-flex square-inventory-out main">
+                            <span th:text="${inventoryOut.inventoryOutQuantity}"></span>
+                        </div>
+                        <div class="square square-flex square-inventory-out main">
+                            <span th:text="${inventoryOut.inventory.unit}"></span>
+                        </div>
+                        <div class="square square-flex square-inventory-out main">
+                            <span th:text="${inventoryOut.inventoryOutEquivalent}"></span>
+                        </div>
+                        <div class="square square-flex square-inventory-out main">
+                            <span th:text="${inventoryOut.saleLotList.get(0).saleContainer.orderUnit}"></span>
+                        </div>
+                        <div class="square square-flex square-inventory-out main">
+                            <span th:text="${inventoryOut.inventory.productionCode}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <span id="temp-allowed-surplus" style="display: none;"></span>
+        <span id="temp-id-sale" style="display: none;"></span>
+        <span id="temp-id-article" style="display: none;"></span>
+        <span id="temp-id-container" style="display: none;"></span>
+        <span id="temp-id-lot" style="display: none;"></span>
+
+        <div class="footer" th:insert="~{/fragments/header-footer :: footer}"></div>
+
+    </div>
+
+</body>
+</html>

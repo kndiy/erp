@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL>
+    <!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL>
+    <!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL>
+    <!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL>
+    <!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL>
+    <!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL><!ADD NEW EQUIVALENT MODAL>
+
+    <div th:fragment="new-equivalent">
+        <div class="modal new-equivalent-modal" id="new-equivalent-modal">
+            <form th:action="@{equivalents/new}" th:object="${itemCodeSupplierEquivalentDto}" method="post">
+                <div class="new-equivalent-grid">
+                    <div class="black-square-flex new-equivalent-square">
+                        <h2 class="modal-heading">ADD NEW EQUIVALENT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>Equivalent of Item Code:</label>
+                        <hr>
+                        <input type="text" readonly class="edit-input">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>And Supplier:</label>
+                        <hr>
+                        <input type="text" readonly class="edit-input">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <input type="hidden" class="edit-input" th:field="*{idItemCodeSupplier}">
+                        <label>Under ItemCodeSupplier name:</label>
+                        <hr>
+                        <input type="text" readonly class="edit-input">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>From Unit:</label>
+                        <hr>
+                        <select th:field="*{sourceUnit}" onchange="inputNewSourceUnit(this)">
+                            <option th:value="0"></option>
+                            <option th:each="unit : ${units}" th:value="${unit}" th:text="${unit}"></option>
+                            <option th:value="NewUnit" th:text="NewUnit"></option>
+                        </select>
+                        <hr>
+                        <input type="text" th:field="*{sourceUnit}" style="display: none" id="new-source-unit">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>To Unit:</label>
+                        <hr>
+                        <select th:field="*{equivalentUnit}" onchange="inputNewEquivalentUnit(this)">
+                            <option th:value="0"></option>
+                            <option th:each="unit : ${units}" th:value="${unit}" th:text="${unit}"></option>
+                            <option th:value="NewUnit" th:text="NewUnit"></option>
+                        </select>
+                        <hr>
+                        <input type="text" th:field="*{equivalentUnit}" style="display: none" id="new-equivalent-unit">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>is</label>
+                        <hr>
+                        <input type="text" th:field="*{equivalent}">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <input type="submit" value="New Equivalent">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+    <!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL>
+    <!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL>
+    <!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL>
+    <!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL>
+    <!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL><!DELETE MODAL>
+
+    <div th:fragment="delete-equivalent">
+        <div class="modal delete-equivalent-modal" id="delete-equivalent-modal">
+            <form th:action="@{equivalents/delete}" th:object="${idItemCodeSupplierEquivalent}" method="post">
+                <div class="modal-grid grid-delete">
+                    <div class="modal-square black-square-flex square-delete">
+                        <h2 class="modal-heading">DELETE EQUIVALENT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="modal-square black-square-flex square-delete">
+                        <label>Do you want to delete this Equivalent?</label>
+                        <hr>
+                        <input type="hidden" name="idItemCodeSupplierEquivalent" class="modal-id-equivalent">
+                    </div>
+                    <div class="modal-square black-square-flex square-delete">
+                        <input type="submit" value="Delete Equivalent">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL>
+    <!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL>
+    <!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL>
+    <!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL>
+    <!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL><!EDIT MODAL>
+
+    <div th:fragment="edit-equivalent">
+        <div class="modal new-equivalent-modal" id="edit-equivalent-modal">
+            <form th:action="@{equivalents/edit}" th:object="${itemCodeSupplierEquivalentDto}" method="post">
+                <div class="new-equivalent-grid">
+                    <div class="black-square-flex new-equivalent-square">
+                        <h2 class="modal-heading">ADD NEW EQUIVALENT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>Equivalent of Item Code:</label>
+                        <hr>
+                        <input type="text" readonly class="edit-input">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>And Supplier:</label>
+                        <hr>
+                        <input type="text" readonly class="edit-input">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <input type="hidden" class="edit-input" th:field="*{idItemCodeSupplier}">
+                        <label>Under ItemCodeSupplier name:</label>
+                        <hr>
+                        <input type="text" readonly class="edit-input">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>From Unit:</label>
+                        <hr>
+                        <select th:field="*{sourceUnit}" onchange="inputNewSourceUnit(this)" class="edit-select">
+                            <option th:value="0"></option>
+                            <option th:each="unit : ${units}" th:value="${unit}" th:text="${unit}"></option>
+                            <option th:value="NewUnit" th:text="NewUnit"></option>
+                        </select>
+                        <hr>
+                        <input type="text" th:field="*{sourceUnit}" style="display: none" id="edit-source-unit">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>To Unit:</label>
+                        <hr>
+                        <select th:field="*{equivalentUnit}" onchange="inputNewEquivalentUnit(this)" class="edit-select">
+                            <option th:value="0"></option>
+                            <option th:each="unit : ${units}" th:value="${unit}" th:text="${unit}"></option>
+                            <option th:value="NewUnit" th:text="NewUnit"></option>
+                        </select>
+                        <hr>
+                        <input type="text" th:field="*{equivalentUnit}" style="display: none" id="edit-equivalent-unit">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <label>is</label>
+                        <hr>
+                        <input type="text" th:field="*{equivalent}" class="edit-last">
+                        <input type="hidden" class="edit-last" th:field="*{idItemCodeSupplierEquivalent}">
+                    </div>
+                    <div class="black-square-flex new-equivalent-square">
+                        <input type="submit" value="Edit Equivalent">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>

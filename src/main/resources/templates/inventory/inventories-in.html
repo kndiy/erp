@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Inventory Section</title>
+    <link th:href="@{/styles/inventory-in-template.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/template.css}" rel="stylesheet"/>
+
+    <script type="text/javascript" th:src="@{/scripts/inventory-in-scripts.js}"></script>
+
+</head>
+<body>
+    <div class="everything-container">
+        <div th:insert="~{/fragments/header-footer :: header}"></div>
+        <div th:insert="~{/fragments/inventory-in-modals :: new-inventory-in-modal}"></div>
+        <div th:insert="~{/fragments/inventory-in-modals :: edit-inventory-in-modal}"></div>
+        <div th:insert="~{/fragments/inventory-in-modals :: delete-inventory-in-modal}"></div>
+
+        <div th:if="${results != null && !results.isEmpty()}">
+            <div th:each="result : ${results}">
+                <ul>
+                    <li th:text="${result}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div th:if="${errors != null && !errors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${errors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="page-heading">
+            <div class="grid-function-button">
+                <div class="black-square-flex square-function-button">
+                    <h2>In-ventory Section:</h2>
+                </div>
+                <div class="black-square-flex square-function-button">
+                    <button onclick="openNewInventoryInModal()">New In-ventory</button>
+                </div>
+                <div class="black-square-flex square-function-button">
+                    <button onclick="openDeleteInventoryInModal()">Delete In-ventory</button>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="ultra-grid">
+            <div class="sub-grid">
+                <div class="grid grid-inventory-in-header">
+                    <div class="square-flex flex-center square-inventory-in-header table-heading">
+                        <span>ID</span>
+                    </div>
+                    <div class="square-flex square-inventory-in-header table-heading">
+                        <span>Created At/ Source</span>
+                    </div>
+                    <div class="square-flex square-inventory-in-header table-heading">
+                        <span>Inv. Count/ Supplier</span>
+                    </div>
+                    <div class="square-flex square-inventory-in-header table-heading">
+                        <span>Voucher No./ VND Value</span>
+                    </div>
+                    <div class="square-flex square-inventory-in-header table-heading">
+                        <span>Foreign/ Rate</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-inventory-in" th:each="in : ${inventoriesIn}">
+                    <div class="square-flex flex-center square-inventory-in square-check-radio">
+                        <span class="check-radio"></span>
+                        <span class="check-radio-id" th:text="${in.idInventoryIn}"></span>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <span th:text="${#temporals.format(in.createdAt, 'yyyy-MMM-dd; HH:mm')}"></span>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <span th:if="${inventoryMap.get(__${in.idInventoryIn}__) != null}" th:text="${inventoryMap.get(__${in.idInventoryIn}__).inventoryList.size()}"></span>
+                        <span th:if="${inventoryMap.get(__${in.idInventoryIn}__) == null}" th:text="0"></span>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <span th:text="${in.voucher}"></span>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <span th:text="${in.inventoryInValueForeign}"></span>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <span th:text="${in.foreignUnit}"></span>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <input type="button" value="Edit"
+                               th:data-voucher="${in.voucher}"
+                               th:data-source="${in.inventoryInSource}"
+                               th:data-supplierSource="${in.supplierSource.idCompany}"
+                               th:data-value="${in.inventoryInValue}"
+                               th:data-foreignValue="${in.inventoryInValueForeign}"
+                               th:data-unit="${in.foreignUnit}"
+                               th:data-exchangeRate="${in.exchangeRate}"
+                               th:data-idInventoryIn="${in.idInventoryIn}"
+                               onclick="openEditInventoryInModal(this.getAttribute('data-voucher'),
+                                                                 this.getAttribute('data-source'),
+                                                                 this.getAttribute('data-supplierSource'),
+                                                                 this.getAttribute('data-value'),
+                                                                 this.getAttribute('data-foreignValue'),
+                                                                 this.getAttribute('data-foreignUnit'),
+                                                                 this.getAttribute('data-exchangeRate'),
+                                                                 this.getAttribute('data-idInventoryIn'))"/>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <span th:text="${in.inventoryInSource}"></span>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <span th:text="${in.supplierSource.nameEn}"></span>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <span th:text="${in.inventoryInValue}"></span>
+                    </div>
+                    <div class="square-flex square-inventory-in">
+                        <span th:text="${in.exchangeRate}"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="sub-grid">
+                <div class="grid grid-filter-header">
+                    <div class="square-flex flex-center square-filter-header table-heading">
+                        <span>No.</span>
+                    </div>
+                    <div class="square-flex square-filter-header table-heading">
+                        <span>Item</span>
+                    </div>
+                    <div class="square-flex square-filter-header table-heading">
+                        <span>Store</span>
+                    </div>
+                    <div class="square-flex square-filter-header table-heading">
+                        <span>Place</span>
+                    </div>
+                    <div class="square-flex square-filter-header table-heading">
+                        <span>Code</span>
+                    </div>
+                    <div class="square-flex square-filter-header table-heading">
+                        <span>Remain</span>
+                    </div>
+                    <div class="square-flex square-filter-header table-heading">
+                        <span>Unit</span>
+                    </div>
+                </div>
+
+                <div th:each="idInventoryIn : ${idInventoryInList}" class="id-inventory-in" style="display: none;">
+                    <span th:text="${idInventoryIn}" style="display: none;"></span>
+                    <div class="grid grid-filter" th:each="inventory : ${inventoryMap.get(idInventoryIn).inventoryList}">
+                        <div class="square-flex square-filter flex-center">
+                            <span th:text="${inventory.numberInBatch}"></span>
+                        </div>
+                        <div class="square-flex square-filter">
+                            <span th:text="${inventory.itemCode.itemCodeString}"></span>
+                        </div>
+                        <div class="square-flex square-filter">
+                            <span th:text="${inventory.storedAtAddress.addressName}"></span>
+                        </div>
+                        <div class="square-flex square-filter">
+                            <span th:text="${inventory.placementInWarehouse}"></span>
+                        </div>
+                        <div class="square-flex square-filter">
+                            <span th:text="${inventory.productionCode}"></span>
+                        </div>
+                        <div class="square-flex square-filter">
+                            <span th:text="${inventory.remainingQuantity}"></span>
+                        </div>
+                        <div class="square-flex square-filter">
+                            <span th:text="${inventory.unit}"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <hr>
+
+
+        <div class="footer" th:insert="~{/fragments/header-footer :: footer}"></div>
+    </div>
+
+
+</body>
+</html>

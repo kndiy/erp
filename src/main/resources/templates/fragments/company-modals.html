@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div th:fragment="modal-company-create-new">
+
+        <div class="modal modal-company" id="myModal">
+
+            <form th:action="@{/companies/new}" method="post" th:object="${company}">
+                <div class="grid-modal-company">
+
+                    <div class="square-modal-company">
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                        <h2 class="modal-heading">CREATING NEW COMPANY</h2>
+                    </div>
+                    <div class="square-modal-company">
+                        <label for="idCompany" class="label-new-company">Company ID</label>
+                        <input type="text" class="input-text" th:field="*{idCompany}" id="idCompany" style="width: 50px" readonly>
+                    </div>
+                    <div class="square-modal-company">
+                        <label for="abbreviation" class="label-new-company">Abbreviation</label>
+                        <input type="text" class="input-text" th:field="*{abbreviation}" id="abbreviation">
+                    </div>
+                    <div class="square-modal-company">
+                        <label for="nameEn" class="label-new-company">English Name</label>
+                        <input type="text" class="input-text" th:field="*{nameEn}" id="nameEn">
+                    </div>
+
+                    <div class="square-modal-company">
+                        <label for="nameVn" class="label-new-company">Vietnamese Name</label>
+                        <input type="text" class="input-text" th:field="*{nameVn}" id="nameVn">
+                    </div>
+
+                    <div class="square-modal-company">
+                        <label class="label-new-company">Company Types</label>
+                        <div class="company-checkbox" th:each="type : ${companyTypes}">
+                            <input class="checkbox cb-type" type="checkbox" th:value="| ${type}|" th:field="*{companyType}"/>
+                            <span class="company-new-text" th:text="${type}"></span>
+                        </div>
+                    </div>
+
+                    <div class="square-modal-company">
+                        <label class="label-new-company">Company Industry</label>
+                        <div class="company-checkbox" th:each="industry : ${companyIndustries}">
+                            <input type="checkbox" class="checkbox cb-industry" th:value="| ${industry}|" th:field="*{companyIndustry}">
+                            <span class="company-new-text" th:text="${industry}"></span>
+                        </div>
+                    </div>
+
+                    <div class="square-modal-company">
+                        <input type="submit" class="input-button" value="Create New">
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- EDIT MODAL --><!-- EDIT MODAL --><!-- EDIT MODAL -->
+    <!-- EDIT MODAL --><!-- EDIT MODAL --><!-- EDIT MODAL -->
+    <!-- EDIT MODAL --><!-- EDIT MODAL --><!-- EDIT MODAL -->
+    <!-- EDIT MODAL --><!-- EDIT MODAL --><!-- EDIT MODAL -->
+
+    <div th:fragment="modal-company-edit">
+
+        <div class="modal modal-company-edit" id="modal-edit">
+
+            <form th:action="@{companies/edit}" method="post" th:object="${company}">
+                <div class="grid-modal-company">
+                    <div class="square-modal-company">
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                        <h2 class="modal-heading">EDITING COMPANY</h2>
+                    </div>
+                    <div class="square-modal-company">
+                        <label for="idCompanyEdit" class="label-new-company">Company ID</label>
+                        <input type="text" readonly class="input-text" th:field="*{idCompany}" id="idCompanyEdit" style="width: 50px"/>
+                    </div>
+
+                    <div class="square-modal-company">
+                        <label for="abbreviationEdit" class="label-new-company">Abbreviation</label>
+                        <input type="text" class="input-text" th:field="*{abbreviation}" id="abbreviationEdit">
+                    </div>
+
+                    <div class="square-modal-company">
+                        <label for="nameEnEdit" class="label-new-company">English Name</label>
+                        <input type="text" class="input-text" th:field="*{nameEn}" id="nameEnEdit">
+                    </div>
+
+                    <div class="square-modal-company">
+                        <label for="nameVnEdit" class="label-new-company">Vietnamese Name</label>
+                        <input type="text" class="input-text" th:field="*{nameVn}" id="nameVnEdit">
+                    </div>
+
+
+
+                    <div class="square-modal-company">
+                        <label class="label-new-company">Company Types</label>
+                        <div class="company-checkbox" th:each="type : ${companyTypes}">
+                            <input class="checkbox cb-type cb-company-type-edit" type="checkbox" th:value="| ${type}|" th:field="*{companyType}" id="companyTypeEdit"/>
+                            <span class="company-new-text" th:text="${type}"></span>
+                        </div>
+                    </div>
+
+                    <div class="square-modal-company">
+                        <label class="label-new-company">Company Industry</label>
+                        <div class="company-checkbox" th:each="industry : ${companyIndustries}">
+                            <input type="checkbox" class="checkbox cb-industry cb-company-industry-edit" th:value="| ${industry}|" th:field="*{companyIndustry}" id="industryEdit">
+                            <span class="company-new-text" th:text="${industry}"></span>
+                        </div>
+                    </div>
+
+                    <div class="square-modal-company">
+                        <input type="submit" class="input-button" value="Edit">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div th:fragment="modal-company-delete">
+
+        <div class="modal modal-company-delete" id="modalCompanyDelete">
+
+            <form th:action="@{/companies/delete}" th:object="${idCompany}" method="post">
+
+                <div class="grid-modal-delete">
+
+                    <div class="square-modal-delete">
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                        <label for="inputCompanyDelete" style="text-decoration: underline">Please enter ID of the Company you want to delete!</label>
+                        <br clear="all"/>
+                        <input type="text" placeholder="Company ID" required name="idCompany" id="inputCompanyDelete"/>
+                    </div>
+
+                    <div class="square-modal-delete">
+                        <input type="submit" value="Delete Company"/>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${abbreviation} + ' Addresses'"></title>
+
+    <link th:href="@{/styles/template.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/address-template.css}" rel="stylesheet"/>
+
+    <script type="text/javascript" th:src="@{/scripts/address-scripts.js}"></script>
+
+</head>
+<body>
+    <div class="everything-container">
+        <div th:insert="~{/fragments/header-footer :: header}"></div>
+        <div th:insert="~{/fragments/address-modals :: address-edit-modal}"></div>
+        <div th:insert="~{/fragments/address-modals :: address-new-modal}"></div>
+        <div th:insert="~{/fragments/address-modals :: delete-address-modal}"></div>
+
+        <div th:if="${result != null}">
+            <h4 th:text="${result}"></h4>
+        </div>
+
+        <hr>
+
+        <div th:if="${fieldErrors != null && !fieldErrors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${fieldErrors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="page-heading">
+            <h2>Affiliated Addresses of Company: <span th:text="${companyName}"></span></h2>
+        </div>
+
+        <hr>
+
+        <div class="function">
+            <button onclick="openModalNewAddress()">Add New Address</button>
+            &nbsp&nbsp&nbsp&nbsp&nbsp
+            <button onclick="openModalDeleteAddress()">Delete Address</button>
+        </div>
+
+        <hr>
+
+        <div>
+            <div class="grid-address">
+                <div class="square-address square-heading-id">
+                    <span class="table-heading">ID</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-heading">Tên/<br/>Loại</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-heading">Địa Chỉ EN/VN</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-heading">MST/<br/>Đại Diện</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-heading">Km/<br/>Ngoại ô?</span>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="grid-address" th:each="address : ${addresses}">
+                <div class="square-address">
+                    <form th:action="@{addresses/__${address.idAddress}__/contacts}" id="address" method="get">
+                        <input type="submit" class="input-address-id" th:value="${address.idAddress}"/>
+                    </form>
+                </div>
+                <div class="square-address">
+                    <span class="table-row" th:text="${address.addressName}">address</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-row" th:text="${address.addressEn}">nameEn</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-row" th:text="${address.taxCode}">MST</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-row" th:text="${address.distance}">distance</span>
+                </div>
+
+                <div class="square-address">
+                    <button class="input-address-id"
+                            th:data-idAddress="${address.idAddress}"
+                            th:data-address="${address.addressName}"
+                            th:data-adNameEn="${address.addressEn}"
+                            th:data-adNameVn="${address.addressVn}"
+                            th:data-taxCodeAd="${address.taxCode}"
+                            th:data-distance="${address.distance}"
+                            th:data-type="${address.addressType}"
+                            th:data-representative="${address.representative}"
+                            th:data-outsideCity="${address.outsideCity}"
+                            onclick="openModalEditAddress(this.getAttribute('data-idAddress'),
+                                                            this.getAttribute('data-address'),
+                                                            this.getAttribute('data-adNameEn'),
+                                                            this.getAttribute('data-adNameVn'),
+                                                            this.getAttribute('data-taxCodeAd'),
+                                                            this.getAttribute('data-distance'),
+                                                            this.getAttribute('data-type'),
+                                                            this.getAttribute('data-representative'),
+                                                            this.getAttribute('data-outsideCity'))">Edit</button>
+                </div>
+                <div class="square-address">
+                    <span class="table-row" th:text="${address.addressType}">type</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-row" th:text="${address.addressVn}">nameVn</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-row" th:text="${address.representative}">rep</span>
+                </div>
+                <div class="square-address">
+                    <span class="table-row" th:text="${address.outsideCity}">outCity</span>
+                </div>
+            </div>
+
+            <hr>
+
+        </div>
+    </div>
+
+    <div class="footer" th:insert="~{fragments/header-footer :: footer}"></div>
+
+</body>
+</html>

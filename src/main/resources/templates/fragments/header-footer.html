@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="UTF-8">
+    <link th:href="@{styles/template.css}" rel="stylesheet">
+
+</head>
+<body>
+    <div th:fragment="header">
+        <div class="header-background"></div>
+        <div class="grid-header">
+            <div class="square-header">
+                <img class="header-logo" th:src="@{/images/ds.jpg}">
+            </div>
+            <div class="square-header">
+                <form th:action="@{/}" id="goToHome" method="get">
+                    <input class="input-header" type="submit" value="Home">
+                </form>
+            </div>
+            <div class="square-header">
+                <form th:action="@{/companies/}" id="goToCompany" method="get">
+                    <input class="input-header" type="submit" value="Company">
+                </form>
+            </div>
+            <div class="square-header">
+                <form th:action="@{/item-codes/}" id="goToItemCode" method="get">
+                    <input class="input-header" type="submit" value="Item Code">
+                </form>
+            </div>
+            <div class="square-header">
+                <form th:action="@{/inventories-in/}" id="goToInventory" method="get">
+                    <input class="input-header" type="submit" value="In-ventory">
+                </form>
+            </div>
+            <div class="square-header">
+                <form th:action="@{/sales/}" method="get">
+                    <input class="input-header" type="submit" value="Sales"/>
+                </form>
+            </div>
+        </div>
+        <div class="header-logout">
+            <form th:action="@{/logout}" method="post">
+                <input class="input-header" type="submit" value="Logout"/>
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div th:fragment="footer" class="footer-sub">
+        <h3>Copyright © 2023 Khiem Nguyen. All Rights Reserved</h3>
+        <hr>
+        <h4>khiemnd9112@gmail.com</h4>
+    </div>
+
+</body>
+</html>

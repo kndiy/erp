@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+
+    <div th:fragment="new-article">
+        <div class="modal new-article-modal" id="new-article-modal">
+            <form th:action="@{articles/new}" th:object="${saleArticleDto}" method="post">
+                <div class="modal-grid new-article-grid">
+                    <div class="black-square-flex square-new-article">
+                        <h2 class="modal-heading">NEW SALE ARTICLE</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Id Sale</label>
+                        <hr>
+                        <input type="text" th:field="*{idSale}" readonly class="article-id-sale">
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Id Article</label>
+                        <hr>
+                        <input type="text" th:field="*{idSaleArticle}" readonly>
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>ETD</label>
+                        <hr>
+                        <input type="date" th:field="*{requestDeliveryDate}">
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Item Category</label>
+                        <hr>
+                        <select onchange="onchangeCategoryFilter(this)" id="new-article-select-item-category">
+                            <option th:value="0"></option>
+                            <option th:each="itemCategory : ${itemCategories}" th:value="${itemCategory.idItemCategory}" th:text="${itemCategory.itemCategoryString}"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Item Type</label>
+                        <hr>
+                        <select onchange="onchangeTypeFilter(this)" id="new-article-select-item-type">
+                            <option th:value="0"></option>
+                            <div th:each="itemType : ${itemTypes}">
+                                <option th:value="${itemType.itemCategory.idItemCategory}" style="display: none;"></option>
+                                <option th:value="${itemType.idItemType}" th:text="${itemType.itemTypeString}"></option>
+                            </div>
+                        </select>
+                    </div>
+
+                    <div class="black-square-flex square-new-article">
+                        <label>Item Code</label>
+                        <hr>
+                        <select th:field="*{idItemCode}" id="new-article-select-item-code">
+                            <option th:value="0"></option>
+                            <div th:each="itemCode : ${itemCodes}">
+                                <option th:value="${itemCode.itemType.itemCategory.idItemCategory}" style="display: none;"></option>
+                                <option th:value="${itemCode.itemType.idItemType}" style="display: none;"></option>
+                                <option th:value="${itemCode.idItemCode}" th:text="${itemCode.itemCodeString}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Allowed Surplus</label>
+                        <hr>
+                        <input type="text" th:field="*{allowedSurplus}">
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <input type="submit" value="New Sale Article">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div th:fragment="edit-article">
+        <div class="modal new-article-modal" id="edit-article-modal">
+            <form th:action="@{edit}" th:object="${saleArticleDto}" method="post">
+                <div class="modal-grid new-article-grid">
+                    <div class="black-square-flex square-new-article">
+                        <h2 class="modal-heading">EDIT SALE ARTICLE</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Id Sale</label>
+                        <hr>
+                        <input type="text" th:field="*{idSale}" readonly class="article-id-sale">
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Id Article</label>
+                        <hr>
+                        <input class="edit-input" type="text" th:field="*{idSaleArticle}" readonly>
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>ETD</label>
+                        <hr>
+                        <input class="edit-input" type="date" th:field="*{requestDeliveryDate}">
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Item Category</label>
+                        <hr>
+                        <select onchange="onchangeEditCategoryFilter(this)" id="edit-article-select-item-category">
+                            <option th:value="0"></option>
+                            <option th:each="itemCategory : ${itemCategories}" th:value="${itemCategory.idItemCategory}" th:text="${itemCategory.itemCategoryString}"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Item Type</label>
+                        <hr>
+                        <select onchange="onchangeEditTypeFilter(this)" id="edit-article-select-item-type">
+                            <option th:value="0"></option>
+                            <div th:each="itemType : ${itemTypes}">
+                                <option th:value="${itemType.itemCategory.idItemCategory}" style="display: none;"></option>
+                                <option th:value="${itemType.idItemType}" th:text="${itemType.itemTypeString}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Item Code</label>
+                        <hr>
+                        <select class="edit-select" th:field="*{idItemCode}" id="edit-article-select-item-code">
+                            <option th:value="0"></option>
+                            <div th:each="itemCode : ${itemCodes}">
+                                <option th:value="${itemCode.itemType.itemCategory.idItemCategory}" style="display: none;"></option>
+                                <option th:value="${itemCode.itemType.idItemType}" style="display: none;"></option>
+                                <option th:value="${itemCode.idItemCode}" th:text="${itemCode.itemCodeString}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <label>Allowed Surplus</label>
+                        <hr>
+                        <input class="edit-input" type="text" th:field="*{allowedSurplus}">
+                    </div>
+                    <div class="black-square-flex square-new-article">
+                        <input type="submit" value="Edit Sale Article">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <div th:fragment="delete-article">
+        <div class="modal delete-modal" id="delete-article-modal">
+            <form th:action="@{delete}" th:object="${idSaleArticle}" method="post">
+                <div class="grid-delete">
+                    <div class="black-square-flex square-delete">
+                        <h2 class="modal-heading">DELETE SALE ARTICLE</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-delete">
+                        <label>Please enter ID of the Sale ARTICLE you want to delete!</label>
+                        <hr>
+                        <input type="text" placeholder="Sale ID to Delete" autocomplete="off" required name="idSaleArticle" id="delete-article-input"/>
+                    </div>
+
+                    <div class="black-square-flex square-delete">
+                        <input type="submit" value="Delete Sale Article"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventories Out</title>
+
+    <link th:href="@{/styles/template.css}" rel="stylesheet">
+    <link th:href="@{/styles/inventory-out-template.css}" rel="stylesheet">
+
+    <script type="text/javascript" th:src="@{/scripts/inventory-out-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/api/BigDecimal.js}"></script>
+</head>
+<body>
+    <div class="everything-container">
+        <div th:insert="~{/fragments/header-footer :: header}"></div>
+
+        <div th:if="${results != null && !results.isEmpty()}">
+            <div th:each="result : ${results}">
+                <ul>
+                    <li th:text="${result}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div th:if="${errors != null && !errors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${errors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="title-grid">
+            <div class="title-square">
+                <h3>Please Select Inventories Out For:</h3>
+                <div class="summary-grid">
+                    <div class="summary-square">
+                        Purpose:
+                    </div>
+                    <div class="summary-square data">
+                        <span th:text="${purpose.purpose}"></span>
+                    </div>
+                </div>
+                <div class="summary-grid" th:each="entry : ${purpose.info}">
+                    <div class="summary-square">
+                        <span th:text="${entry.key}"></span>
+                    </div>
+                    <div class="summary-square data">
+                        <span th:text="${entry.value}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="title-square">
+                <h3 th:text="|Quantity Summary: (Allowed Surplus ${summaryQuantity.allowedSurplus})|"></h3>
+                <div class="summary-grid">
+                    <div class="summary-square">
+                        Order Qtt. by Container:
+                    </div>
+                    <div class="summary-square data">
+                        <h3 th:text="${summaryQuantity.orderQuantity}" id="order-quantity"></h3>
+                        &nbsp
+                        <h3 th:text="${summaryQuantity.saleUnit}"></h3>
+                    </div>
+                    <div class="summary-square">
+                        Allowed Quantity:
+                    </div>
+                    <div class="summary-square data">
+                        <h3 th:text="${summaryQuantity.allowedQuantity}" id="allowed-quantity"></h3>
+                        &nbsp
+                        <h3 th:text="${summaryQuantity.saleUnit}"></h3>
+                    </div>
+                    <div class="summary-square">
+                        Sum Delivered Quantity:
+                    </div>
+                    <div class="summary-square data">
+                        <h3 th:text="${summaryQuantity.deliveredQuantity}" id="delivered-quantity"></h3>
+                        &nbsp
+                        <h3 th:text="${summaryQuantity.saleUnit}"></h3>
+                    </div>
+                    <div class="summary-square">
+                        Differential Quantity:
+                    </div>
+                    <div class="summary-square data">
+                        <h3 th:text="${summaryQuantity.differential}" id="differential"></h3>
+                    </div>
+                    <div class="summary-square">
+                        Differential Percentage %:
+                    </div>
+                    <div class="summary-square data">
+                        <h3 th:text="${summaryQuantity.percentageDiff}" id="percentage"></h3>
+                    </div>
+                    <div class="summary-square">
+                        Inventory Count:
+                    </div>
+                    <div class="summary-square data">
+                        <h3 th:text="0" id="count"></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="ultra-grid">
+            <div class="ultra-square inventory-out">
+                <div class="ultra-square-table-header">
+                    &nbsp<span>Inventories Out Selection</span>
+                    &nbsp&nbsp&nbsp<input type="submit" form="new-form" value="Submit">
+                </div>
+
+                <div class="grid inventory-out-grid header-grid">
+                    <div class="square inventory-out-square header-square">
+                        <span>Id Inv.</span>
+                    </div>
+                    <div class="square inventory-out-square header-square">
+                        <span>Stored At</span>
+                    </div>
+                    <div class="square inventory-out-square header-square">
+                        <span>Placement</span>
+                    </div>
+                    <div class="square inventory-out-square header-square">
+                        <span>Prod. Code</span>
+                    </div>
+                    <div class="square inventory-out-square header-square">
+                        <span>Remaining</span>
+                    </div>
+                    <div class="square inventory-out-square header-square">
+                        <span>Inv. Unit</span>
+                    </div>
+                    <div class="square inventory-out-square header-square">
+                        <span>Eqv. Value</span>
+                    </div>
+                    <div class="square inventory-out-square header-square">
+                        <span>Eqv. Quantity</span>
+                    </div>
+                    <div class="square inventory-out-square header-square">
+                        <span>Sale Unit</span>
+                    </div>
+                    <div class="square-center inventory-out-square header-square">
+                        <span>Take All?</span>
+                    </div>
+                    <div class="square-center inventory-out-square header-square">
+                        <span>Split?</span>
+                    </div>
+                    <div class="square inventory-out-square header-square">
+                        <span>Spt. Qtt. By Sale Unit</span>
+                    </div>
+                </div>
+
+
+                <form th:action="@{new}" method="post" th:object="${inventoryOutDtoWrapper}" id="new-form" onkeypress="return event.keyCode != 13;">
+                    <div class="grid inventory-out-grid main" th:each="dto, stat : *{inventoryOutDtoList}">
+                        <div class="square inventory-out-square main">
+                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].idInventory}">
+                        </div>
+                        <div class="square inventory-out-square main">
+                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].storedAtAddress}">
+                        </div>
+                        <div class="square inventory-out-square main">
+                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].placementInWarehouse}">
+                        </div>
+                        <div class="square inventory-out-square main">
+                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].productionCode}">
+                        </div>
+                        <div class="square inventory-out-square main">
+                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].remainingQuantity}">
+                        </div>
+                        <div class="square inventory-out-square main">
+                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].inventoryUnit}">
+                        </div>
+                        <div class="square inventory-out-square main">
+                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentValue}">
+                        </div>
+                        <div class="square inventory-out-square main">
+                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentQuantity}">
+                        </div>
+                        <div class="square inventory-out-square main">
+                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentUnit}">
+                        </div>
+                        <div class="square-center inventory-out-square main">
+                            <input type="checkbox" th:field="*{inventoryOutDtoList[__${stat.index}__].takeAll}">
+                        </div>
+                        <div class="square-center inventory-out-square main">
+                            <input type="checkbox" th:field="*{inventoryOutDtoList[__${stat.index}__].split}">
+                        </div>
+                        <div class="square inventory-out-square main">
+                            <input type="text" th:field="*{inventoryOutDtoList[__${stat.index}__].splitQuantity}">
+                        </div>
+                    </div>
+                    <input type="text" th:field="*{idSaleLot}" style="display: none;">
+                    <input type="text" th:field="*{idManufacture}" style="display: none;">
+                    <input type="text" th:field="*{idWarehouseTransfer}" style="display: none;">
+                </form>
+
+                <div class="grid inventory-grid main">
+                    <div class="square inventory-square main">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div th:insert="~{/fragments/header-footer :: footer}" class="footer"></div>
+    </div>
+
+</body>
+</html>

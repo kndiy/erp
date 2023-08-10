@@ -1,0 +1,92 @@
+.grid-contact {
+    display: grid;
+    grid-template-columns: 60px 200px 200px 300px;
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    background-color: black;
+    margin-bottom: 3px;
+}
+
+.square-contact {
+    display: flex;
+    align-items: center;
+    color: black;
+    background-color: white;
+    min-height: 50px;
+    overflow-wrap: anywhere;
+}
+
+.square-heading-id, .square-id, .square-contact-edit {
+    font-weight: bold;
+    justify-content: center;
+}
+
+.square-heading {
+    font-weight: bold;
+}
+
+.input-contact-edit {
+    width: 50px;
+    height: 40px;
+}
+
+.contact-heading {
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+/*MODAL MODAL MODAL MODAL MODAL*/
+/*MODAL MODAL MODAL MODAL MODAL*/
+/*MODAL MODAL MODAL MODAL MODAL*/
+/*MODAL MODAL MODAL MODAL MODAL*/
+/*MODAL MODAL MODAL MODAL MODAL*/
+/*MODAL MODAL MODAL MODAL MODAL*/
+
+.grid-new-contact {
+    display: grid;
+    grid-template-columns: 400px 400px;
+    grid-row-gap: 10px;
+
+    position: fixed;
+    top: 60px;
+    left: 20%;
+    padding: 50px;
+    background-color: black;
+}
+
+.square-new-contact {
+    display: block;
+    align-items: center;
+}
+
+.square-new-contact:nth-child(2) {
+    grid-column: span 2;
+}
+
+label {
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#address-nameVn, #address-nameEn {
+    width: 720px;
+}
+
+
+.grid-delete-contact {
+    display: grid;
+    position: fixed;
+    top: 200px;
+    left: 20%;
+    grid-template-columns: 500px;
+    background-color: black;
+    padding: 50px;
+    grid-row-gap: 30px;
+}
+
+#contact-heading {
+    margin-bottom: 20px;
+    margin-top: 25px;
+}

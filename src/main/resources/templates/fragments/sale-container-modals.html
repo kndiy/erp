@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div th:fragment="new-container">
+        <div class="modal new container-modal" id="new-container-modal">
+            <form th:action="@{containers/new}" th:object="${saleContainerDto}" method="post">
+                <div class="modal-grid new-container-grid">
+                    <div class="modal-square black-square-flex square-new-container">
+                        <h2 class="modal-heading">NEW SALE CONTAINER</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Id Article</label>
+                        <hr>
+                        <input type="text" th:field="*{idSaleArticle}" class="modal-id-article">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Id Container</label>
+                        <hr>
+                        <input type="text" th:field="*{idSaleContainer}">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Container Name</label>
+                        <hr>
+                        <input type="text" th:field="*{container}">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Please select Order Unit</label>
+                        <hr>
+                        <select th:field="*{orderUnit}" onchange="newUnitInput(this)">
+                            <option th:value="0"></option>
+                            <option th:each="unit : ${units}" th:value="${unit}" th:text="${unit}"></option>
+                            <option th:value="NewUnit" th:text="NewUnit"></option>
+                        </select>
+                        <hr>
+                        <input type="text" placeholder="Enter New Unit..." th:field="*{orderUnit}" style="display: none;" class="new-unit-input">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Is this for Claim?</label>
+                        <hr>
+                        <input type="checkbox" th:field="*{forClaim}">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <input type="submit" value="New Sale Container">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div th:fragment="edit-container">
+        <div class="modal edit-container-modal" id="edit-container-modal">
+            <form th:action="@{edit}" th:object="${saleContainerDto}" method="post">
+                <div class="modal-grid new-container-grid">
+                    <div class="modal-square black-square-flex square-new-container">
+                        <h2 class="modal-heading">EDIT SALE CONTAINER</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Id Article</label>
+                        <hr>
+                        <input type="text" th:field="*{idSaleArticle}" class="modal-id-article">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Id Container</label>
+                        <hr>
+                        <input type="text" th:field="*{idSaleContainer}" class="modal-id-container">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Container Name</label>
+                        <hr>
+                        <input type="text" th:field="*{container}" class="edit-input">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Please select Order Unit</label>
+                        <hr>
+                        <select th:field="*{orderUnit}" class="edit-select" onchange="newUnitInput(this)">
+                            <option th:value="0"></option>
+                            <option th:each="unit : ${units}" th:value="${unit}" th:text="${unit}"></option>
+                            <option th:value="NewUnit" th:text="NewUnit"></option>
+                        </select>
+                        <hr>
+                        <input type="text" placeholder="Enter New Unit..." th:field="*{orderUnit}" style="display: none;" class="new-unit-input">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <label>Is this for Claim?</label>
+                        <hr>
+                        <input type="checkbox" th:field="*{forClaim}" class="edit-input">
+                    </div>
+                    <div class="modal-square black-square-flex square-new-container">
+                        <input type="submit" value="Edit Sale Container">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div th:fragment="delete-container">
+        <div class="modal delete-modal" id="delete-container-modal">
+            <form th:action="@{delete}" th:object="${idSaleContainer}" method="post">
+                <div class="grid-delete">
+                    <div class="black-square-flex square-delete">
+                        <h2 class="modal-heading">DELETE SALE CONTAINER</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-delete">
+                        <label>Please enter ID of the SaleContainer you want to delete!</label>
+                        <hr>
+                        <input type="text" placeholder="SaleContainer ID to Delete" autocomplete="off" required name="idSaleContainer" class="modal-id-container"/>
+                    </div>
+
+                    <div class="black-square-flex square-delete">
+                        <input type="submit" value="Delete Sale Container"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

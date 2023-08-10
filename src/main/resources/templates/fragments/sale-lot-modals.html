@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="new-lot">
+        <div class="modal new-lot-modal" id="new-lot-modal">
+            <form th:action="@{lots/new}" th:object="${saleLotDto}" method="post">
+                <div class="modal-grid new-lot-grid">
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <h2 class="modal-heading">NEW SALE LOT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>SContainer Id</label>
+                        <hr>
+                        <input type="text" th:field="*{idSaleContainer}" readonly class="modal-id-container">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>SaleLot Id</label>
+                        <hr>
+                        <input type="text" th:field="*{idSaleLot}" readonly>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Supplier/ Self</label>
+                        <hr>
+                        <select th:field="*{idCompanySupplier}" onchange="onchangeSupplier(this)">
+                            <option th:value="0"></option>
+                            <option th:each="supplier : ${suppliers}" th:value="${supplier.idCompany}" th:text="${supplier.nameEn}"></option>
+                        </select>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+
+
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Lot Name</label>
+                        <hr>
+                        <input type="text" th:field="*{lotName}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Order Quantity</label>
+                        <hr>
+                        <input type="text" th:field="*{orderQuantity}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Order Style</label>
+                        <hr>
+                        <input type="text" th:field="*{orderStyle}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Order Color</label>
+                        <hr>
+                        <input type="text" th:field="*{orderColor}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Delivery Date</label>
+                        <hr>
+                        <input type="date" th:field="*{deliveryDate}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Departure Address</label>
+                        <hr>
+                        <select th:field="*{idFromAddress}" class="modal-departure-select">
+                            <option th:value="0"></option>
+                            <div th:each="departure : ${departureAddresses}">
+                                <option th:value="${departure.company.idCompany}" style="display: none;"></option>
+                                <option th:value="${departure.company.companyType}" style="display: none;"></option>
+                                <option th:value="${departure.idAddress}" th:text="${departure.addressName}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Delivery Turn</label>
+                        <hr>
+                        <input type="text" th:field="*{deliveryTurn}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+
+
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Destination Address</label>
+                        <hr>
+                        <select th:field="*{idToAddress}" class="modal-destination-select" onchange="onchangeDestinationSelect(this)">
+                            <option th:value="0"></option>
+                            <div th:each="destination : ${destinationAddresses}">
+                                <option th:value="${destination.company.abbreviation}" style="display: none;"></option>
+                                <option th:value="${destination.idAddress}" th:text="${destination.addressName}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Receiver</label>
+                        <hr>
+                        <select th:field="*{idContactReceiver}" class="modal-receiver-select">
+                            <option th:value="0"></option>
+                            <div th:each="contact : ${receiverContacts}">
+                                <option th:value="${contact.address.idAddress}" style="display: none;"></option>
+                                <option th:value="${contact.idContact}" th:text="${contact.contactName}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Note</label>
+                        <hr>
+                        <input type="text" th:field="*{note}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <input type="submit" value="New Sale Lot">
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+    <div th:fragment="edit-lot">
+        <div class="modal new-lot-modal" id="edit-lot-modal">
+            <form th:action="@{edit}" th:object="${saleLotDto}" method="post">
+                <div class="modal-grid new-lot-grid">
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <h2 class="modal-heading">EDIT SALE LOT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>SContainer Id</label>
+                        <hr>
+                        <input type="text" th:field="*{idSaleContainer}" readonly class="modal-id-container">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>SaleLot Id</label>
+                        <hr>
+                        <input type="text" th:field="*{idSaleLot}" readonly class="modal-id-lot">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Supplier/ Self</label>
+                        <hr>
+                        <select class="edit-select" th:field="*{idCompanySupplier}" onchange="onchangeSupplier(this)">
+                            <option th:value="0"></option>
+                            <div th:each="supplier : ${suppliers}">
+                                <option th:value="${supplier.abbreviation}" style="display: none;"></option>
+                                <option th:value="${supplier.idCompany}" th:text="${supplier.nameEn}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+
+
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Lot Name</label>
+                        <hr>
+                        <input class="edit-input" type="text" th:field="*{lotName}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Order Quantity</label>
+                        <hr>
+                        <input class="edit-input" type="text" th:field="*{orderQuantity}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Order Style</label>
+                        <hr>
+                        <input class="edit-input" type="text" th:field="*{orderStyle}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Order Color</label>
+                        <hr>
+                        <input class="edit-input" type="text" th:field="*{orderColor}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Delivery Date</label>
+                        <hr>
+                        <input class="edit-input" type="date" th:field="*{deliveryDate}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Departure Address</label>
+                        <hr>
+                        <select th:field="*{idFromAddress}" class="modal-departure-select edit-select">
+                            <option th:value="0"></option>
+                            <div th:each="departure : ${departureAddresses}">
+                                <option th:value="${departure.company.idCompany}" style="display: none;"></option>
+                                <option th:value="${departure.company.companyType}" style="display: none;"></option>
+                                <option th:value="${departure.idAddress}" th:text="${departure.addressName}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Delivery Turn</label>
+                        <hr>
+                        <input class="edit-input" type="text" th:field="*{deliveryTurn}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+
+
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Destination Address</label>
+                        <hr>
+                        <select th:field="*{idToAddress}" class="modal-destination-select edit-select" onchange="onchangeDestinationSelect(this)">
+                            <option th:value="0"></option>
+                            <div th:each="destination : ${destinationAddresses}">
+                                <option th:value="${destination.company.abbreviation}" style="display: none;"></option>
+                                <option th:value="${destination.idAddress}" th:text="${destination.addressName}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Receiver</label>
+                        <hr>
+                        <select th:field="*{idContactReceiver}" class="modal-receiver-select edit-select">
+                            <option th:value="0"></option>
+                            <div th:each="contact : ${receiverContacts}">
+                                <option th:value="${contact.address.idAddress}" style="display: none;"></option>
+                                <option th:value="${contact.idContact}" th:text="${contact.contactName}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Note</label>
+                        <hr>
+                        <input class="edit-input" type="text" th:field="*{note}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <label>Note</label>
+                        <hr>
+                        <input class="edit-input" type="checkbox" th:field="*{supplierSettled}">
+                    </div>
+                    <div class="modal-square black-square-flex new-lot-square">
+                        <input type="submit" value="Edit Sale Lot">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div th:fragment="delete-lot">
+        <div class="modal new-lot-modal" id="delete-lot-modal">
+            <form th:action="@{delete}" th:object="${idSaleLot}" method="post">
+                <div class="modal-grid grid-delete">
+                    <div class="modal-square black-square-flex square-delete">
+                        <h2 class="modal-heading">DELETE SALE LOT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="modal-square black-square-flex square-delete">
+                        <label>Do you want to delete the current SaleLot?</label>
+                        <hr>
+                        <input type="hidden" name="idSaleLot" class="modal-id-lot">
+                    </div>
+                    <div class="modal-square black-square-flex square-delete">
+                        <input type="submit" value="Delete Sale Lot">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

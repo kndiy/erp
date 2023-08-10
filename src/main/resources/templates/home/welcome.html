@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Welcome
+    </title>
+
+    <link th:href="@{/styles/template.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/welcome-login.css}" rel="stylesheet"/>
+
+</head>
+<body >
+
+    <div class="everything-container">
+        <div th:insert="~{fragments/header-footer :: header}"></div>
+
+        <h2>Welcome! Please choose what you want to inquire!</h2>
+
+        <hr>
+
+        <div class="grid-welcome">
+
+            <div class="square-welcome">
+                <form th:action="@{/companies/}" id="companySec" method="get">
+                    <input type="submit" value="Company Section"/>
+                </form>
+            </div>
+
+            <div class="square-welcome">
+                <form th:action="@{/item-codes/}" id="item-code-section" method="get">
+                    <input type="submit" value="Item Code Section"/>
+                </form>
+            </div>
+
+            <div class="square-welcome">
+                <form th:action="@{/inventories-in/}" id="inventorySec" method="get">
+                    <input type="submit" value="Inventory In Section"/>
+                </form>
+            </div>
+
+            <div class="square-welcome">
+                <form th:action="@{/sales/}" method="get">
+                    <input type="submit" value="Sales Section"/>
+                </form>
+            </div>
+
+            <div class="square-welcome">
+                <form th:action="@{/backup}" method="post">
+                    <input type="submit" value="Back Up">
+                </form>
+            </div>
+            <div class="square-welcome">
+                <form th:action="@{/restore}" method="post" enctype="multipart/form-data">
+                    <div class="label-choose-file-input">
+                        <label for="choose-file-input">Choose JsonFile</label>
+                    </div>
+                    <input type="file" name="backup" id="choose-file-input">
+                    <input type="submit" value="Restore">
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer" th:insert="~{fragments/header-footer :: footer}"></div>
+</body>
+</html>

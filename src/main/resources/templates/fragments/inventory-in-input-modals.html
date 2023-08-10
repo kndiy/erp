@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="new-article-number">
+        <div class="modal new-article-number-modal" id="new-article-number-modal">
+            <div class="grid-new-article-number">
+                <div class="black-square-flex square-new-article-number">
+                    <h2 class="modal-heading">NEW ARTICLE NUMBER</h2>
+                    <span class="close-button">&times;</span>
+                </div>
+                <div class="black-square-flex square-new-article-number">
+                    <label>Please input new Article Number</label>
+                </div>
+                <div class="black-square-flex square-new-article-number">
+                    <input type="text" id="input-new-article-number">
+                </div>
+                <div class="black-square-flex square-new-article-number">
+                    <input type="submit" value="Change Article Num" onclick="changeArticleNumberPost()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div th:fragment="new-article-number-edit">
+        <div class="modal new-article-number-modal" id="new-article-number-modal-edit">
+            <div class="grid-new-article-number">
+                <div class="black-square-flex square-new-article-number">
+                    <h2 class="modal-heading">NEW ARTICLE NUMBER</h2>
+                    <span class="close-button">&times;</span>
+                </div>
+                <div class="black-square-flex square-new-article-number">
+                    <label>Please input new Article Number</label>
+                </div>
+                <div class="black-square-flex square-new-article-number">
+                    <input type="text" id="input-new-article-number-edit">
+                </div>
+                <div class="black-square-flex square-new-article-number">
+                    <input type="submit" value="Change Article Num" onclick="changeArticleNumberEditPost()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div th:fragment="delete-inventory-modal">
+
+        <div class="modal delete-inventory-modal" id="delete-inventory-modal">
+
+            <form th:action="@{/inventories-in/inventories/delete}" th:object="${idInventory}" method="post">
+
+                <div class="grid-modal-delete">
+                    <div class="square-modal-delete">
+                        <h2 class="modal-heading">DELETING ITEM CATEGORY</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square-modal-delete">
+                        <label>Do you really want to delete this Inventory with the following ID?</label>
+                    </div>
+                    <div class="square-modal-delete">
+                        <input type="text" name="idInventory" readonly id="delete-id-inventory">
+                    </div>
+                    <div class="square-modal-delete">
+                        <input type="submit" value="Delete Inventory"/>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>

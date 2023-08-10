@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div th:fragment="address-edit-modal">
+        <div class="modal modal-edit" id="address-edit-modal">
+
+            <form th:action="@{addresses/edit}" method="post" th:object="${address}">
+                <div class="grid grid-address-edit">
+                    <div class="square-delete-address">
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                        <h2 class="modal-heading">EDITING ADDRESS</h2>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-id">Id</label>
+                        <input class="input-text" type="text" readonly id="address-id" th:field="*{idAddress}" style="width: 50px"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-address">Address Name</label>
+                        <input class="input-text" type="text" id="address-address" th:field="*{addressName}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-type">Address Type</label>
+                        <input class="input-text" type="text" id="address-type" th:field="*{addressType}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-distance">Distance</label>
+                        <input class="input-text" type="text" id="address-distance" th:field="*{distance}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-outside-city">Outside City</label>
+                        <input class="input-text" type="checkbox" id="address-outside-city" th:field="*{outsideCity}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-nameEn">English Address</label>
+                        <input class="input-text" type="text" id="address-nameEn" th:field="*{addressEn}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-nameVn">Vietnamese Address</label>
+                        <input class="input-text" type="text" id="address-nameVn" th:field="*{addressVn}"/>
+                    </div>
+
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-tax-code">Tax Code</label>
+                        <input class="input-text" type="text" id="address-tax-code" th:field="*{taxCode}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-representative">Representative</label>
+                        <input class="input-text" type="text" id="address-representative" th:field="*{representative}"/>
+                    </div>
+
+                    <div class="square square-address-edit">
+                        <input type="submit" value="Edit Address"/>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!NEW ADDRESS MODAL>
+    <!NEW ADDRESS MODAL>
+    <!NEW ADDRESS MODAL>
+    <!NEW ADDRESS MODAL>
+    <!NEW ADDRESS MODAL>
+    <!NEW ADDRESS MODAL>
+
+    <div th:fragment="address-new-modal">
+        <div class="modal modal-edit" id="address-new-modal">
+
+            <form th:action="@{addresses/new}" method="post" th:object="${address}">
+                <div class="grid grid-address-edit">
+                    <div class="square-delete-address">
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                        <h2 class="modal-heading">CREATING NEW ADDRESS</h2>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-new-id">Id</label>
+                        <input class="input-text" type="text" readonly id="address-new-id" th:field="*{idAddress}" style="width: 50px"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-address-new">Address Name</label>
+                        <input class="input-text" type="text" id="address-address-new" th:field="*{addressName}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-type-new">Address Type</label>
+                        <input class="input-text" type="text" id="address-type-new" th:field="*{addressType}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-distance-new">Distance</label>
+                        <input class="input-text" type="text" id="address-distance-new" th:field="*{distance}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-outside-city-new">Outside City</label>
+                        <input class="input-text" type="checkbox" id="address-outside-city-new" th:field="*{outsideCity}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-nameEn-new">English Address</label>
+                        <input class="input-text" type="text" id="address-nameEn-new" th:field="*{addressEn}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-nameVn-new">Vietnamese Address</label>
+                        <input class="input-text" type="text" id="address-nameVn-new" th:field="*{addressVn}"/>
+                    </div>
+
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-tax-code-new">Tax Code</label>
+                        <input class="input-text" type="text" id="address-tax-code-new" th:field="*{taxCode}"/>
+                    </div>
+                    <div class="square square-address-edit">
+                        <label class="label label-edit-address" for="address-representative-new">Representative</label>
+                        <input class="input-text" type="text" id="address-representative-new" th:field="*{representative}"/>
+                    </div>
+
+                    <div class="square square-address-edit">
+                        <input type="submit" value="Add New Address"/>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!DELETE MODAL>
+    <!DELETE MODAL>
+    <!DELETE MODAL>
+    <!DELETE MODAL>
+    <!DELETE MODAL>
+    <!DELETE MODAL>
+
+    <div th:fragment="delete-address-modal">
+
+        <div class="modal modal-delete" id="delete-address-modal">
+
+            <form th:action="@{addresses/delete}" th:object="${idAddress}" method="post">
+
+                <div class="grid-delete-address">
+
+                    <div class="square-delete-address">
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                        <label for="inputAddressDelete" style="text-decoration: underline">Please enter ID of the Address you want to delete!</label>
+                        <br clear="all"/>
+                        <input type="text" placeholder="Address ID to Delete" autocomplete="off" required name="idAddress" id="inputAddressDelete"/>
+                    </div>
+
+                    <div class="square-delete-address">
+                        <input type="submit" value="Delete Address"/>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>

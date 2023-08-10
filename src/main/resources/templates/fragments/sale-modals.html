@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    <div th:fragment="new-sale">
+        <div class="modal new-sale-modal" id="new-sale-modal">
+            <form th:action="@{/sales/new}" method="post" th:object="${saleDto}">
+                <div class="grid-new-sale">
+                    <div class="black-square-flex square-new-sale">
+                        <h2 class="modal-heading">NEW SALE ORDER</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Id</label>
+                        <hr>
+                        <input type="text" th:field="*{idSale}" readonly style="width: 100%;">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Order Date</label>
+                        <hr>
+                        <input type="date" th:field="*{orderDate}">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Sale From</label>
+                        <hr>
+                        <select th:field="*{idCompanySource}">
+                            <option th:value="0"></option>
+                            <option th:each="source : ${selves}" th:value="${source.idCompany}" th:text="${source.nameEn}"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Customer</label>
+                        <hr>
+                        <select th:field="*{idCustomer}" onchange="onchangeCustomerSelect(this)">
+                            <option th:value="0"></option>
+                            <option th:each="customer : ${customers}" th:value="${customer.idCompany}" th:text="${customer.nameEn}"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Order Name</label>
+                        <hr>
+                        <input type="text" th:field="*{orderName}">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Batch</label>
+                        <hr>
+                        <input type="text" th:field="*{orderBatch}">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Note</label>
+                        <hr>
+                        <input type="text" th:field="*{note}">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Placer</label>
+                        <hr>
+                        <select th:field="*{idContactCustomer}" id="new-sale placer-select">
+                            <option th:value="0"></option>
+                            <div class="contact-filter" th:each="contact : ${receiverContacts}">
+                                <option th:value="${contact.address.company.idCompany}" style="display: none;"></option>
+                                <option th:value="${contact.idContact}" th:text="${contact.contactName}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <input type="submit" value="New Sale Data" style="width: 200px;">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div th:fragment="edit-sale">
+        <div class="modal new-sale-modal" id="edit-sale-modal">
+            <form th:action="@{edit}" method="post" th:object="${saleDto}">
+                <div class="grid-new-sale">
+                    <div class="black-square-flex square-new-sale">
+                        <h2 class="modal-heading">EDIT SALE DATA</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Id</label>
+                        <hr>
+                        <input class="input-edit" type="text" th:field="*{idSale}" readonly style="width: 100%;">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Order Date</label>
+                        <hr>
+                        <input class="input-edit" type="date" th:field="*{orderDate}">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Sale From</label>
+                        <hr>
+                        <select class="select-edit" th:field="*{idCompanySource}">
+                            <option th:value="0"></option>
+                            <option th:each="source : ${selves}" th:value="${source.idCompany}" th:text="${source.nameEn}"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Customer</label>
+                        <hr>
+                        <select class="select-edit" th:field="*{idCustomer}">
+                            <option th:value="0"></option>
+                            <option th:each="customer : ${customers}" th:value="${customer.idCompany}" th:text="${customer.nameEn}"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Order Name</label>
+                        <hr>
+                        <input class="input-edit" type="text" th:field="*{orderName}">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Batch</label>
+                        <hr>
+                        <input class="input-edit" type="text" th:field="*{orderBatch}">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Note</label>
+                        <hr>
+                        <input class="input-edit" type="text" th:field="*{note}">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Placer</label>
+                        <hr>
+                        <select class="select-edit" th:field="*{idContactCustomer}">
+                            <option th:value="0"></option>
+                            <div class="contact-filter" th:each="contact : ${receiverContacts}">
+                                <option th:value="${contact.address.company.idCompany}" style="display: none;"></option>
+                                <option th:value="${contact.idContact}" th:text="${contact.contactName}"></option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <label>Done Delivery?</label>
+                        <hr>
+                        <input class="check-box" type="checkbox" th:field="${saleDto.doneDelivery}">
+                    </div>
+                    <div class="black-square-flex square-new-sale">
+                        <input type="submit" value="Edit Sale Data" style="width: 200px;">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <div th:fragment="delete-sale">
+        <div class="modal delete-modal" id="delete-sale-modal">
+            <form th:action="@{delete}" th:object="${idSale}" method="post">
+                <div class="grid-delete">
+                    <div class="black-square-flex square-delete">
+                        <h2 class="modal-heading">DELETE SALE DATA</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-delete">
+                        <label>Please enter ID of the Sale Data you want to delete!</label>
+                        <hr>
+                        <input type="text" placeholder="Sale ID to Delete" autocomplete="off" required name="idSale" id="delete-sale-input"/>
+                    </div>
+
+                    <div class="black-square-flex square-delete">
+                        <input type="submit" value="Delete Sale Data"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+</body>
+</html>

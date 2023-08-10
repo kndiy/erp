@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory Input</title>
+
+    <link th:href="@{/styles/template.css}" rel="stylesheet">
+    <link th:href="@{/styles/inventory-in-input-template.css}" rel="stylesheet">
+
+    <script type="text/javascript" th:src="@{/scripts/inventory-in-input-scripts.js}"></script>
+
+</head>
+<body>
+
+    <div class="everything-container">
+        <div th:insert="~{/fragments/header-footer :: header}"></div>
+        <div th:insert="~{/fragments/inventory-in-input-modals :: new-article-number}"></div>
+
+        <div th:if="${results != null && !results.isEmpty()}">
+            <div th:each="result : ${results}">
+                <ul>
+                    <li th:text="${result}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div th:if="${errors != null && !errors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${errors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="page-heading">
+            <div class="grid-function-button">
+                <div class="black-square-flex square-function-button">
+                    <h2>In-ventory - Inventories Input:</h2>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="inventory-in-summary">
+            <h3>Please input Inventories of InventoryIn id: <span th:text="${inventoryIn.idInventoryIn}"></span></h3>
+            <br clear="all">
+            <h3>With voucher: <span th:text="${inventoryIn.voucher}"></span></h3>
+        </div>
+
+        <hr>
+        <div class="first-grid">
+            <div class="grid-inventory-input-header">
+                <div class="square-flex square-inventory-input-header table-header">
+                    <input type="submit" value="Submit Inventories" form="form-inventory">
+                </div>
+                <div class="square-flex square-inventory-input-header table-header">
+                    <input type="submit" value="Change Article Num" onclick="openNewArticleNumberModal()">
+                </div>
+                <div class="square-flex square-inventory-input-header table-header">
+                    <span>NO.</span>
+                </div>
+                <div class="square-flex square-inventory-input-header table-header">
+                    <span>ITEM CODE</span>
+                </div>
+                <div class="square-flex square-inventory-input-header table-header">
+                    <span>STORED AT</span>
+                </div>
+                <div class="square-flex square-inventory-input-header table-header">
+                    <span>WAREHOUSE PLACEMENT</span>
+                </div>
+                <div class="square-flex square-inventory-input-header table-header">
+                    <span>SOURCE CODE</span>
+                </div>
+                <div class="square-flex square-inventory-input-header table-header">
+                    <span>QUANTITY</span>
+                </div>
+                <div class="square-flex square-inventory-input-header table-header">
+                    <span>UNIT</span>
+                </div>
+            </div>
+
+            <hr>
+            <form th:action="@{/inventories-in/new-inventories/new}" method="post" th:object="${inventoryDtoWrapperDto}" id="form-inventory">
+                <div class="grid-inventory-input" th:each="inventoryDTO, itemStat : *{inventoryDtoList}">
+                    <div class="square-flex square-inventory-input">
+                        <input type="text" readonly class="numbering-inventory-input" th:field="*{inventoryDtoList[__${itemStat.index}__].numberInBatch}">
+                    </div>
+                    <div class="square-flex square-inventory-input">
+                        <select class="select-item-code" th:field="*{inventoryDtoList[__${itemStat.index}__].idItemCode}"
+                                th:data-index="${itemStat.index}"
+                                onchange="changeBelowItemCodeSelect(this.getAttribute('data-index'), this)">
+                            <option th:each="itemCode: ${inventoryIn.supplierSource.itemCodeList}" th:value="${itemCode.idItemCode}" th:text="${itemCode.itemCodeString}"></option>
+                        </select>
+                    </div>
+                    <div class="square-flex square-inventory-input">
+                        <select class="select-address" th:field="*{inventoryDtoList[__${itemStat.index}__].idAddressStoredAt}"
+                                th:data-index="${itemStat.index}"
+                                onchange="changeBelowAddressSelect(this.getAttribute('data-index'), this)">
+                            <option th:each="address: ${selfAddresses}" th:value="${address.idAddress}" th:text="${address.addressName}"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-inventory-input">
+                        <input class="input-warehouse" type="text" th:field="*{inventoryDtoList[__${itemStat.index}__].placementInWarehouse}"
+                               th:data-index="${itemStat.index}"
+                               onkeydown="nextWarehousePlacement(this.getAttribute('data-index'), this)">
+                    </div>
+                    <div class="black-square-flex square-inventory-input">
+                        <input class="input-production-code" type="text" th:field="*{inventoryDtoList[__${itemStat.index}__].supplierProductionCode}"
+                               th:data-index="${itemStat.index}"
+                               onkeydown="nextProductionCode(this.getAttribute('data-index'), this)">
+                    </div>
+                    <div class="black-square-flex square-inventory-input">
+                        <input class="input-quantity" type="text" th:field="*{inventoryDtoList[__${itemStat.index}__].initQuantity}"
+                               th:data-index="${itemStat.index}"
+                               onkeydown="nextQuantity(this.getAttribute('data-index'))">
+                    </div>
+                    <div class="black-square-flex square-inventory-input">
+                        <select class="select-unit" th:field="*{inventoryDtoList[__${itemStat.index}__].unit}"
+                                th:data-index="${itemStat.index}"
+                                onchange="nextOrNewUnit(this.getAttribute('data-index'), this)">
+                            <option th:value="0"></option>
+                            <option th:each="unit : ${units}" th:value="${unit}" th:text="${unit}"></option>
+                            <option th:text="NewUnit" th:value="NewUnit"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-inventory-input new-unit-div" style="display: none;">
+                        <input type="text" class="input-new-unit" th:field="*{inventoryDtoList[__${itemStat.index}__].unit}"
+                               th:data-index="${itemStat.index}"
+                               onkeydown="copyNewUnit(this.getAttribute('data-index'), this)">
+                    </div>
+                </div>
+                <div class="black-square-flex square-inventory-input" style="display: none;">
+                    <input type="hidden" th:field="*{newArticleNumber}" id="hidden-input-new-article-number">
+                </div>
+                <div class="black-square-flex square-inventory-input" style="display: none;">
+                    <input type="hidden" th:field="*{idInventoryIn}" id="input-idInventoryIn">
+                </div>
+
+            </form>
+        </div>
+
+        <div class="footer" th:insert="~{/fragments/header-footer :: footer}"></div>
+    </div>
+
+</body>
+</html>

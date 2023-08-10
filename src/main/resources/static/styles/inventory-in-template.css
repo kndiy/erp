@@ -1,0 +1,152 @@
+
+.ultra-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 90vw;
+    grid-column-gap: 30px;
+}
+
+.sub-grid {
+    position: relative;
+    height: 80vh;
+    overflow: auto;
+}
+
+.grid-inventory-in-header {
+     display: grid;
+     grid-template-columns: 1.5fr 3fr 3fr 3fr 3fr 1fr;
+     grid-auto-rows: 50px;
+     grid-column-gap: 1px;
+     grid-row-gap: 1px;
+     margin-bottom: 3px;
+
+     position: sticky;
+     top: 0;
+}
+
+.grid-inventory-in {
+    display: grid;
+    grid-template-columns: 1.5fr 3fr 3fr 3fr 3fr 1fr;
+    grid-auto-rows: 50px;
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    margin-bottom: 3px;
+
+    cursor: pointer;
+}
+
+.square-inventory-in-header {
+    padding-left: 5px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.square-inventory-in-header:nth-child(1) {
+    padding-left: 0;
+}
+
+.square-inventory-in:nth-child(11) {
+    grid-column: span 2;
+}
+
+.square-inventory-in input[type="button"] {
+    width: 98%;
+    height: 95%;
+    padding: 0;
+}
+
+.square-inventory-in {
+    padding-left: 5px;
+}
+.square-inventory-in:nth-child(1), .square-inventory-in:nth-child(6) {
+    padding: 0;
+    justify-content: center;
+}
+
+.grid-function-button {
+    display: grid;
+    grid-template-columns: 150px 150px 150px;
+    grid-column-gap: 10px;
+}
+
+
+
+/*  MODAL MODAL MODAL MODAL MODAL */
+/*  MODAL MODAL MODAL MODAL MODAL */
+/*  MODAL MODAL MODAL MODAL MODAL */
+/*  MODAL MODAL MODAL MODAL MODAL */
+/*  MODAL MODAL MODAL MODAL MODAL */
+
+.grid-new-inventory-in {
+    display: grid;
+    grid-template-columns: 260px 260px;
+    background-color: black;
+    position: fixed;
+    top: 60px;
+    left: 20%;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    padding: 50px;
+}
+
+
+
+.black-square-flex select {
+    width: 360px;
+    height: 50px;
+}
+
+.square-new-inventory-in:nth-child(2) input[type="text"] {
+    width: 500px;
+}
+
+.square-new-inventory-in:nth-child(1), .square-new-inventory-in:nth-child(2), .square-new-inventory-in:nth-child(5) {
+    grid-column: span 2;
+}
+.square-new-inventory-in select {
+    width: 260px;
+}
+
+.square-new-inventory-in:nth-child(3) input[type="text"], .square-new-inventory-in:nth-child(4) input[type="text"],
+.square-new-inventory-in:nth-child(5) input[type="text"], .square-new-inventory-in:nth-child(6) input[type="text"],
+.square-new-inventory-in:nth-child(8) input[type="text"], .square-new-inventory-in:nth-child(7) input[type="text"] {
+    width: 230px;
+}
+
+.grid-filter-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 1fr;
+    grid-auto-rows: 50px;
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    margin-bottom: 3px;
+
+    position: sticky;
+    top: 0;
+}
+
+.grid-filter {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 1fr;
+    grid-auto-rows: 50px;
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    margin-bottom: 1px;
+}
+
+.square-filter, .square-filter-header {
+    padding-left: 5px;
+
+    text-overflow: ellipsis;
+}
+
+.grid-delete-inventory-in {
+    display: grid;
+    grid-template-columns: 500px;
+    position: absolute;
+    top: 60px;
+    left: 20%;
+    background-color: black;
+    padding: 50px;
+}

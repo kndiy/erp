@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    <div th:fragment="modal-login-register-user">
+
+        <div class="modal modal-register" id="modal-register">
+
+            <form th:action="@{/register}" method="post" th:object="${userRoleDto}">
+                <div class="grid grid-modal-register-user">
+
+                    <div class="square square-modal-register-user">
+                        <h3>Registering new User</h3>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+
+                    <div class="square square-modal-register-user">
+                        <label for="username">Username:</label>
+                    </div>
+
+                    <div class="square square-modal-register-user">
+                        <input  type="text" th:field="*{username}" id="username" placeholder="Enter desired username" autocomplete="off" autofocus required/>
+                    </div>
+
+                    <div class="square square-modal-register-user">
+                        <label for="password">Password:</label>
+                    </div>
+                    <div class="square square-modal-register-user">
+                        <input class="input-text" type="password" th:field="*{password}" id="password" placeholder="Enter desired password" autocomplete="off" required/>
+                    </div>
+
+                    <div class="square square-modal-register-user">
+                        <label for="email">Email:</label>
+                    </div>
+                    <div class="square square-modal-register-user">
+                        <input class="input-text" type="text" th:field="*{email}" id="email" placeholder="Enter your email" autocomplete="off" required/>
+                    </div>
+                    <div class="square square-modal-register-user">
+                        <label>Roles:</label>
+                    </div>
+                    <div class="square square-modal-register-user" id="modal-register-user-role">
+                        <div class="checkbox" th:each="role : ${allRoles}">
+                            <input class="input-text" type="checkbox" th:value="${role}" th:field="*{roles}"/>
+                            <label class="label-user-role" th:text="${role}"></label>
+                        </div>
+                    </div>
+
+                    <div class="square square=modal-register-user"></div>
+                    <div class="square square=modal-register-user">
+                        <input type="submit" value="Register New User"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div th:fragment="modal-admin-prompt">
+        <div class="modal modal-admin" id="modal-admin">
+
+            <div class="grid grid-admin">
+                <div class="square square-admin">
+                    <h3>Only an Admin can add new User</h3>
+                    <span class="close-button" onclick="pressToClose()">&times;</span>
+                </div>
+                <div class="square square-admin">
+                    <label>Please Enter Admin Password:</label>
+                </div>
+                <div class="square square-admin">
+                    <input class="input-text" type="password" id="input-admin" autocomplete="off" autofocus/>
+                </div>
+
+                <div class="square square-admin"></div>
+                <div class="square square-admin">
+                    <button th:data-adminPass="${adminPass}" onclick="checkAdminPassword(this.getAttribute('data-adminPass'))">Check Admin Password</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,379 @@
+
+/*================= GENERAL SECTIONS ==================*/
+
+.select {
+    width: 300px;
+    height: 30px;
+}
+
+.modal {
+    display: none;
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-dialog {
+    pointer-event: all;
+}
+
+input:hover, button:hover {
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+    background-color: #FF7333;
+}
+
+body {
+    padding-top: 65px;
+    background-color: black;
+    color: white;
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+input {
+    padding: 15px;
+    border-radius: 0.35rem;
+    width: 200px;
+    background-color: #FFA633;
+    font-weight: bold;
+}
+
+input[type='password'] {
+    width: 320px;
+    background-color: white;
+    height: 20px;
+    color: black;
+}
+
+button {
+    border-radius: 0.35rem;
+    width: 200px;
+    height: 50px;
+    background-color: #FFA633;
+    font-weight: bold;
+
+}
+
+input[type=text] {
+    color: black;
+    background-color: white;
+    height: 20px;
+    width: 320px;
+}
+
+input[type=checkbox] {
+    width: 25px;
+    height: 25px;
+}
+
+.table-heading {
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+h3 {
+    display: inline;
+}
+
+.close-button {
+    display: flex;
+    color: red;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    font-weight: bold;
+    font-size: 28px;
+    border: 2px solid red;
+    height: 30px;
+    width: 30px;
+    background-color: white;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-button:hover, close-button:focus {
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+    background-color: #FF7333;
+    cursor: pointer;
+}
+
+.function {
+    display: flex;
+    padding-bottom: 20px;
+}
+
+.modal-heading {
+    text-decoration: underline;
+    position: absolute;
+    top: -10px;
+    left: 20px;
+}
+
+/*================= HEADER FRAGMENT SECTIONS ==================*/
+
+.header-background {
+    position: fixed;
+    display:block;
+    width: 100%;
+    height: 60px;
+    background-color: #FFC333;
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+}
+
+.footer {
+    position: absolute;
+
+    width: 104%;
+    height: 70px;
+    background-color: #FFC333;
+    color: black;
+    bottom: 0;
+    left: 0;
+
+    margin: -2%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-sub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: wrap;
+}
+
+.footer-sub h3 {
+    margin: 0;
+}
+
+.footer-sub h4 {
+    margin-top: 5px;
+    margin: 0px;
+}
+
+.footer-sub hr {
+    flex-basis: 100%;
+    margin: 0;
+    border: 0;
+    height: 0;
+}
+
+.grid-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: 100px 120px 120px 120px 120px 120px 120px;
+    z-index: 101;
+}
+
+.square-header {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo {
+    margin-left: 20px;
+    width: 60px;
+    height: 60px;
+}
+
+.input-header {
+    width: 100px;
+    height: 40px;
+    background-color: #FFC333;
+    color: black;
+    padding: 0;
+    margin: 5px;
+}
+
+.input-header:hover {
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+    border = 2px orange;
+    background-color: #FF7333;
+}
+
+.header-logout {
+    position: fixed;
+    right: 5px;
+    top: 5px;
+
+    z-index: 101;
+}
+
+.page-heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    flex-flow: wrap;
+}
+
+.page-heading hr {
+    flex-basis: 100%;
+    height: 0;
+    margin: 0;
+    border: 0;
+}
+
+/*GRID*//*GRID*//*GRID*//*GRID*//*GRID*//*GRID*/
+/*GRID*//*GRID*//*GRID*//*GRID*//*GRID*//*GRID*/
+/*GRID*//*GRID*//*GRID*//*GRID*//*GRID*//*GRID*/
+/*GRID*//*GRID*//*GRID*//*GRID*//*GRID*//*GRID*/
+
+.grid-small-gap {
+    display: grid;
+    grid-row-gap: 1px;
+    grid-column-gap: 1px;
+
+    background-color: black;
+}
+
+.grid-big-gap {
+    display: grid;
+    grid-row-gap: 10px;
+    grid-column-gap: 10px;
+
+    margin-bottom: 30px;
+    background-color: black;
+}
+
+.square-flex {
+    background-color: white;
+    color: black;
+    display: flex;
+    flex-flow: wrap;
+    overflow-wrap: anywhere;
+    align-items: center;
+}
+
+.square-flex hr {
+    flex-basis: 100%;
+    margin: 0;
+    border: 0;
+    height: 0;
+}
+
+.everything-container {
+    display: flex;
+    min-height: 100%;
+    justify-content: center;
+    flex-flow: wrap;
+    width: 1fr;
+    padding-bottom: 80px;
+}
+
+.everything-container hr {
+    flex-basis: 100%;
+    margin: 0;
+    border: 0;
+    height: 0;
+}
+
+.black-square-flex {
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-flow: wrap;
+    overflow-wrap: anywhere;
+    align-items: center;
+}
+
+.black-square-flex label {
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.black-square-flex hr {
+    flex-basis: 100%;
+    margin: 0;
+    border: 0;
+    height: 0;
+}
+
+.flex-center {
+    justify-content: center;
+    padding: 0;
+}
+
+.check-radio {
+    position: absolute;
+    height: 92%;
+    width: 92%;
+    border-radius: 50%;
+
+    background-color: white;
+}
+
+.check-radio-id {
+    position: absolute;
+}
+
+.square-check-radio {
+    position: relative;
+}
+
+.grid-delete {
+    display: grid;
+    grid-template-columns: 500px;
+    grid-gap: 20px;
+
+    position: absolute;
+    top: 60px;
+    left: 20%;
+
+    padding: 50px;
+    background-color: black;
+}
+
+.modal-grid {
+    display: grid;
+    grid-gap: 20px;
+
+    position: absolute;
+    top: 60px;
+    left: 20%;
+
+    padding: 50px;
+    background-color: black;
+}
+
+.modal-square:nth-child(1) {
+    grid-column: 1/-1;
+}
+
+.modal-square select {
+    width: 100%;
+    height: 50px;
+}
+
+.modal-square input[type="text"] {
+    width: 100%;
+}
+
+.black-square-flex input[type="date"] {
+    background-color: white;
+}
+
+.checkmark {
+    height: 5px;
+    width: 5px;
+    background-color: red;
+    border-radius: 50%;
+}

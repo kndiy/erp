@@ -1,0 +1,30 @@
+spring:
+    datasource:
+        url: ${env.MYSQL_URL}
+        username: ${env.MYSQL_USERNAME}
+        password: ${env.MYSQL_PASSWORD}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        hibernate:
+            ddl-auto: update
+        #show-sql: true
+        #properties:
+        #    hibernate:
+        #       format_sql: true
+
+management:
+    endpoints:
+        web:
+            base-path: /management
+            exposure:
+                include: '*'
+                exclude:
+        health:
+            show-details: always
+
+info:
+    contact:
+        email: khiemnd9112@gmail.com
+        phone: 0084 979 388 201
+
+

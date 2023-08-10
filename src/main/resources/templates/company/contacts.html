@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Contacts of ' + ${addressName}"></title>
+
+    <link th:href="@{/styles/template.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/contact-template.css}" rel="stylesheet"/>
+
+    <script type="text/javascript" th:src="@{/scripts/contact-scripts.js}"></script>
+
+</head>
+<body>
+
+    <div class="everything-container">
+        <div th:insert="~{/fragments/header-footer :: header}"></div>
+        <div th:insert="~{/fragments/contact-modals :: new-contact-modal}"></div>
+        <div th:insert="~{/fragments/contact-modals :: edit-contact-modal}"></div>
+        <div th:insert="~{/fragments/contact-modals :: delete-contact-modal}"></div>
+
+        <div th:if="${result != null}">
+            <h4 th:text="${result}"></h4>
+        </div>
+
+        <hr>
+
+        <div th:if="${fieldErrors != null && !fieldErrors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${fieldErrors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="page-heading">
+            <h2>Contacts of Address: <span th:text="${addressName}"></span>; from Company: <span th:text="${companyName}"></span></h2>
+        </div>
+
+        <hr>
+
+        <div class="function">
+            <button onclick="openModalNewContact()">Add New Contact</button>
+            &nbsp&nbsp&nbsp&nbsp&nbsp
+            <button onclick="openModalDeleteContact()">Delete Contact</button>
+        </div>
+
+        <hr>
+
+        <div>
+            <div class="grid grid-contact grid-heading">
+                <div class="square square-contact square-heading-id">ID</div>
+                <div class="square square-contact square-heading">Contact Name/ Position</div>
+                <div class="square square-contact square-heading">Phone Number</div>
+                <div class="square square-contact square-heading">Bank Account/ Email</div>
+            </div>
+
+            <div class="grid grid-contact" th:each="contact : ${contacts}">
+                <div class="square square-contact square-id">
+                    <span class="table-row" th:text="${contact.idContact}"></span>
+                </div>
+                <div class="square square-contact">
+                    <span class="table-row" th:text="${contact.contactName}"></span>
+                </div>
+                <div class="square square-contact">
+                    <span class="table-row" th:text="${contact.phone1}"></span>
+                </div>
+                <div class="square square-contact">
+                    <span class="table-row" th:text="${contact.bankAccount}"></span>
+                </div>
+                <div class="square square-contact square-contact-edit">
+                    <button class="input input-contact-edit"
+                            th:data-idContact="${contact.idContact}"
+                            th:data-position="${contact.position}"
+                            th:data-contactName="${contact.contactName}"
+                            th:data-bankAccount="${contact.bankAccount}"
+                            th:data-phone1="${contact.phone1}"
+                            th:data-phone2="${contact.phone2}"
+                            th:data-email="${contact.email}"
+                            onclick="openModalEditContact(this.getAttribute('data-idContact'),
+                                                            this.getAttribute('data-position'),
+                                                            this.getAttribute('data-contactName'),
+                                                            this.getAttribute('data-bankAccount'),
+                                                            this.getAttribute('data-phone1'),
+                                                            this.getAttribute('data-phone2'),
+                                                            this.getAttribute('data-email'))">Edit</button>
+                </div>
+
+                <div class="square square-contact">
+                    <span class="table-row" th:text="${contact.position}"></span>
+                </div>
+
+
+                <div class="square square-contact">
+                    <span class="table-row" th:text="${contact.phone2}"></span>
+                </div>
+                <div class="square square-contact">
+                    <span class="table-row" th:text="${contact.email}"></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="footer" th:insert="~{fragments/header-footer :: footer}"></div>
+
+</body>
+</html>

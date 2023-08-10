@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Item Code Section</title>
+
+    <link th:href="@{/styles/item-code-template.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/template.css}" rel="stylesheet"/>
+
+    <script type="text/javascript" th:src="@{/scripts/item-code-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/api/Generals.js}"></script>
+
+</head>
+<body>
+
+    <div class="everything-container">
+
+        <div th:insert="~{/fragments/header-footer :: header}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: new-item-code-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: delete-item-code-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: delete-item-type-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: delete-item-category-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: new-supplier-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: new-sell-price-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: delete-sell-price-contract-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: edit-item-code-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: edit-supplier-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: delete-supplier-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: edit-sell-price-modal}"></div>
+        <div th:insert="~{/fragments/item-code-modals :: remove-linked-contract-modal}"></div>
+
+
+
+        <div th:if="${results != null && !results.isEmpty()}">
+            <div th:each="result : ${results}">
+                <ul>
+                    <li th:text="${result}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div th:if="${errors != null && !errors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${errors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+
+        <hr>
+
+
+        <div class="page-heading">
+            <div class="grid-function-button">
+                <div class="black-square-flex square-function-button">
+                    <h2>Item Code Section:</h2>
+                </div>
+                <div class="black-square-flex square-function-button">
+                    <button onclick="openNewItemCodeModal()">
+                        New Item Code
+                    </button>
+                </div>
+                <div class="black-square-flex square-function-button">
+                    <button onclick="openDeleteItemCodeModal()">
+                        Delete Item Code
+                    </button>
+                </div>
+                <div class="black-square-flex square-function-button">
+                    <button onclick="openDeleteItemTypeModal()">
+                        Delete Item Type
+                    </button>
+                </div>
+                <div class="black-square-flex square-function-button">
+                    <button onclick="openDeleteItemCategoryModal()">
+                        Delete Item Category
+                    </button>
+                </div>
+                <div class="black-square-flex square-function-button">
+                    <button onclick="openDeleteSellPriceContractModal()">
+                        Delete Sales Contract
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="grid-cate-type-select">
+            <div class="square-cate-type-select">
+                <label>Select Item Category</label>
+                <hr>
+                <select class="select select-item-category" id="select-item-category">
+                    <option th:value="0"></option>
+                    <option th:each="category : ${itemCategories}" th:text="${category.itemCategoryString}" th:value="${category.idItemCategory}"></option>
+                </select>
+            </div>
+            <div class="square-cate-type-select">
+                <label>Select Item Type</label>
+                <hr>
+                <select class="select select-item-category-type" id="select-item-type">
+                    <option th:value="0"></option>
+                    <div class="select-item-type-group" th:each="type : ${itemTypes}">
+                        <option class="select-item-type-idItemCategory" th:value="${type.ItemCategory.idItemCategory}" style="display: none"></option>
+                        <option class="select-item-type-idItemType"  th:text="${type.itemTypeString}" th:value="${type.idItemType}"></option>
+                    </div>
+                </select>
+            </div>
+            <form th:action="@{/item-codes}" method="get" id="form-filter-item-codes">
+                <input type="submit" class="input input-submit item-function-input" value="Filter">
+            </form>
+        </div>
+
+        <hr>
+
+
+
+
+        <div class="ultra-grid">
+            <div class="ultra-square">
+                <div class="grid item-code-grid header-grid">
+                    <div class="square square-flex item-code-square header-square"></div>
+                    <div class="square square-flex item-code-square header-square">
+                        <span class="table-heading">CTGORY</span>
+                    </div>
+                    <div class="square square-flex item-code-square header-square">
+                        <span class="table-heading">ITEM TYPE</span>
+                    </div>
+                    <div class="square square-flex item-code-square header-square">
+                        <span class="table-heading">ITEM CODE</span>
+                    </div>
+                    <div class="square square-flex item-code-square header-square flex-center">
+                        <span class="table-heading-center">NEW INFO</span>
+                    </div>
+                </div>
+
+                <div class="grid item-code-grid main" th:each="itemCode : ${itemCodes}" onclick="onclickItemCodeGrid(this)">
+                    <div class="square square-flex item-code-square main square-check-radio flex-center">
+                        <span class="check-radio"></span>
+                        <span class="input-source check-radio-id" th:text="${itemCode.idItemCode}"></span>
+                    </div>
+                    <div class="square square-flex item-code-square main">
+                        <span th:text="${itemCode.itemType.itemCategory.itemCategoryString}"></span>
+                    </div>
+                    <div class="square square-flex item-code-square main">
+                        <span th:text="${itemCode.itemType.itemTypeString}"></span>
+                    </div>
+                    <div class="square square-flex item-code-square main">
+                        <span th:text="${itemCode.itemCodeString}"></span>
+                    </div>
+                    <div class="square square-flex item-code-square main">
+                        <input type="button" class="radio-container-button"
+                               th:data-idItemCode="${itemCode.idItemCode}"
+                               onclick="openNewSupplierModal(this.getAttribute('data-idItemCode'))" value="Supplier"/>
+                    </div>
+                    <div class="square square-flex item-code-square main">
+                        <input type="button" class="radio-container-button"
+                               th:data-idItemCodeSellPrice="${itemCode.idItemCode}"
+                               onclick="openNewSellPriceModal(this.getAttribute('data-idItemCodeSellPrice'))" value="S.Price"/>
+                    </div>
+                    <div class="square square-flex item-code-square main">
+                        <input type="button" class="edit-button"
+                               th:data-idItemCode="${itemCode.idItemCode}"
+                               th:data-itemCategoryString="${itemCode.itemType.itemCategory.itemCategoryString}"
+                               th:data-itemTypeString="${itemCode.itemType.itemTypeString}"
+                               th:data-itemCodeString="${itemCode.itemCodeString}"
+                               onclick="openEditItemCodeModal(this.getAttribute('data-idItemCode'),
+                                                                this.getAttribute('data-itemCategoryString'),
+                                                                this.getAttribute('data-itemTypeString'),
+                                                                this.getAttribute('data-itemCodeString'))"
+                               value="Edit">
+                    </div>
+                </div>
+            </div>
+
+            <div class="ultra-square">
+                <div class="grid supplier-grid header-grid">
+                    <div class="square supplier-square header-square">
+                        <span>SUPP</span>
+                    </div>
+                    <div class="square supplier-square header-square">
+                        <span>ITEM CODE SUPPLIER</span>
+                    </div>
+                </div>
+                <div th:each="itemCode : ${itemCodes}" class="item-code-map supplier" style="display: none;">
+                    <span th:text="${itemCode.idItemCode}" style="display: none"></span>
+                    <div class="grid supplier-grid main" th:each="itemCodeSupplier : ${itemCode.itemCodeSuppliers}">
+                        <span th:text="${itemCodeSupplier.itemCode.idItemCode}" style="display: none"></span>
+                        <span th:text="${itemCodeSupplier.supplier.idCompany}" style="display: none"></span>
+                        <div class="square square-flex supplier-square main">
+                            <span th:text="${itemCodeSupplier.supplier.abbreviation}"></span>
+                        </div>
+                        <div class="square square-flex supplier-square main">
+                            <span th:text="${itemCodeSupplier.itemCodeSupplierString}"></span>
+                        </div>
+                        <div class="square square-flex flex-center supplier-square main">
+                            <input type="submit"
+                                   th:data-idItemCode="${itemCodeSupplier.itemCode.idItemCode}"
+                                   th:data-idSupplier="${itemCodeSupplier.supplier.idCompany}"
+                                   th:data-itemCodeSupplierString="${itemCodeSupplier.itemCodeSupplierString}"
+                                   onclick="openEditItemCodeSupplierModal(this.getAttribute('data-idItemCode'),
+                                                                            this.getAttribute('data-idSupplier'),
+                                                                            this.getAttribute('data-itemCodeSupplierString'),
+                                                                            this.getAttribute('data-equivalent'))"
+                                   value="Edt">
+                        </div>
+                        <div class="square square-flex flex-center supplier-square main">
+                            <input th:data-idItemCode="${itemCodeSupplier.itemCode.idItemCode}"
+                                   th:data-idSupplier="${itemCodeSupplier.supplier.idCompany}"
+                                   th:data-supplierString="${itemCodeSupplier.supplier.nameEn}"
+                                   th:data-itemCodeString="${itemCodeSupplier.itemCode.itemCodeString}"
+                                   type="submit"
+                                   onclick="openDeleteItemCodeSupplierModal(this.getAttribute('data-idItemCode'),
+                                                                            this.getAttribute('data-idSupplier'),
+                                                                            this.getAttribute('data-itemCodeString'),
+                                                                            this.getAttribute('data-supplierString'))"
+                                   value="Dlt">
+                        </div>
+                        <div class="square square-flex supplier-square main" style="justify-content: center;">
+                            <form th:action="@{item-code-supplier/__${itemCodeSupplier.idItemCodeSupplier}__/equivalents}" method="get" id="to-equivalent-page">
+                                <input type="submit" value="Add Eqv.">
+                            </form>
+                            <span th:if="${itemCodeSupplier.itemCodeSupplierEquivalentList == null || itemCodeSupplier.itemCodeSupplierEquivalentList.isEmpty()}" class="checkmark"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ultra-square">
+                <div class="grid price-grid header-grid">
+                    <div class="square-flex price-square header-square">
+                        <span>SALES CONTRACTS</span>
+                    </div>
+                    <div class="square black-square-flex price-square"></div>
+                    <div class="square square-flex price-square header-square">
+                        <span>FROM DATE</span>
+                    </div>
+                    <div class="square square-flex price-square header-square">
+                        <span>TO DATE</span>
+                    </div>
+
+                </div>
+                <div th:each="itemCode : ${itemCodes}" class="item-code-map price" style="display: none;">
+                    <span th:text="${itemCode.idItemCode}" style="display: none" id="sell-price-id-item-code"></span>
+                    <div class="grid price-grid main" th:each="itemSellPrice : ${itemCode.itemSellPriceList}">
+                        <div class="square square-flex price-square main">
+                            <span th:text="${itemSellPrice.idItemSellPrice}" style="display: none" id="sell-price-id-item-sell-price"></span>
+                            <span th:text="${itemSellPrice.itemSellPriceContract}"></span>
+                        </div>
+                        <div class="square square-flex price-square main">
+                            <input th:data-idItemSellPrice="${itemSellPrice.idItemSellPrice}"
+                                   th:data-idCustomer="${itemSellPrice.customer.idCompany}"
+                                   th:data-contractName="${itemSellPrice.itemSellPriceContract}"
+                                   th:data-fromDate="${itemSellPrice.fromDate}"
+                                   th:data-toDate="${itemSellPrice.toDate}"
+                                   th:data-contractAmount="${itemSellPrice.itemSellPriceAmount}"
+                                   th:data-contractUnit="${itemSellPrice.itemSellPriceUnit}"
+                                   type="submit" onclick="openEditItemSellPriceModal(this.getAttribute('data-idItemSellPrice'),
+                                                                                     this.getAttribute('data-idCustomer'),
+                                                                                     this.getAttribute('data-contractName'),
+                                                                                     this.getAttribute('data-fromDate'),
+                                                                                     this.getAttribute('data-toDate'),
+                                                                                     this.getAttribute('data-contractAmount'),
+                                                                                     this.getAttribute('data-contractUnit'))"
+                                   value="Edt">
+                        </div>
+                        <div class="square square-flex price-square main sell-price-date">
+                            <span th:text="${itemSellPrice.fromDate}"></span>
+                        </div>
+                        <div class="square square-flex price-square main sell-price-date">
+                            <span th:text="${itemSellPrice.toDate}"></span>
+                        </div>
+                        <div class="square square-flex price-square main">
+                            <input th:data-idItemSellPrice="${itemSellPrice.idItemSellPrice}"
+                                   th:data-idItemCode="${itemCode.idItemCode}"
+                                   th:data-contractName="${itemSellPrice.itemSellPriceContract}"
+                                   th:data-itemCodeString="${itemCode.itemCodeString}"
+                                   type="submit" onclick="openRemoveLinkedContractModal(this.getAttribute('data-idItemSellPrice'),
+                                                                                     this.getAttribute('data-idItemCode'),
+                                                                                     this.getAttribute('data-contractName'),
+                                                                                     this.getAttribute('data-itemCodeString'))"
+                                   value="Rmv Link">
+                        </div>
+                        <div class="square square-flex price-square main">
+                            <span th:text="${itemSellPrice.itemSellPriceAmount}"></span>
+                        </div>
+                        <div class="square square-flex price-square main">
+                            <span th:text="${itemSellPrice.itemSellPriceUnit}"></span>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer" th:insert="~{/fragments/header-footer :: footer}"></div>
+
+</body>
+</html>

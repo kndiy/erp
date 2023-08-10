@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div th:fragment="delete-inventory-out">
+        <div class="modal delete-inventory-out-modal" id="delete-inventory-out-modal">
+            <form th:action="@{inventories-out/delete}" method="post" th:object="${idInventoryOut}">
+                <div class="grid-delete">
+                    <div class="black-square-flex square-delete">
+                        <h2 class="modal-heading">DELETE INVENTORY OUT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-delete">
+                        <label>Do you want to delete this InventoryOut?</label>
+                        <hr>
+                        <input type="text" readonly required name="idInventoryOut" class="modal-id-inventory-out"/>
+                    </div>
+
+                    <div class="black-square-flex square-delete">
+                        <input type="submit" value="Delete"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

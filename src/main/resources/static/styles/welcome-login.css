@@ -1,0 +1,103 @@
+
+.grid {
+    display: grid;
+    grid-template-columns: 150px 400px;
+    grid-row-gap: 30px;
+}
+
+.square {
+    display: flex;
+    align-items: center;
+}
+
+.grid-welcome {
+    display: grid;
+    grid-template-columns: 200px 200px 200px 200px;
+    gap: 30px;
+}
+
+.square-welcome {
+    display: flex;
+    aspect-ratio: 3/1;
+}
+
+.grid-modal-register-user {
+    display: grid;
+    position: fixed;
+    top: 150px;
+    left: 150px;
+    grid-template-column: 200px 200px;
+    padding: 50px;
+    background-color: black;
+
+}
+
+.square-modal-register-user {
+    display: flex;
+    align-items: center;
+}
+
+.square-modal-register-user:nth-child(1) {
+    grid-column: span 2;
+}
+
+.grid-login-prompt {
+    display: grid;
+    grid-template-columns: 300px 300px;
+    padding-bottom: 50px;
+}
+
+.square-login-prompt {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.grid-admin {
+    position: fixed;
+    top: 150px;
+    left: 200px;
+    padding: 50px;
+    background-color: black;
+}
+
+.square-admin {
+    display: flex;
+    align-items: center;
+}
+
+.square-admin:nth-child(1) {
+    grid-column: span 2;
+}
+
+#modal-register-user-role {
+    display: block;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.label-choose-file-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 0.35rem;
+    width: 200px;
+    background-color: #FFA633;
+    font-weight: bold;
+    color: black;
+    width: 170px;
+    margin-bottom: 10px;
+}
+
+.label-choose-file-input:hover {
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+    background-color: #FF7333;
+}
+
+
+
+
+

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    <!NEW MODAL>
+    <!NEW MODAL>
+    <!NEW MODAL>
+    <!NEW MODAL>
+    <!NEW MODAL>
+
+    <div th:fragment="new-contact-modal">
+        <div class="modal new-contact-modal" id="new-contact-modal">
+            <form th:action="@{contacts/new}" method="post" th:object="${contact}">
+                <div class="grid grid-new-contact">
+                    <div class="square square-new-contact">
+                        <h2 class="modal-heading">CREATING NEW CONTACT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-id">Contact ID</label>
+                        <input type="text" id="contact-id" th:field="*{idContact}" style="width: 50px" readonly/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-name">Contact Name</label>
+                        <input type="text" id="contact-name" th:field="*{contactName}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-position">Contact Position</label>
+                        <input type="text" id="contact-position" th:field="*{position}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-phone1">Phone 1</label>
+                        <input type="text" id="contact-phone1" th:field="*{phone1}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-phone2">Phone 2</label>
+                        <input type="text" id="contact-phone2" th:field="*{phone2}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-email">Email</label>
+                        <input type="text" id="contact-email" th:field="*{email}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-bank-account">Bank Account</label>
+                        <input type="text" id="contact-bank-account" th:field="*{bankAccount}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <input type="submit" value="Create New Contact">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!EDIT MODAL>
+    <!EDIT MODAL>
+    <!EDIT MODAL>
+    <!EDIT MODAL>
+    <!EDIT MODAL>
+
+    <div th:fragment="edit-contact-modal">
+        <div class="modal edit-contact-modal" id="edit-contact-modal">
+            <form th:action="@{contacts/edit}" method="post" th:object="${contact}">
+                <div class="grid grid-new-contact">
+                    <div class="square square-new-contact">
+                        <h2 class="modal-heading">EDITING CONTACT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-edit-id">Contact ID</label>
+                        <input type="text" id="contact-edit-id" th:field="*{idContact}" style="width: 50px" readonly/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-edit-name">Contact Name</label>
+                        <input type="text" id="contact-edit-name" th:field="*{contactName}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-edit-position">Contact Position</label>
+                        <input type="text" id="contact-edit-position" th:field="*{position}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-edit-phone1">Phone 1</label>
+                        <input type="text" id="contact-edit-phone1" th:field="*{phone1}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-edit-phone2">Phone 2</label>
+                        <input type="text" id="contact-edit-phone2" th:field="*{phone2}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-edit-email">Email</label>
+                        <input type="text" id="contact-edit-email" th:field="*{email}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <label class="label-input" for="contact-edit-bank-account">Bank Account</label>
+                        <input type="text" id="contact-edit-bank-account" th:field="*{bankAccount}"/>
+                    </div>
+                    <div class="square square-new-contact">
+                        <input type="submit" value="Edit Contact">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    <!DELETE MODAL>
+    <!DELETE MODAL>
+    <!DELETE MODAL>
+    <!DELETE MODAL>
+    <!DELETE MODAL>
+
+    <div th:fragment="delete-contact-modal">
+        <div class="modal delete-contact-modal" id="delete-contact-modal">
+            <form th:action="@{contacts/delete}" th:object="${idContact}" method="post">
+                <div class="grid-delete-contact">
+                    <div class="contact">
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                        <label for="inputContactDelete" style="text-decoration: underline">Please enter ID of the Contact you want to delete!</label>
+                        <br clear="all"/>
+                        <input type="text" placeholder="Contact ID to Delete" autocomplete="off" required name="idAddress" id="inputContactDelete"/>
+                    </div>
+                    <div class="square-delete-contact">
+                        <input type="submit" value="Delete Address"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

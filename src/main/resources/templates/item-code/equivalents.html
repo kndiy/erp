@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Equivalents</title>
+
+    <link th:href="@{/styles/template.css}" rel="stylesheet">
+    <link th:href="@{/styles/item-code-equivalent-template.css}" rel="stylesheet">
+
+    <script th:src="@{/scripts/item-code-equivalent-scripts.js}" type="text/javascript"></script>
+
+</head>
+<body>
+    <div class="everything-container">
+        <div th:insert="~{fragments/header-footer :: header}"></div>
+        <div th:insert="~{fragments/item-code-equivalent-modals :: new-equivalent}"></div>
+        <div th:insert="~{fragments/item-code-equivalent-modals :: delete-equivalent}"></div>
+        <div th:insert="~{fragments/item-code-equivalent-modals :: edit-equivalent}"></div>
+
+        <div th:if="${results != null && !results.isEmpty()}">
+            <div th:each="result : ${results}">
+                <ul>
+                    <li th:text="${result}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div th:if="${errors != null && !errors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${errors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>The following Equivalent information is connected to:</h2>
+            <h3>ItemCode: <span th:text="${itemCodeSupplier == null ? '' : itemCodeSupplier.itemCode.itemCodeString}" class="source-input"></span></h3>
+            <br clear="all">
+            <h3>Supplier: <span th:text="${itemCodeSupplier == null ? '' : itemCodeSupplier.supplier.nameEn}" class="source-input"></span></h3>
+            <br clear="all">
+            <span th:text="${itemCodeSupplier == null ? '' : itemCodeSupplier.idItemCodeSupplier}" style="display: none;" class="source-input"></span>
+            <h3>ItemCodeSupplier: <span th:text="${itemCodeSupplier == null? '' : itemCodeSupplier.itemCodeSupplierString}" class="source-input"></span></h3>
+            <br clear="all">
+            <button onclick="openNewEquivalentModal()">New Equivalent</button>
+            &nbsp&nbsp&nbsp
+
+        </div>
+
+        <hr>
+
+        <div>
+            <div class="grid equivalent-grid header-grid">
+                <div class="square square-flex equivalent-square table-heading">
+                    <span>From Unit</span>
+                </div>
+                <div class="square square-flex equivalent-square table-heading">
+                    <span>To Unit</span>
+                </div>
+                <div class="square square-flex equivalent-square table-heading">
+                    <span>Equivalent</span>
+                </div>
+            </div>
+
+            <div class="grid equivalent-grid main" th:each="eql : ${itemCodeSupplierEquivalent}">
+                <div class="square square-flex equivalent-square main">
+                    <span th:text="${eql.sourceUnit}" class="source-input"></span>
+                </div>
+                <div class="square square-flex equivalent-square main">
+                    <span th:text="${eql.equivalentUnit}" class="source-input"></span>
+                </div>
+                <div class="square square-flex equivalent-square main">
+                    <span th:text="${eql.equivalent}" class="source-input"></span>
+                </div>
+                <div class="square square-flex equivalent-square main">
+                    <button th:data-idEquivalent="${eql.idItemCodeSupplierEquivalent}"
+                            onclick="openEditEquivalentModal(this.getAttribute('data-idEquivalent'))">Edit</button>
+                </div>
+                <div class="square square-flex equivalent-square main">
+                    <button th:data-idEquivalent="${eql.idItemCodeSupplierEquivalent}"
+                            onclick="openDeleteEquivalentModal(this.getAttribute('data-idEquivalent'))">Delete</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer" th:insert="~{fragments/header-footer :: footer}"></div>
+    </div>
+
+</body>
+</html>

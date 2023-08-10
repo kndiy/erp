@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    <div th:fragment="new-item-code-modal">
+        <div class="modal new-item-code-modal" id="new-item-code-modal">
+            <form th:object="${itemCategoryTypeCodeDto}" th:action="@{/item-codes/new}" method="post">
+                <div class="grid-new-item-code">
+                    <div class="square-new-item-code">
+                        <h2 class="modal-heading">ADDING NEW ITEM CODE</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square-new-item-code">
+                        <label>Select Item Category</label>
+                        <hr>
+                        <select class="select select-new-item-category" id="select-new-item-category" th:field="*{itemCategoryString}" onchange="onSelectCategoryChange()">
+                            <option th:value="0"></option>
+                            <option th:each="category : ${itemCategories}" th:text="${category.itemCategoryString}" th:value="${category.itemCategoryString}"></option>
+                            <option th:value="OTHER..." th:text="OTHER..."></option>
+                        </select>
+                        <hr>
+                        <input class="new-item-category-input" id="new-item-category-input" type="text" th:field="*{itemCategoryString}" style="display: none"/>
+
+                    </div>
+                    <div class="square-new-item-code">
+                        <label>Select Item Type</label>
+                        <hr>
+                        <select class="select select-new-item-type" id="select-new-item-type" th:field="*{itemTypeString}" onchange="onSelectTypeChange()">
+                            <option th:value="0"></option>
+                            <div class="select-item-type-group" th:each="type : ${itemTypes}">
+                                <option class="select-item-type-idItemCategory" th:value="${type.ItemCategory.itemCategoryString}" style="display: none"></option>
+                                <option class="select-item-type-idItemType"  th:text="${type.itemTypeString}" th:value="${type.itemTypeString}"></option>
+                            </div>
+                            <option th:value="OTHER..." th:text="OTHER..."></option>
+                        </select>
+                        <hr>
+                        <input class="new-item-type-input" id="new-item-type-input" type="text" th:field="*{itemTypeString}" style="display: none"/>
+
+                    </div>
+                    <div class="square-new-item-code">
+                        <label>Item Code</label>
+                        <input class="new-item-code-input" type="text" th:field="*{itemCodeString}">
+                    </div>
+                    <div class="square-new-item-code">
+                        <input class="new-item-code-input" type="submit">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT>
+    <!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT>
+    <!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT>
+    <!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT>
+    <!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT><!DELETE ITEM CODE FRAGMENT>
+
+    <div th:fragment="delete-item-code-modal">
+
+        <div class="modal delete-item-code-modal" id="delete-item-code-modal">
+
+            <form th:action="@{/item-codes/delete}" th:object="${idItemCode}" method="post">
+
+                <div class="grid-modal-delete">
+                    <div class="square-modal-delete">
+                        <h2 class="modal-heading">DELETING ITEM CODE</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square-modal-delete">
+                        <label>Please enter ID of the Item Code you want to delete!</label>
+                    </div>
+                    <div class="square-modal-delete">
+                        <label>Please exit modal and click on Item Code to know its ID!</label>
+                    </div>
+                    <div class="square-modal-delete">
+                        <input type="text" placeholder="Item Code ID" required name="idItemCode" id="delete-item-code-input" autocomplete="off"/>
+                    </div>
+                    <div class="square-modal-delete">
+                        <input type="submit" value="Delete Item Code"/>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT>
+    <!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT>
+    <!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT>
+    <!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT>
+    <!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT><!DELETE ITEM TYPE FRAGMENT>
+
+    <div th:fragment="delete-item-type-modal">
+
+        <div class="modal delete-item-code-modal" id="delete-item-type-modal">
+
+            <form th:action="@{/item-codes/delete-item-type}" th:object="${idItemType}" method="post">
+
+                <div class="grid-modal-delete">
+                    <div class="square-modal-delete">
+                        <h2 class="modal-heading">DELETING ITEM TYPE</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square-modal-delete">
+                        <label>Please select the Item Type that you want to delete!</label>
+                    </div>
+                    <div class="square-modal-delete">
+                        <select id="delete-item-type-select" name="idItemType">
+                            <option class="select-item-type-idItemType" th:each="type : ${itemTypes}" th:text="${type.itemTypeString}" th:value="${type.idItemType}"></option>
+                        </select>
+                    </div>
+                    <div class="square-modal-delete">
+                        <input type="submit" value="Delete Item Type"/>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT>
+    <!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT>
+    <!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT>
+    <!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT>
+    <!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT><!DELETE ITEM CATEGORY FRAGMENT>
+
+    <div th:fragment="delete-item-category-modal">
+
+        <div class="modal delete-item-code-modal" id="delete-item-category-modal">
+
+            <form th:action="@{/item-codes/delete-item-category}" th:object="${idItemCategory}" method="post">
+
+                <div class="grid-modal-delete">
+                    <div class="square-modal-delete">
+                        <h2 class="modal-heading">DELETING ITEM CATEGORY</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square-modal-delete">
+                        <label>Please select the Item Category that you want to delete!</label>
+                    </div>
+                    <div class="square-modal-delete">
+                        <select id="delete-item-category-select" name="idItemCategory">
+                            <option th:text="${category.itemCategoryString}" th:each="category : ${itemCategories}" th:value="${category.idItemCategory}"></option>
+                        </select>
+                    </div>
+                    <div class="square-modal-delete">
+                        <input type="submit" value="Delete Item Category"/>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL>
+    <!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL>
+    <!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL>
+    <!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL>
+    <!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL><!NEW SUPPLIER MODAL>
+
+    <div th:fragment="new-supplier-modal">
+        <div class="modal new-supplier-modal" id="new-supplier-modal">
+            <form th:action="@{item-codes/add-new-item-code-supplier}" th:object="${itemCodeSupplierDto}" method="post">
+                <div class="grid-new-supplier-modal">
+                    <div class="square-new-supplier">
+                        <h2 class="modal-heading">NEW ITEM CODE SUPPLIER</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square-new-supplier">
+                        <label>ItemCode ID</label>
+                        <hr>
+                        <input type="text" th:field="*{idItemCode}" style="width: 50px" readonly id="new-item-code-supplier-id-item-code">
+                    </div>
+                    <div class="square-new-supplier">
+                        <label>Please select Supplier</label>
+                        <hr>
+                        <select th:field="*{idCompany}" style="width: 400px; height: 40px;">
+                            <option th:value="0"></option>
+                            <option th:each="supplier : ${suppliers}" th:value="${supplier.idCompany}" th:text="${supplier.nameEn}"></option>
+                        </select>
+                    </div>
+                    <div class="square-new-supplier">
+                        <label>Please enter designated Item Code of Corresponding Supplier</label>
+                        <hr>
+                        <input type="text" th:field="*{itemCodeSupplierString}">
+                    </div>
+                    <div class="square-new-supplier">
+                        <input type="submit" value="Add New ICSupplier ">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    <!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL>
+    <!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL>
+    <!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL>
+    <!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL>
+    <!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL><!NEW SELL PRICE MODAL>
+
+    <div th:fragment="new-sell-price-modal">
+        <div class="modal new-sell-price-modal" id="new-sell-price-modal">
+            <form th:action="@{/item-codes/add-new-item-sell-price}" th:object="${itemSellPriceDto}" method="post">
+                <div class="grid-new-sell-price">
+                    <div class="black-square-flex square-new-sell-price">
+                        <h2 class="modal-heading">NEW SALES CONTRACT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <label>Item Code ID</label>
+                        <hr>
+                        <input type="text" th:field="*{idItemCode}" style="width: 50px" readonly id="new-sell-price-id-item-code">
+                    </div>
+
+                    <div class="black-square-flex square-new-sell-price">
+                        <label>Contract Name</label>
+                        <hr>
+                        <select th:field="*{itemSellPriceContract}" id="new-sell-price-select-contract" onchange="onchangeNewSellPriceSelectContract()">
+                            <option th:each="itemSellPrice : ${itemSellPrices}" th:text="${itemSellPrice.itemSellPriceContract + ' '
+                            + itemSellPrice.itemSellPriceAmount + ' ' + itemSellPrice.itemSellPriceUnit}" th:value="${itemSellPrice.idItemSellPrice}"></option>
+                            <option th:value="OTHER..." th:text="OTHER..."></option>
+                        </select>
+                        <input type="text"
+                               th:field="*{itemSellPriceContract}"
+                               class="square-new-sell-price-hidden input-new-sell-price-contract"
+                               style="display: none"
+                               id="new-sell-price-contract-input"
+                        >
+                    </div>
+                    <div class="black-square-flex square-new-sell-price square-new-sell-price-hidden" style="display: none">
+                        <label>Please Select Customer</label>
+                        <hr>
+                        <select th:field="*{idCustomer}">
+                            <option th:each="customer : ${customers}" th:text="${customer.nameEn}" th:value="${customer.idCompany}"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-sell-price square-new-sell-price-hidden" style="display: none">
+                        <label>From Date</label>
+                        <hr>
+                        <input type="date" th:field="*{fromDate}">
+                    </div>
+                    <div class="black-square-flex square-new-sell-price square-new-sell-price-hidden" style="display: none">
+                        <label>To Date</label>
+                        <hr>
+                        <input type="date" th:field="*{toDate}">
+                    </div>
+                    <div class="black-square-flex square-new-sell-price square-new-sell-price-hidden" style="display: none">
+                        <label>Set Item Sell Price</label>
+                        <hr>
+                        <input type="text" th:field="*{itemSellPriceAmount}">
+                    </div>
+                    <div class="black-square-flex square-new-sell-price square-new-sell-price-hidden" style="display: none">
+                        <label>Unit of Item Sell Price</label>
+                        <hr>
+                        <input type="text" th:field="*{itemSellPriceUnit}">
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <input type="submit" value="Link to Contract">
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT>
+    <!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT>
+    <!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT>
+    <!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT>
+    <!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT><!DELETE SELL PRICE CONTRACT>
+
+    <div th:fragment="delete-sell-price-contract-modal">
+        <div class="modal delete-item-code-modal" id="delete-item-sell-price-contract-modal">
+            <form th:action="@{/item-codes/delete-sell-price-contract}" th:object="${idItemSellPrice}" method="post">
+                <div class="grid-modal-delete">
+                    <div class="square-modal-delete">
+                        <h2 class="modal-heading">DELETING SALE CONTRACT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square-modal-delete">
+                        <label>Please select the Contract you want to delete!</label>
+                    </div>
+                    <div class="square-modal-delete">
+                        <select name="idItemSellPrice">
+                            <option th:value="0"></option>
+                            <option th:each="itemSellPrice : ${itemSellPrices}" th:text="${itemSellPrice.itemSellPriceContract}" th:value="${itemSellPrice.idItemSellPrice}"></option>
+                        </select>
+                    </div>
+                    <div class="square-modal-delete">
+                        <input type="submit" value="Delete Contract"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT>
+    <!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT>
+    <!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT>
+    <!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT>
+    <!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT>
+    <!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT><!EDIT ITEM CODE FRAGMENT>
+
+    <div th:fragment="edit-item-code-modal">
+        <div class="modal new-item-code-modal" id="edit-item-code-modal">
+            <form th:object="${itemCategoryTypeCodeDto}" th:action="@{/item-codes/edit}" method="post">
+                <div class="grid-new-item-code">
+                    <div class="square-new-item-code">
+                        <h2 class="modal-heading">ADDING NEW ITEM CODE</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square-new-item-code">
+                        <label>Item Code ID</label>
+                        <hr>
+                        <input type="text" readonly th:field="*{idItemCode}" id="edit-item-code-id" style="width: 50px;">
+                    </div>
+                    <div class="square-new-item-code">
+                        <label>Select Item Category</label>
+                        <hr>
+                        <select class="select select-new-item-category" id="select-edit-item-category" th:field="*{itemCategoryString}" onchange="onSelectCategoryChange()">
+                            <option th:value="0"></option>
+                            <option th:each="category : ${itemCategories}" th:text="${category.itemCategoryString}" th:value="${category.itemCategoryString}"></option>
+                            <option th:value="OTHER..." th:text="OTHER..."></option>
+                        </select>
+                        <hr>
+                        <input class="new-item-category-input" id="edit-item-category-input" type="text" th:field="*{itemCategoryString}" style="display: none"/>
+
+                    </div>
+                    <div class="square-new-item-code">
+                        <label>Select Item Type</label>
+                        <hr>
+                        <select class="select select-new-item-type" id="select-edit-item-type" th:field="*{itemTypeString}" onchange="onSelectTypeChange()">
+                            <option th:value="0"></option>
+                            <div class="select-item-type-group" th:each="type : ${itemTypes}">
+                                <option class="select-item-type-idItemCategory" th:value="${type.ItemCategory.itemCategoryString}" style="display: none"></option>
+                                <option class="select-item-type-idItemType"  th:text="${type.itemTypeString}" th:value="${type.itemTypeString}"></option>
+                            </div>
+                            <option th:value="OTHER..." th:text="OTHER..."></option>
+                        </select>
+                        <hr>
+                        <input class="new-item-type-input" id="edit-item-type-input" type="text" th:field="*{itemTypeString}" style="display: none"/>
+
+                    </div>
+                    <div class="square-new-item-code">
+                        <label>Item Code</label>
+                        <input class="new-item-code-input" type="text" th:field="*{itemCodeString}" id="edit-item-code-string-input">
+                    </div>
+                    <div class="square-new-item-code">
+                        <input class="new-item-code-input" type="submit">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER>
+    <!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER>
+    <!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER>
+    <!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER>
+    <!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER><!EDIT ITEM CODE SUPPLIER>
+
+    <div th:fragment="edit-supplier-modal">
+        <div class="modal new-supplier-modal" id="edit-supplier-modal">
+            <form th:action="@{/item-codes/edit-item-code-supplier}" th:object="${itemCodeSupplierDto}" method="post">
+                <div class="grid-new-supplier-modal">
+                    <div class="square-new-supplier">
+                        <h2 class="modal-heading">EDIT ITEM CODE SUPPLIER</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="square-new-supplier">
+                        <label>ItemCode ID</label>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp
+                        <label>Original Supplier ID</label>
+                        <hr>
+                        <input type="text" th:field="*{idItemCode}" style="width: 50px" readonly id="edit-supplier-id-item-code">
+                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                        <input type="text" th:field="*{idCompany}" style="width: 50px" readonly id="edit-supplier-id-supplier">
+                    </div>
+                    <div class="square-new-supplier">
+                        <label>Please select new Supplier if required</label>
+                        <hr>
+                        <select th:field="*{newIdCompany}" style="width: 400px; height: 40px;" id="edit-supplier-new-id-supplier">
+                            <option th:value="0"></option>
+                            <option th:each="supplier : ${suppliers}" th:value="${supplier.idCompany}" th:text="${supplier.nameEn}"></option>
+                        </select>
+                    </div>
+                    <div class="square-new-supplier">
+                        <label>Please enter designated Item Code of Corresponding Supplier</label>
+                        <hr>
+                        <input type="text" th:field="*{itemCodeSupplierString}" id="edit-supplier-string">
+                    </div>
+                    <div class="square-new-supplier">
+                        <input type="submit" value="Edit ICSupplier ">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER>
+    <!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER>
+    <!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER>
+    <!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER>
+    <!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER><!DELETE ITEM CODE SUPPLIER>
+
+    <div th:fragment="delete-supplier-modal">
+        <div class="modal delete-item-code-modal" id="delete-supplier-modal">
+            <form th:action="@{/item-codes/delete-item-code-supplier}" method="post">
+                <div class="grid-modal-delete">
+                    <div class="square-modal-delete">
+                        <h2 class="modal-heading">DELETING ITEM CODE SUPPLIER</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-modal-delete">
+                        <label>Do you want to delete this Item Code Supplier?</label>
+                    </div>
+                    <div class="black-square-flex square-modal-delete">
+                        <label>This ItemCodeSupplier belongs to ItemCode:</label>
+                        <hr>
+                        <input type="hidden" name="idItemCode" id="delete-supplier-id-item-code">
+                        <input type="text" id="delete-supplier-item-code-string" readonly>
+                    </div>
+                    <div class="black-square-flex square-modal-delete">
+                        <label>And Supplier:</label>
+                        <hr>
+                        <input type="hidden" name="idSupplier" id="delete-supplier-id-supplier">
+                        <input type="text" id="delete-supplier-supplier-string" readonly>
+                    </div>
+                    <div class="black-square-flex square-modal-delete">
+                        <input type="submit" value="Delete Supplier Code"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT>
+    <!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT>
+    <!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT>
+    <!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT>
+    <!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT><!EDIT SALES CONTRACT>
+
+    <div th:fragment="edit-sell-price-modal">
+        <div class="modal new-sell-price-modal" id="edit-sell-price-modal">
+            <form th:action="@{/item-codes/edit-sales-contract}" th:object="${itemSellPriceDto}" method="post">
+                <div class="grid-new-sell-price">
+                    <div class="black-square-flex square-new-sell-price">
+                        <h2 class="modal-heading">EDIT SALES CONTRACT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <label>Contract ID</label>
+                        <hr>
+                        <input type="text" th:field="*{idItemSellPrice}" style="width: 50px" readonly id="sales-contract-id">
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <label>Please Select Customer</label>
+                        <hr>
+                        <select th:field="*{idCustomer}" id="sales-contract-customer">
+                            <option th:each="customer : ${customers}" th:text="${customer.nameEn}" th:value="${customer.idCompany}"></option>
+                        </select>
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <label>Contract name</label>
+                        <hr>
+                        <input type="text"
+                               th:field="*{itemSellPriceContract}"
+                               id="sales-contract-name" style="width: 370px;" >
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <label>From Date</label>
+                        <hr>
+                        <input type="date" th:field="*{fromDate}" id="sales-contract-from-date">
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <label>To Date</label>
+                        <hr>
+                        <input type="date" th:field="*{toDate}" id="sales-contract-to-date">
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <label>Set Item Sell Price</label>
+                        <hr>
+                        <input type="text" th:field="*{itemSellPriceAmount}" id="sales-contract-amount">
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <label>Unit of Item Sell Price</label>
+                        <hr>
+                        <input type="text" th:field="*{itemSellPriceUnit}" id="sales-contract-unit">
+                    </div>
+                    <div class="black-square-flex square-new-sell-price">
+                        <input type="submit" value="Edit Sales Contract">
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT>
+    <!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT>
+    <!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT>
+    <!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT>
+    <!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT><!REMOVE LINKED CONTRACT>
+
+    <div th:fragment="remove-linked-contract-modal">
+
+        <div class="modal delete-item-code-modal" id="remove-linked-contract-modal">
+
+            <form th:action="@{/item-codes/remove-linked-contract}" method="post">
+
+                <div class="grid-modal-delete">
+                    <div class="black-square-flex square-modal-delete">
+                        <h2 class="modal-heading">REMOVING LINKED CONTRACT</h2>
+                        <span class="close-button" onclick="pressToClose()">&times;</span>
+                    </div>
+                    <div class="black-square-flex square-modal-delete">
+                        <label>Do you want to remove the link between Contract named:</label>
+                        <hr>
+                        <input type="hidden" id="remove-linked-contract-id-item-sell-price" name="idItemSellPrice">
+                        <input type="text" id="remove-linked-contract-name" readonly>
+                    </div>
+                    <div class="black-square-flex square-modal-delete">
+                        <label>And ItemCode name:</label>
+                        <hr>
+                        <input type="hidden" id="remove-linked-contract-id-item-code" name="idItemCode">
+                        <input type="text" id="remove-linked-contract-item-code-string" readonly>
+                    </div>
+                    <div class="square-modal-delete">
+                        <input type="submit" value="Remove Link"/>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+
+
+
+</body>
+</html>
