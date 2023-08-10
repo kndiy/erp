@@ -15,6 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -43,10 +45,12 @@ public class BackUpRestoreController {
         response.flushBuffer();
     }
 
-    @PostMapping(value = "/restore")
+    @PostMapping("/restore")
     public String restore(@RequestParam("backup") MultipartFile backupFile, RedirectAttributes redirectAttributes) throws IOException, MismatchedUnitException {
 
-        restoreService.restore(backupFile);
+        List<String> results = new ArrayList<>();
+        restoreService.restore(results, backupFile);
+        redirectAttributes.addFlashAttribute("results", results);
 
         return "redirect:/";
     }

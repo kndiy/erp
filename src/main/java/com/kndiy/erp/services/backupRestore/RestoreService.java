@@ -69,61 +69,31 @@ public class RestoreService {
     private SaleContainerService saleContainerService;
     @Autowired
     private SaleLotService saleLotService;
-    public String restore(MultipartFile backupFile) throws IOException, MismatchedUnitException {
+    public String restore(List<String> results, MultipartFile backupFile) throws IOException, MismatchedUnitException {
 
         root = (JsonObject) JsonParser.parseReader(new InputStreamReader(backupFile.getInputStream()));
-        results = new ArrayList<>();
+        this.results = results;
         dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         restoreEntity("Company");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("Address");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("Contact");
-        log.info(results.toString());
-        results.clear();
 
         restoreEntity("ItemCategory");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("ItemType");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("ItemCode");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("ItemSellPrice");
-        log.info(results.toString());
-        results.clear();
 
         restoreEntity("ItemCodeSupplier");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("ItemCodeSupplierEquivalent");
-        log.info(results.toString());
-        results.clear();
 
         restoreEntity("InventoryIn");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("Inventory");
-        log.info(results.toString());
-        results.clear();
 
         restoreEntity("Sale");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("SaleArticle");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("SaleContainer");
-        log.info(results.toString());
-        results.clear();
         restoreEntity("SaleLot");
-        log.info(results.toString());
-        results.clear();
 
         return "Successfully restore backup named: " + backupFile.getName();
     }
@@ -350,7 +320,7 @@ public class RestoreService {
         inventoryDto.setSupplierProductionCode(fieldMap.get("productionCode").getAsString());
         inventoryDto.setInitQuantity(fieldMap.get("initQuantity").getAsString());
         inventoryDto.setRemainingQuantity(fieldMap.get("initQuantity").getAsString());
-        inventoryDto.setPlacementInWarehouse(fieldMap.get("placementInWarehouse").getAsString());
+        inventoryDto.setPlacementInWarehouse(fieldMap.get("placementInWarehouse") == null ? "" : fieldMap.get("placementInWarehouse").getAsString());
 
         String idItemCodeFromBackUp = fieldMap.get("idItemCode").getAsString();
         String idStoredAtAddressFromBackUp = fieldMap.get("idStoredAtAddress").getAsString();
@@ -367,6 +337,7 @@ public class RestoreService {
         inventoryDto.setIdInventoryIn(inventoryIn.getIdInventoryIn());
         inventoryDto.setIdAddressStoredAt(storedAtAddress.getIdAddress());
         inventoryDto.setIdItemCode(itemCode.getIdItemCode());
+        inventoryDto.setNumberInBatch(fieldMap.get("numberInBatch").getAsInt());
 
         inventoryService.addNewInventory(results, inventoryDto);
     }
@@ -381,7 +352,7 @@ public class RestoreService {
         saleDto.setOrderName(fieldMap.get("orderName").getAsString());
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        saleDto.setOrderDate(LocalDate.parse(fieldMap.get("orderDate").getAsString(), dtf));
+        saleDto.setOrderDate(fieldMap.get("orderDate") == null ? null : LocalDate.parse(fieldMap.get("orderDate").getAsString(), dtf));
 
         String idCompanySource = fieldMap.get("idCompanySource").getAsString();
         String idCustomer = fieldMap.get("idCustomer").getAsString();
@@ -445,6 +416,7 @@ public class RestoreService {
         String itemCodeString = root.get("ItemCode").getAsJsonObject().get(articleIdItemCode).getAsJsonObject().get("itemCodeString").getAsString();
 
         SaleArticle saleArticle = saleArticleService.findByOrderNameAndItemCodeString(results, orderName, itemCodeString);
+        saleContainerDto.setIdSaleArticle(saleArticle.getIdSaleArticle());
 
         saleContainerService.addNewSaleContainer(results, saleContainerDto);
     }
@@ -455,50 +427,57 @@ public class RestoreService {
 
         saleLotDto.setLotName(fieldMap.get("lotName").getAsString());
         saleLotDto.setDeliveryTurn(fieldMap.get("deliveryTurn").getAsString());
-        saleLotDto.setDeliveredQuantity(fieldMap.get("deliveredQuantity").getAsString());
         saleLotDto.setNote(fieldMap.get("note").getAsString());
         saleLotDto.setOrderColor(fieldMap.get("orderColor").getAsString());
         saleLotDto.setOrderQuantity(fieldMap.get("orderQuantity").getAsString());
         saleLotDto.setOrderStyle(fieldMap.get("orderStyle").getAsString());
-        saleLotDto.setSupplierSettled(fieldMap.get("supplierSettled").getAsBoolean());
+        saleLotDto.setSupplierSettled(fieldMap.get("supplierSettled") != null && fieldMap.get("supplierSettled").getAsBoolean());
 
-        String deliveryDate = fieldMap.get("deliveryDate").getAsString();
-        saleLotDto.setDeliveryDate(LocalDate.parse(deliveryDate, dtf));
+        String deliveryDate = fieldMap.get("deliveryDate") == null ? "" : fieldMap.get("deliveryDate").getAsString();
+        if (!deliveryDate.equals("")) saleLotDto.setDeliveryDate(LocalDate.parse(deliveryDate, dtf));
 
         String idSaleContainerFromBackUp = fieldMap.get("idSaleContainer").getAsString();
         String container = root.get("SaleContainer").getAsJsonObject().get(idSaleContainerFromBackUp).getAsJsonObject().get("container").getAsString();
         String containerIdArticle = root.get("SaleContainer").getAsJsonObject().get(idSaleContainerFromBackUp).getAsJsonObject().get("idSaleArticle").getAsString();
-        String itemCodeString = root.get("SaleArticle").getAsJsonObject().get(containerIdArticle).getAsJsonObject().get("itemCodeString").getAsString();
+        String articleIdItemCode = root.get("SaleArticle").getAsJsonObject().get(containerIdArticle).getAsJsonObject().get("idItemCode").getAsString();
+        String itemCodeString = root.get("ItemCode").getAsJsonObject().get(articleIdItemCode).getAsJsonObject().get("itemCodeString").getAsString();
         String articleIdSale = root.get("SaleArticle").getAsJsonObject().get(containerIdArticle).getAsJsonObject().get("idSale").getAsString();
         String orderName = root.get("Sale").getAsJsonObject().get(articleIdSale).getAsJsonObject().get("orderName").getAsString();
 
         String idSupplierFromBackUp = fieldMap.get("idSupplier").getAsString();
         String supplierNameEn = root.get("Company").getAsJsonObject().get(idSupplierFromBackUp).getAsJsonObject().get("nameEn").getAsString();
 
-        String idFromAddressFromBackUp = fieldMap.get("idFromAddress").getAsString();
-        String fromAddressName = fieldMap.get("Address").getAsJsonObject().get(idFromAddressFromBackUp).getAsJsonObject().get("addressName").getAsString();
-        String idToAddressFromBackUp = fieldMap.get("idToAddress").getAsString();
-        String toAddressName = fieldMap.get("Address").getAsJsonObject().get(idToAddressFromBackUp).getAsJsonObject().get("addressName").getAsString();
+        String idFromAddressFromBackUp = fieldMap.get("idFromAddress") == null ? "" : fieldMap.get("idFromAddress").getAsString();
+        if (!idFromAddressFromBackUp.equals("")) {
+            String fromAddressName = fieldMap.get("Address").getAsJsonObject().get(idFromAddressFromBackUp).getAsJsonObject().get("addressName").getAsString();
+            Address fromAddress = companyClusterService.findAddressByAddressName(results, fromAddressName);
+            saleLotDto.setIdFromAddress(fromAddress.getIdAddress().toString());
+        }
 
-        String idReceiverFromBackUp = fieldMap.get("idReceiver").getAsString();
-        String contactName = root.get("Contact").getAsJsonObject().get(idReceiverFromBackUp).getAsJsonObject().get("contactName").getAsString();
+        String idToAddressFromBackUp = fieldMap.get("idToAddress") == null ? "" : fieldMap.get("idToAddress").getAsString();
+        if (!idToAddressFromBackUp.equals("")) {
+            String toAddressName = fieldMap.get("Address").getAsJsonObject().get(idToAddressFromBackUp).getAsJsonObject().get("addressName").getAsString();
+            Address toAddress = companyClusterService.findAddressByAddressName(results, toAddressName);
+
+            String idReceiverFromBackUp = fieldMap.get("idReceiver").getAsString();
+            String contactName = root.get("Contact").getAsJsonObject().get(idReceiverFromBackUp).getAsJsonObject().get("contactName").getAsString();
+            Contact receiver = companyClusterService.findContactByContactNameAndAddressName(results, contactName, toAddressName);
+
+            saleLotDto.setIdToAddress(toAddress.getIdAddress().toString());
+            saleLotDto.setIdContactReceiver(receiver.getIdContact().toString());
+        }
+
 
         SaleContainer saleContainer = saleContainerService.findByContainerAndItemCodeStringAndOrderName(results, container, itemCodeString, orderName);
         Company supplier = companyClusterService.findCompanyByCompanyNameEn(results, supplierNameEn);
-        Address fromAddress = companyClusterService.findAddressByAddressName(results, fromAddressName);
-        Address toAddress = companyClusterService.findAddressByAddressName(results, toAddressName);
-        Contact receiver = companyClusterService.findContactByContactNameAndAddressName(results, contactName, toAddressName);
 
-        if (saleContainer == null || supplier == null || fromAddress == null || toAddress == null || receiver == null) {
+        if (saleContainer == null || supplier == null) {
             results.add("While restoring SaleContainer from Backup");
             return;
         }
 
         saleLotDto.setIdSaleContainer(saleContainer.getIdSaleContainer());
         saleLotDto.setIdCompanySupplier(supplier.getIdCompany().toString());
-        saleLotDto.setIdFromAddress(fromAddress.getIdAddress().toString());
-        saleLotDto.setIdToAddress(toAddress.getIdAddress().toString());
-        saleLotDto.setIdContactReceiver(receiver.getIdContact().toString());
 
         SaleLot saleLot = saleLotService.addNewSaleLot(results, saleLotDto);
 

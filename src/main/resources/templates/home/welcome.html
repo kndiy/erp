@@ -14,9 +14,33 @@
 <body >
 
     <div class="everything-container">
+
+
         <div th:insert="~{fragments/header-footer :: header}"></div>
 
         <h2>Welcome! Please choose what you want to inquire!</h2>
+
+        <hr>
+
+
+        <div th:if="${results != null && !results.isEmpty()}">
+            <div th:each="result : ${results}">
+                <ul>
+                    <li th:text="${result}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div th:if="${errors != null && !errors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${errors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
 
         <hr>
 
