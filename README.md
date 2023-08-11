@@ -7,20 +7,11 @@ My First Project
 - Working with an exporting customer demanded much update to our voucher system, whether it was the delivery notice, or item identification system,
   or even account-settling form. We did not even have a mature inventory monitoring system back then. Everthing was done by hand and on-demand,
   which was not even up to par with a normal periodic inventory system.
-- My journey started from a simple excel file...whose opening process started to freeze my computer when the sales number reached the count of 100.
-- I endured 300 sales using 3 of those files...,
-- Well, to resolve the problem, Ms Access was my decision at that time as it was very fast to develop,
-- It took six months of learning and applying what I learned from scratch to reach what I desired for this simple sales monitoring application
-  (1 months was taken to make the core and the rest was added step by step).
-- In mid 2020, I decided to migrate the back-end of the Ms Access application to MySQL, which started the next step of my journey,
-  Ending with the deployment of the back-end database to a HPE ProLiant DL60 gen 9 server and enabling remote-accessing through the internet,
-- At the beginning of 2023, precisely from February 2023, with the hope of transforming my database into a web-based application. I picked up Java.
-  In May 2023, I started implementing the application using Spring Boot + Spring MVC framework.
-  It was truly entertaining building up an application from scratch. Even more so when the author was a complete fresher.
+- My journey started from using MS Excel (2019) to MS Access (2020-2022) to Spring Boot App (2023).
 - Now in July 2023, the simple erp-application was uploaded to Git, but not quite complete yet.
 
 So, let's summary the content of this application:
-i. First is the heart of the application: the relational database, ie. the Entities. It can be separated into 9 clusters:
+- First is the heart of the application: the relational database, ie. the Entities. It can be separated into 9 clusters:
    1. Company cluster: Company - Address - Contact data (eg. Daesan Company - HQ Address - My Contact)
    2. Item Code cluster: ItemCategory - ItemType - ItemCode - ItemCodeSupplier - Equivalent 
       (eg. Fabric - 70D Interlock - BLACK DS19031444-A - JETBLACK 01A (linked with Company NamThanh) - Eqv 1kg -> 6.76 yards)
@@ -43,13 +34,10 @@ i. First is the heart of the application: the relational database, ie. the Entit
   The Inventory cluster is the core, everything revolves around it. InventoryIn should have linkage with reasons of purchases. 
   And InventoryOut are each defined by its purpose: SALES? Input for MANUFACTURING? GIFT OUT? WAREHOUSE TRANSFERRING (from A address to B address of the same or even different companies)
   I used @ManyToMany annotation to express these relationships currently. 
-ii. Second are the Repository Interfaces which extends Jpa or lower CRUD Repository, taking advantage of Spring ready-baked codes, to interact 
-  directly with the database layers.
-iii. Thirdly are Services classes, which represented most of the application Model in the MVC. 
-  I implemented the Quantity.class, used to handle all logic related to calculating Floating point numbers, in order to ensure the decimals did not 
-    get distorted.
-  I do not know if my approach was correct or not, but in most of my logic, I added a List<String> results 
-    in each argument list of methods in these Service classes.
-  I wonder if those List<String> results should be replaced by proper Exceptions and appropriate handling methods (and Views)...
-iv. Next are Controllers that connect our Model to the Views that is fed to users.
-
+- Second are the Repository Interfaces which extends Jpa or lower CRUD Repository, taking advantage of Spring ready-baked codes, to interact  directly with the database layers.
+- Thirdly are Services classes, which represented most of the application Model in the MVC.
+I implemented the Quantity.class, used to handle all logic related to calculating Floating point numbers, in order to ensure the decimals did not get distorted.
+I do not know if my approach was correct or not, but in most of my logic, I added a List<String> results in each argument list of methods in these Service classes.
+I wonder if those List<String> results should be replaced by proper Exceptions and appropriate handling methods (and Views)...
+- Next were Controllers that connect our Model to the Views that is fed to users.
+- Finally were the Views, written using HTML, CSS and Javascript. I try practicing many ways to present data to webpages, but all of them use a single technik: Grid, Grids all the way, because I love Grid...and Flex containers
