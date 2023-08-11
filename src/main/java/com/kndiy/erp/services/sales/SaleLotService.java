@@ -86,9 +86,9 @@ public class SaleLotService {
         }
 
         Company supplier = companyClusterService.findCompanyByIdCompany(results, saleLotDto.getIdCompanySupplier());
-        Address departure = companyClusterService.findAddressByIdAddress(results, saleLotDto.getIdFromAddress());
-        Address destination = companyClusterService.findAddressByIdAddress(results, saleLotDto.getIdToAddress());
-        Contact receiver = companyClusterService.findContactByIdContact(results, saleLotDto.getIdContactReceiver());
+        Address departure = companyClusterService.findAddressByIdAddress(results, saleLotDto.getIdFromAddress() == null ? "0" : saleLotDto.getIdFromAddress());
+        Address destination = companyClusterService.findAddressByIdAddress(results, saleLotDto.getIdToAddress() == null ? "0" : saleLotDto.getIdToAddress());
+        Contact receiver = companyClusterService.findContactByIdContact(results, saleLotDto.getIdContactReceiver() == null ? "0" : saleLotDto.getIdContactReceiver());
 
         saleLot = new SaleLot();
         saleLot.setSupplier(supplier);

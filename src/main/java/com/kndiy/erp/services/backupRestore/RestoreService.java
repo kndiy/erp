@@ -232,6 +232,13 @@ public class RestoreService {
         String customerNameEn = root.get("Company").getAsJsonObject().get(idCustomerFromBackup).getAsJsonObject().get("nameEn").getAsString();
         Company customer = companyClusterService.findCompanyByCompanyNameEn(results, customerNameEn);
 
+        String contract = fieldMap.get("itemSellPriceContract").getAsString();
+
+        ItemSellPrice itemSellPrice = itemSellPriceService.findByItemSellPriceContract(results, contract);
+        if (itemSellPrice != null) {
+            return;
+        }
+
         List<ItemCode> itemCodeList = new ArrayList<>();
         String[] idItemCodesFromBackup = fieldMap.get("itemCodeList").getAsString().split(",");
         for (String idItemCode : idItemCodesFromBackup) {
@@ -243,9 +250,9 @@ public class RestoreService {
             itemCodeList.add(itemCode);
         }
 
-        ItemSellPrice itemSellPrice = new ItemSellPrice();
+        itemSellPrice = new ItemSellPrice();
         itemSellPrice.setCustomer(customer);
-        itemSellPrice.setItemSellPriceContract(fieldMap.get("itemSellPriceContract").getAsString());
+        itemSellPrice.setItemSellPriceContract(contract);
         itemSellPrice.setItemSellPriceAmount(fieldMap.get("itemSellPriceAmount").getAsFloat());
         itemSellPrice.setItemSellPriceUnit(fieldMap.get("itemSellPriceUnit").getAsString());
 

@@ -161,4 +161,12 @@ public class ItemSellPriceService {
 
         return "Successfully remove the link between Contract named: " + itemSellPrice.getItemSellPriceContract() + " from ItemCode named: " +itemCode.getItemCodeString();
     }
+
+    public ItemSellPrice findByItemSellPriceContract(List<String> results, String contract) {
+        ItemSellPrice itemSellPrice = itemSellPriceRepository.findByContract(contract);
+        if (itemSellPrice == null) {
+            results.add("ItemSellPrice with Contract: " + contract + " has not been created!");
+        }
+        return itemSellPrice;
+    }
 }

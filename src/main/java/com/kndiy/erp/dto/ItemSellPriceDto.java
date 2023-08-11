@@ -1,6 +1,7 @@
 package com.kndiy.erp.dto;
 
 import com.kndiy.erp.validators.ItemSellPriceDtoConstraint;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class ItemSellPriceDto {
     private Integer idItemSellPrice;
     private Float itemSellPriceAmount;
     private String itemSellPriceUnit;
+    @NotBlank(message = "Contract is required!")
     private String itemSellPriceContract;
     private String note;
     private LocalDate fromDate;
