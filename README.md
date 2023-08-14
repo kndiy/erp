@@ -4,8 +4,8 @@ My First Project
   between my company and a customer that focused on exporting garments. We were supposed to sell dyed fabric to them,
 - Our normal sales to the local market does not need any standard vouchers, everything was recorded by hands into a physical ledger kept by the director,
 - Our main product was un-dyed, greige fabric,
-- Working with an customer that dealt with exporting garments demanded much update to our voucher system, whether it was the delivery notice, or item identification system, or even account-settling form. We did not even have a mature inventory monitoring system back then. Everthing was done by hand and on-demand, which was not even up to par with a normal periodic inventory system.
-- My journey started from using MS Excel (2019) to MS Access (2020-2022) to Spring Boot App (2023).
+- Working with a customer that dealt with exporting garments demanded much update to our voucher system, whether it was the delivery notice, or item identification system, or even account-settling form. We did not even have a mature inventory monitoring system back then. Everthing was done by hand and on-demand, which was not even up to par with a normal periodic inventory system.
+- My journey started from using MS Excel (2019: quickest resolution, but extremely slow and un-scalabled) to MS Access (2020-2021: scalabled, but un-portable) to Migrating Back-end database to MySQL (more portable but still waste some setup time when adding new users) to using Spring-Boot MVC-framework App deployed through AWS (2023).
 - In July 2023, the simple erp-application was uploaded to Git, but not quite complete yet.
 
 The content of this application:
@@ -30,9 +30,9 @@ The content of this application:
    8. Warehouse transferring cluster: not yet done
    9. User cluster: User - Role: saving users roles and log-in information to get permission from Spring Security.
 
-  The Inventory cluster is the core, everything revolves around it.
-  InventoryIn should have linkage with reasons of purchases and purchase vouchers. 
-  InventoryOut are each defined by its purpose: SALES? Input for MANUFACTURING? GIFT OUT? WAREHOUSE TRANSFERRING (from A address to B address of the same or even different companies). I used @ManyToMany annotation to express these relationships currently. 
+The Inventory cluster is the core, everything revolves around it.
+InventoryIn should have linkage with reasons of purchases and purchase vouchers. 
+InventoryOut are each defined by its purpose: SALES? Input for MANUFACTURING? GIFT OUT? WAREHOUSE TRANSFERRING (from A address to B address of the same or even different companies). I used @ManyToMany annotation to express these relationships currently. 
 - Second are the Repository Interfaces which extends Jpa or lower CRUD Repository, taking advantage of Spring ready-baked codes (in fact I wrote my own JPQL instead of using method-naming queries for training purpose), to interact  directly with the database layers.
 - Thirdly are Services classes, which represented most of the application Model in the MVC.
 I implemented the Quantity.class, used to handle all logic related to calculating Floating point numbers, in order to ensure the decimals did not get distorted.
