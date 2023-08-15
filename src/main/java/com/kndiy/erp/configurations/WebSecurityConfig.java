@@ -24,16 +24,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().disable()
+        http
+                .csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/", "/styles/**", "scripts/**", "/images/**", "/register").permitAll()
+                        authorize.requestMatchers("/", "/login", "/resume", "/files/**", "/styles/**", "/scripts/**", "/images/**", "/register").permitAll()
                                 .anyRequest().hasAuthority("ROLE_ADMIN") //has to manually set this up to let users with ROLE_ADMIN access the application after logging in
                 )
                 .formLogin(
                         form -> form
-                                .loginPage("/")
-                                .loginProcessingUrl("/")
-                                .defaultSuccessUrl("/")
+                                .loginPage("/login")
+                                .loginProcessingUrl("/login")
+                                .defaultSuccessUrl("/login")
                                 .permitAll()
                 )
                 .logout(

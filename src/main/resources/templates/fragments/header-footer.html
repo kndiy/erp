@@ -49,6 +49,36 @@
     </div>
 
 
+
+    <div th:fragment="header-port">
+        <div class="header-background"></div>
+        <div class="grid-header">
+            <div class="square-header">
+                <img class="header-logo" th:src="@{/images/ds.jpg}">
+            </div>
+            <div class="square-header">
+                <input class="input-header" type="button" value="About" onclick="scrollToAbout()">
+            </div>
+            <div class="square-header">
+                <input class="input-header" type="button" value="Project" onclick="scrollToAbout()">
+            </div>
+            <div class="square-header">
+                <input class="input-header" type="button" value="Experience" onclick="scrollToAbout()">
+            </div>
+            <div class="square-header">
+                <input class="input-header" type="button" value="Contact" onclick="scrollToAbout()">
+            </div>
+            <div class="header-logout">
+                <form th:action="@{/resume}" method="post">
+                    <input class="input-header" type="submit" value="Resume">
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <div th:fragment="footer" class="footer-sub">
         <h3>Copyright © 2023 Khiem Nguyen. All Rights Reserved</h3>
         <hr>

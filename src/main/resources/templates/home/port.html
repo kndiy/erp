@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Khiem Nguyen|Software Developer</title>
+    <link th:href="@{styles/template.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="everything-container">
+        <div th:insert="~{/fragments/header-footer :: header-port}"></div>
+
+        <hr>
+
+        <div class="ultra-grid">
+            <div class="ultra-square hello" id="hello">
+                <div class="grid hello-grid">
+                    <div class="square flex hello-square">
+                        <h3>Hello! My name is</h3>
+                        <hr>
+                        <h2>Khiem Duy Nguyen</h2>
+                        <hr>
+                        <h2>IT is my passion and seeking knowledge is my drive!</h2>
+                    </div>
+                    <div class="square flex hello-square">
+                        <p>I am a Java developer, with strong points in learning ability</p>
+                        <p>English skills, and adaptability, </p>
+                    </div>
+                    <div class="square flex hello-square">
+                        <p>Currently working at Daesan Vina Company Limited.</p>
+                    </div>
+                    <div class="square flex hello-square">
+                        <button onclick="scrollToContact()">Contact Me</button>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="ultra-square about" id="about">
+
+            </div>
+            <div class="ultra-square project" id="project">
+
+            </div>
+            <div class="ultra-square experience" id="experience">
+
+            </div>
+            <div class="ultra-square contact" id="contact">
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div th:insert="~{/fragments/header-footer :: footer}" class="footer"></div>
+    </div>
+
+</body>
+</html>

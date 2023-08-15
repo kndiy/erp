@@ -40,7 +40,6 @@ public class BackUpRestoreController {
 
         backupService.backup(writer);
 
-
         writer.close();
         response.flushBuffer();
     }
