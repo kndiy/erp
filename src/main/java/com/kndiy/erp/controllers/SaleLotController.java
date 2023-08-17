@@ -45,7 +45,7 @@ public class SaleLotController {
         if (errors.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", errorHandlingService.parseError(errors));
             redirectAttributes.addFlashAttribute("errorType", "Adding new SaleLot");
-            return "redirect:/sales";
+            return "redirect:/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/";
         }
 
         List<String> results = new ArrayList<>();

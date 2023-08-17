@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -29,4 +30,9 @@ public interface SaleLotRepository extends JpaRepository<SaleLot, Integer> {
             "WHERE sl.saleContainer.saleArticle.idSaleArticle = ?1 " +
             "ORDER BY sl.idSaleLot")
     List<SaleLot> findAllByIdSaleArticle(Integer idSaleArticle);
+
+    @Query("SELECT s " +
+            "FROM SaleLot s " +
+            "WHERE s.deliveryDate > ?1 AND s.deliveryDate < ?2")
+    List<SaleLot> findAllByDeliveryDate(LocalDate fromDate, LocalDate toDate);
 }

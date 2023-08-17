@@ -28,11 +28,12 @@ public class HomeController {
 
     @GetMapping("/")
     public String port(Model model) {
+
         return "home/port";
     }
 
 
-    @GetMapping("/login")
+    @GetMapping("/home")
     public String welcome(Principal principal, Model model) {
         model.addAttribute("userRoleDto", new UserRoleDTO());
         model.addAttribute("adminPass", "852456!!!!");
@@ -53,7 +54,7 @@ public class HomeController {
             redirectAttributes.addFlashAttribute("registerErrors", registerErrors);
         }
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 
     @PostMapping("/resume")

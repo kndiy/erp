@@ -10,11 +10,12 @@
     <link th:href="@{/styles/template.css}" rel="stylesheet"/>
     <link th:href="@{/styles/welcome-login.css}" rel="stylesheet"/>
 
+    <script th:src="@{/scripts/welcome_login.js}" type="text/javascript"></script>
+
 </head>
 <body >
 
     <div class="everything-container">
-
 
         <div th:insert="~{fragments/header-footer :: header}"></div>
 
@@ -66,6 +67,12 @@
             <div class="square-welcome">
                 <form th:action="@{/sales/}" method="get">
                     <input type="submit" value="Sales Section"/>
+                </form>
+            </div>
+
+            <div class="square-welcome">
+                <form th:action="@{/sales-reporting/}" method="get" id="welcome-sales-reporting">
+                    <input type="button" value="Sales Reporting" onclick="openSalesReporting()"/>
                 </form>
             </div>
 

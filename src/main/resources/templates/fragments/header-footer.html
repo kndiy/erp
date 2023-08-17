@@ -3,7 +3,6 @@
 <head>
 
     <meta charset="UTF-8">
-    <link th:href="@{styles/template.css}" rel="stylesheet">
 
 </head>
 <body>
@@ -57,16 +56,16 @@
                 <img class="header-logo" th:src="@{/images/ds.jpg}">
             </div>
             <div class="square-header">
-                <input class="input-header" type="button" value="About" onclick="scrollToAbout()">
+                <input class="input-header" type="button" value="About" onclick="scrollToFunction('about')"/>
             </div>
             <div class="square-header">
-                <input class="input-header" type="button" value="Project" onclick="scrollToAbout()">
+                <input class="input-header" type="button" value="Project" onclick="scrollToFunction('project')">
             </div>
             <div class="square-header">
-                <input class="input-header" type="button" value="Experience" onclick="scrollToAbout()">
+                <input class="input-header" type="button" value="Experience" onclick="scrollToFunction('experience')">
             </div>
             <div class="square-header">
-                <input class="input-header" type="button" value="Contact" onclick="scrollToAbout()">
+                <input class="input-header" type="button" value="Contact" onclick="scrollToFunction('contact')">
             </div>
             <div class="header-logout">
                 <form th:action="@{/resume}" method="post">

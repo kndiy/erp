@@ -1,0 +1,22 @@
+
+.grid {
+    display: grid;
+}
+
+.square {
+    max-width: 800px;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    flex-flow: wrap;
+}
+
+.flex .hr {
+    flex-basis: 100%;
+    margin: 0;
+    border: 0;
+    height: 0;
+}
+

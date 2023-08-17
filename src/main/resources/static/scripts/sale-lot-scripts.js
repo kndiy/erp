@@ -17,7 +17,10 @@ function toClose(modal) {
             modal.style.display = 'none';
         }
     });
+
+
 }
+
 
 function openNewLotModal() {
     var modal = document.getElementById('new-lot-modal');
@@ -160,10 +163,9 @@ function onclickSaleLot(curLotGrid) {
     //color
     editInputArr[3].value = sourceInputArr[7].textContent;
     //date
-    let dateString = sourceInputArr[2].textContent.split('/').join('-');
-    if (dateString != "") {
-        editInputArr[4].value  = dateString;
-    }
+    let dateArr = sourceInputArr[2].textContent.split('/');
+    dateArr[1] = months.get(dateArr[1]);
+    editInputArr[4].value  = dateArr.join('-');
     //turn
     editInputArr[5].value = sourceInputArr[5].textContent;
     //note
@@ -248,4 +250,6 @@ function onclickSaleLot(curLotGrid) {
 
     var addNewInventoryOutButton = document.getElementsByClassName('add-inventory-out')[0];
     addNewInventoryOutButton.style.display = 'inline';
+
+
 }

@@ -1,5 +1,6 @@
 package com.kndiy.erp.dto;
 
+import com.kndiy.erp.validators.NumberStringConstraint;
 import com.kndiy.erp.validators.SaleLotDtoConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -24,7 +25,7 @@ public class SaleLotDto {
     private LocalDate deliveryDate;
     private String deliveryTurn;
     private String lotName;
-    @Pattern(regexp = "^?[0-9]*[.]?[0-9]+$", message = "Please enter the Order Quantity of this SaleLot!")
+    @NumberStringConstraint(message = "OrderQuantity is not a valid number!")
     private String orderQuantity = "0";
     private String orderStyle;
     private String orderColor;

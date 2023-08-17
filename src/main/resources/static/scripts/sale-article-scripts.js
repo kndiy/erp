@@ -225,20 +225,7 @@ function onclickArticle(curArticleEle) {
 
     document.getElementById('delete-article-input').value = idSaleArticle;
 
-    const months = new Map([
-          ['Jan', '01'],
-          ['Feb', '02'],
-          ['Mar', '03'],
-          ['Apr', '04'],
-          ['May', '05'],
-          ['Jun', '06'],
-          ['Jul', '07'],
-          ['Aug', '08'],
-          ['Sep', '09'],
-          ['Oct', '10'],
-          ['Nov', '11'],
-          ['Dec', '12']
-          ]);
+
 
     var editInputArr = document.getElementById('edit-article-modal').getElementsByClassName('edit-input');
     var editSelectArr = document.getElementById('edit-article-modal').getElementsByClassName('edit-select');
@@ -333,9 +320,15 @@ function onclickArticle(curArticleEle) {
         modalIdSaleArticle[i].value = idSaleArticle;
     }
 
-    document.getElementById('temp-allowed-surplus').textContent = curArticleEle.getElementsByClassName('allowed-surplus')[0].textContent;
+    //defaulting delivery date
 
+    let testEle = document.getElementById('test');
+    let requestedEtd = curArticleEle.getElementsByClassName('delivery-date')[0].textContent;
+    let etdArr = requestedEtd.split('/');
+    etdArr[1] = months.get(etdArr[1]);
 
+    let deliveryDateNewLot = document.getElementById('delivery-date-new-lot');
+    deliveryDateNewLot.value = etdArr.join('-');
 }
 
 function openDeleteArticleModal() {

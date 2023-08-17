@@ -52,6 +52,9 @@
 
         <hr>
 
+        <input id="test" type="text">
+
+
         <div class="ultra-grid">
             <div class="ultra-square sale">
                 <div class="ultra-square-table-header" id="sale-grid-header">
@@ -163,7 +166,7 @@
                             <span class="input-source check-radio-id id" th:text="${article.idSaleArticle}"></span>
                         </div>
                         <div class="square square-flex square-article">
-                            <span class="input-source" th:text="${#temporals.format(article.requestDeliveryDate, 'yyyy/MMM/dd')}"></span>
+                            <span class="input-source delivery-date" th:text="${#temporals.format(article.requestDeliveryDate, 'yyyy/MMM/dd')}"></span>
                         </div>
                     </div>
                 </div>

@@ -110,7 +110,12 @@ public class Quantity implements Comparable<Quantity>, Serializable {
             this.quantityValue = new BigDecimal("0");
         }
         else {
-            this.quantityValue = new BigDecimal(parsing[0].replace(",", "")).setScale(scale, roundingMode);
+            try {
+                this.quantityValue = new BigDecimal(parsing[0].replace(",", "")).setScale(scale, roundingMode);
+            }
+            catch (NumberFormatException ex) {
+                throw new NumberFormatException();
+            }
         }
     }
 

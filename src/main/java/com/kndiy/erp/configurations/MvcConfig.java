@@ -14,11 +14,13 @@ public class MvcConfig implements WebMvcConfigurer {
                 .addResourceHandler("/files/**",
                         "/styles/**",
                         "/images/**",
-                        "/scripts/**")
+                        "/scripts/**",
+                        "/fonts/**")
                 .addResourceLocations("classpath:/static/files/",
                         "classpath:/static/styles/",
                         "classpath:/static/images/",
-                        "classpath:/static/scripts/")
+                        "classpath:/static/scripts/",
+                        "classpath:/static/fonts/")
                 .resourceChain(true);
     }
 }
