@@ -316,7 +316,7 @@ public class RestoreService {
         Company supplierSource = companyClusterService.findCompanyByCompanyNameEn(results, supplierSourceNameEn);
 
         inventoryInDto.setSupplierSource(supplierSource.getIdCompany().toString());
-        log.info(inventoryInService.addNewInventoryIn(inventoryInDto).toString());
+        inventoryInService.addNewInventoryIn(results, inventoryInDto);
     }
 
     private void persistingInventory(JsonObject fieldMap) {
@@ -497,8 +497,8 @@ public class RestoreService {
             }
             InventoryOut inventoryOut = new InventoryOut();
             inventoryOut.setInventoryOutPurpose(root.get("InventoryOut").getAsJsonObject().get(idInventoryOutFromBackup).getAsJsonObject().get("inventoryOutPurpose").getAsString());
-            inventoryOut.setInventoryOutQuantity(root.get("InventoryOut").getAsJsonObject().get(idInventoryOutFromBackup).getAsJsonObject().get("inventoryOutQuantity").getAsString());
-            inventoryOut.setInventoryOutEquivalent(root.get("InventoryOut").getAsJsonObject().get(idInventoryOutFromBackup).getAsJsonObject().get("inventoryOutEquivalent").getAsString());
+            inventoryOut.setQuantity(root.get("InventoryOut").getAsJsonObject().get(idInventoryOutFromBackup).getAsJsonObject().get("inventoryOutQuantity").getAsString());
+            inventoryOut.setEquivalent(root.get("InventoryOut").getAsJsonObject().get(idInventoryOutFromBackup).getAsJsonObject().get("inventoryOutEquivalent").getAsString());
 
             String outIdInventory = root.get("InventoryOut").getAsJsonObject().get(idInventoryOutFromBackup).getAsJsonObject().get("idInventory").getAsString();
             String inventoryProductionCode = root.get("Inventory").getAsJsonObject().get(outIdInventory).getAsJsonObject().get("productionCode").getAsString();

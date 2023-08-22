@@ -15,12 +15,14 @@ window.addEventListener('load', function(event) {
 
         let curGrid = inventoryOutGridArr[i];
 
-        let takeAllCb = curGrid.children[9].children[0];
-        let splitCb = curGrid.children[10].children[0];
-        let remaining = curGrid.children[7].children[0];
-        let splitQuantity = curGrid.children[11].children[0];
+        let takeAllCb = curGrid.getElementsByClassName('take-all-cb')[0];
+        let splitCb = curGrid.getElementsByClassName('split-cb')[0];
+        let remaining = curGrid.getElementsByClassName('equivalent')[0];
+        let splitQuantity = curGrid.getElementsByClassName('split-quantity')[0];
 
         splitQuantity.readOnly = true;
+
+        let remainingValue = remaining.value.split(" ")[0];
 
         takeAllCb.addEventListener('click', function() {
 
@@ -33,7 +35,7 @@ window.addEventListener('load', function(event) {
                 splitQuantity.value = "";
                 splitQuantity.readOnly = true;
 
-                deliveredQuantity.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).plus(remaining.value).toString();
+                deliveredQuantity.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).plus(remainingValue).toString();
                 differential.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(orderQuantity.textContent).toString();
                 percentage.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(orderQuantity.textContent).divides(orderQuantity.textContent).times(100) + ' %';
 
@@ -41,14 +43,14 @@ window.addEventListener('load', function(event) {
             else if (takeAllCb.checked == true) {
                 count.textContent = parseInt(count.textContent) + 1;
 
-                deliveredQuantity.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).plus(remaining.value).toString();
+                deliveredQuantity.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).plus(remainingValue).toString();
                 differential.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(orderQuantity.textContent).toString();
                 percentage.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(orderQuantity.textContent).divides(orderQuantity.textContent).times(100) + ' %';
             }
             else {
                 count.textContent = parseInt(count.textContent) - 1;
 
-                deliveredQuantity.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(remaining.value).toString();
+                deliveredQuantity.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(remainingValue).toString();
                 differential.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(orderQuantity.textContent).toString();
                 percentage.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(orderQuantity.textContent).divides(orderQuantity.textContent).times(100) + ' %';
             }
@@ -57,7 +59,7 @@ window.addEventListener('load', function(event) {
         splitCb.addEventListener('click', function() {
 
             if (takeAllCb.checked == true && splitCb.checked == true) {
-                deliveredQuantity.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(remaining.value).toString();
+                deliveredQuantity.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(remainingValue).toString();
                 differential.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(orderQuantity.textContent).toString();
                 percentage.textContent = new BigDecimal(deliveredQuantity.textContent, false, 2).minus(orderQuantity.textContent).divides(orderQuantity.textContent).times(100) + ' %';
 
@@ -95,7 +97,7 @@ window.addEventListener('load', function(event) {
                 splitQuantity.value = 0;
             }
 
-            if (parseFloat(splitQuantity.value) > parseFloat(remaining.value)) {
+            if (parseFloat(splitQuantity.value) > parseFloat(remainingValue)) {
                 splitQuantity.value = 0;
                 alert("Split Quantity cannot be larger than Remaining Quantity!!");
             }

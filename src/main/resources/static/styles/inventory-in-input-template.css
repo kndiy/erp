@@ -41,7 +41,7 @@
 }
 
 .square-inventory-input-header:nth-child(1), .square-inventory-input-header:nth-child(2) {
-    background-color: black;
+    background-color: rgb(10,25,47);
     padding: 0;
 }
 
@@ -61,7 +61,7 @@
     grid-template-columns: 500px;
     grid-row-gap: 20px;
     padding: 50px;
-    background-color: black;
+    background-color: rgb(10,25,47);
     position: fixed;
     top: 60px;
     left: 20%;
@@ -99,7 +99,7 @@
 }
 
 .square-inventory-input-header-edit:nth-child(1), .square-inventory-input-header-edit:nth-child(2), .square-inventory-input-header-edit:nth-child(3) {
-    background-color: black;
+    background-color: rgb(10,25,47);
 }
 
 .square-inventory-input-header-edit input[type="submit"] {
@@ -125,7 +125,7 @@
     top: 200px;
     left: 20%;
     grid-template-columns: 500px;
-    background-color: black;
+    background-color: rgb(10,25,47);
     padding: 50px;
     grid-row-gap: 30px;
 }

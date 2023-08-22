@@ -33,6 +33,6 @@ public interface SaleLotRepository extends JpaRepository<SaleLot, Integer> {
 
     @Query("SELECT s " +
             "FROM SaleLot s " +
-            "WHERE s.deliveryDate > ?1 AND s.deliveryDate < ?2")
+            "WHERE s.deliveryDate >= ?1 AND s.deliveryDate <= ?2")
     List<SaleLot> findAllByDeliveryDate(LocalDate fromDate, LocalDate toDate);
 }

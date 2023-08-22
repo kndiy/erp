@@ -89,7 +89,7 @@ public class Quantity implements Comparable<Quantity>, Serializable {
 
         String[] parsing = quantityWithUnit.split(" ");
         if (parsing.length != 2) {
-            throw new IllegalArgumentException("Input String does not contain Unit!");
+            throw new IllegalArgumentException("Input String does not contain Unit, or Unit is not separated with number by white space!");
         }
         else {
             try {
@@ -168,7 +168,7 @@ public class Quantity implements Comparable<Quantity>, Serializable {
 
     public Quantity percentage(Quantity other) throws MismatchedUnitException {
         checkUnit(other);
-        return new Quantity(quantityValue.divide(other.quantityValue, roundingMode).multiply(HUNDRED), "%");
+        return new Quantity(quantityValue.divide(other.quantityValue, roundingMode).multiply(HUNDRED), "percent");
     }
 
     public <T extends Number> Quantity divides(T divisor, RoundingMode roundingModeDivide) {
@@ -239,6 +239,6 @@ public class Quantity implements Comparable<Quantity>, Serializable {
 
     @Override
     public String toString() {
-        return String.format("%,." + scale + "f", quantityValue);
+        return String.format("%,." + scale + "f " + unit, quantityValue);
     }
 }

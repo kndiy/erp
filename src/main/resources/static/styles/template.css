@@ -51,6 +51,10 @@ input[type='password'] {
     color: black;
 }
 
+input[type='date'] {
+    background-color: white;
+}
+
 button {
     border-radius: 0.35rem;
     width: 200px;
@@ -101,7 +105,7 @@ h3 {
 }
 
 .close-button:hover, close-button:focus {
-    box-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px rgba(10, 25, 47, 0.5);
     background-color: #FF7333;
     cursor: pointer;
 }
@@ -202,7 +206,7 @@ h3 {
 }
 
 .input-header:hover {
-    box-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px rgba(10, 25, 47, 0.5);
     border = 2px orange;
     background-color: #FF7333;
 }
@@ -241,7 +245,7 @@ h3 {
     grid-row-gap: 1px;
     grid-column-gap: 1px;
 
-    background-color: black;
+    background-color: rgb(10,25,47);
 }
 
 .grid-big-gap {
@@ -250,7 +254,7 @@ h3 {
     grid-column-gap: 10px;
 
     margin-bottom: 30px;
-    background-color: black;
+    background-color: rgb(10,25,47);
 }
 
 .square-flex {
@@ -286,7 +290,7 @@ h3 {
 }
 
 .black-square-flex {
-    background-color: black;
+    background-color: rgb(10,25,47);
     color: white;
     display: flex;
     flex-flow: wrap;
@@ -339,7 +343,7 @@ h3 {
     left: 20%;
 
     padding: 50px;
-    background-color: black;
+    background-color: rgb(10,25,47);
 }
 
 .modal-grid {
@@ -351,7 +355,7 @@ h3 {
     left: 20%;
 
     padding: 50px;
-    background-color: black;
+    background-color: rgb(10, 25, 47);
 }
 
 .modal-square:nth-child(1) {
@@ -376,4 +380,33 @@ h3 {
     width: 5px;
     background-color: red;
     border-radius: 50%;
+}
+
+.grid {
+    display: grid;
+}
+
+.flex {
+    display: flex;
+    flex-flow: wrap;
+    overflow-wrap: anywhere;
+}
+
+.flex.center {
+    align-items: center;
+}
+
+.black {
+    background-color: rgb(10, 25, 47);
+    color: white;
+}
+
+.white {
+    background-color: white;
+    color: black;
+}
+
+.header-square span {
+    text-transform: uppercase;
+    font-weight: bold;
 }

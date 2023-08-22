@@ -69,15 +69,14 @@ public class InventoryInService {
         return res;
     }
 
-    public List<String> addNewInventoryIn(InventoryInDto inventoryInDto) throws MismatchedUnitException {
-        List<String> results = new ArrayList<>();
+    public InventoryIn addNewInventoryIn(List<String> results, InventoryInDto inventoryInDto) throws MismatchedUnitException {
 
         InventoryIn inventoryIn = inventoryInRepository.findByVoucher(inventoryInDto.getVoucher());
         Company supplier = companyRepository.findCompanyByCompanyId(Integer.parseInt(inventoryInDto.getSupplierSource()));
 
         if (inventoryIn != null) {
             results.add("This voucher already exists under Inventory In Id: " + inventoryIn.getIdInventoryIn());
-            return results;
+            return null;
         }
 
         inventoryIn = new InventoryIn();
@@ -89,7 +88,7 @@ public class InventoryInService {
         Quantity foreignValue;
         Quantity exchangeRate;
 
-        if (inventoryInDto.getInventoryInValue().equals("")) {
+        if (inventoryInDto.getInventoryInValue().isEmpty()) {
             foreignValue = new Quantity(inventoryInDto.getInventoryInValueForeign(), inventoryInDto.getForeignUnit());
             exchangeRate = new Quantity(inventoryInDto.getExchangeRate(), inventoryInDto.getForeignUnit() + "/VND", RoundingMode.UP, 4);
 
@@ -99,19 +98,22 @@ public class InventoryInService {
             value = new Quantity(inventoryInDto.getInventoryInValue(), "VND");
         }
 
-        if (!inventoryInDto.getInventoryInValueForeign().equals("")) {
+        if (!inventoryInDto.getInventoryInValueForeign().isEmpty()) {
             foreignValue = new Quantity(inventoryInDto.getInventoryInValueForeign(), inventoryInDto.getForeignUnit());
             exchangeRate = new Quantity(inventoryInDto.getExchangeRate(), inventoryInDto.getForeignUnit() + "/VND", RoundingMode.UP, 4);
             inventoryIn.setInventoryInValueForeign(foreignValue.toString());
             inventoryIn.setExchangeRate(exchangeRate.toString());
         }
+        else {
+            inventoryIn.setInventoryInValueForeign("");
+            inventoryIn.setExchangeRate("");
+        }
 
         inventoryIn.setInventoryInValue(value.toString());
-        inventoryIn.setForeignUnit(inventoryInDto.getForeignUnit());
-        inventoryInRepository.save(inventoryIn);
+        
 
         results.add("Successfully created new Inventory In, please fill in the Attached Inventories details!");
-        return results;
+        return inventoryInRepository.save(inventoryIn);
     }
 
     public InventoryIn findByVoucher(String voucher) {
@@ -128,7 +130,7 @@ public class InventoryInService {
 
         InventoryIn checkVoucher = inventoryInRepository.findByVoucher(inventoryInDto.getVoucher());
 
-        if (checkVoucher != null) {
+        if (checkVoucher != null && !checkVoucher.getIdInventoryIn().equals(inventoryInDto.getIdInventoryIn())) {
             results.add("This Voucher already belongs to InventoryIn with Id: " + checkVoucher.getIdInventoryIn());
             return results;
         }
@@ -159,21 +161,18 @@ public class InventoryInService {
             value = new Quantity(inventoryInDto.getInventoryInValue(), "VND");
         }
 
-        if (!inventoryInDto.getInventoryInValueForeign().equals("")) {
+        if (!inventoryInDto.getInventoryInValueForeign().isEmpty()) {
             foreignValue = new Quantity(inventoryInDto.getInventoryInValueForeign(), inventoryInDto.getForeignUnit());
             exchangeRate = new Quantity(inventoryInDto.getExchangeRate(), inventoryInDto.getForeignUnit() + "/VND", RoundingMode.UP, 4);
-
+            inventoryIn.setInventoryInValueForeign(foreignValue.toString());
+            inventoryIn.setExchangeRate(exchangeRate.toString());
         }
         else {
-            foreignValue = new Quantity(0, inventoryInDto.getForeignUnit());
-            exchangeRate = new Quantity(0, inventoryInDto.getForeignUnit() + "/VND", RoundingMode.UP, 4);
+            inventoryIn.setInventoryInValueForeign("");
+            inventoryIn.setExchangeRate("");
         }
 
         inventoryIn.setInventoryInValue(value.toString());
-        inventoryIn.setForeignUnit(inventoryInDto.getForeignUnit());
-        inventoryIn.setInventoryInValueForeign(foreignValue.toString());
-        inventoryIn.setExchangeRate(exchangeRate.toString());
-
         inventoryInRepository.save(inventoryIn);
 
         results.add("Successfully edited InventoryId under Voucher named: " + inventoryIn.getVoucher());
@@ -200,19 +199,7 @@ public class InventoryInService {
             res.add("Could not delete InventoryIn with Id: " + idInventoryIn + " because its Inventories were used in: ");
             for (InventoryOut inventoryOut : inventoryOutList) {
 
-                int idTransaction;
-                if (inventoryOut.getInventoryOutPurpose().equals("SALES")) {
-                    idTransaction = inventoryOut.getSaleLotList().get(0).getSaleContainer().getSaleArticle().getSale().getIdSale();
-                }
-                else if (inventoryOut.getInventoryOutPurpose().equals("MANUFACTURE")) {
-                    idTransaction = inventoryOut.getManufactureList().get(0).getIdManufacture();
-                }
-                else if (inventoryOut.getInventoryOutPurpose().equals("WAREHOUSE_TRANSFER")) {
-                    idTransaction = inventoryOut.getWarehouseTransferList().get(0).getIdWarehouseTransfer();
-                }
-                else {
-                    idTransaction = inventoryOut.getGiftOutList().get(0).getIdGiftOut();
-                }
+                int idTransaction = getIdTransaction(inventoryOut);
 
                 res.add("Inventory with Id: " + inventoryOut.getInventory().getIdInventory() + " was used in a "
                         + inventoryOut.getInventoryOutPurpose() + " transaction with id: " + idTransaction + ";");
@@ -220,5 +207,26 @@ public class InventoryInService {
         }
 
         return res;
+    }
+
+    private static int getIdTransaction(InventoryOut inventoryOut) {
+        int idTransaction;
+        String purpose = inventoryOut.getInventoryOutPurpose();
+
+        switch (purpose) {
+            case "SALES" -> {
+                idTransaction = inventoryOut.getSaleLotList().get(0).getSaleContainer().getSaleArticle().getSale().getIdSale();
+            }
+            case "MANUFACTURE" -> {
+                idTransaction = inventoryOut.getManufactureList().get(0).getIdManufacture();
+            }
+            case "WAREHOUSE_TRANSFER" -> {
+                idTransaction = inventoryOut.getWarehouseTransferList().get(0).getIdWarehouseTransfer();
+            }
+            default -> {
+                idTransaction = inventoryOut.getGiftOutList().get(0).getIdGiftOut();
+            }
+        }
+        return idTransaction;
     }
 }

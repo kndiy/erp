@@ -38,7 +38,8 @@ public class ItemCodeController {
     @Autowired
     private ErrorHandlingService errorHandlingService;
 
-    @GetMapping("/item-codes/")
+    @GetMapping(value = {"/item-codes/",
+            "/item-codes"})
     public String showItemCodes(Model model) {
         
         model.addAttribute("itemCategories", itemCategoryService.findAllItemCategories());
@@ -106,28 +107,28 @@ public class ItemCodeController {
             redirectAttributes.addFlashAttribute("errorType", "Creating New Item Code");
         }
 
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
     @PostMapping("/item-codes/delete")
     public String deleteItemCode(Integer idItemCode, RedirectAttributes redirectAttributes) {
         String result = itemCodeService.deleteByIdItemCode(idItemCode);
         redirectAttributes.addFlashAttribute("result", result);
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
     @PostMapping("/item-codes/delete-item-type")
     public String deleteItemType(Integer idItemType, RedirectAttributes redirectAttributes) {
         String result = itemTypeService.deleteByIdItemType(idItemType);
         redirectAttributes.addFlashAttribute("result", result);
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
     @PostMapping("/item-codes/delete-item-category")
     public String deleteItemCategory(Integer idItemCategory, RedirectAttributes redirectAttributes) {
         String result = itemCategoryService.deleteByIdItemCategory(idItemCategory);
         redirectAttributes.addFlashAttribute("result", result);
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
     @PostMapping("/item-codes/add-new-item-code-supplier")
@@ -142,7 +143,7 @@ public class ItemCodeController {
             redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
             redirectAttributes.addFlashAttribute("errorType", "Creating new Item Code Supplier");
         }
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
     @PostMapping("/item-codes/add-new-item-sell-price")
@@ -158,7 +159,7 @@ public class ItemCodeController {
             redirectAttributes.addFlashAttribute("errorType", "Creating new Item Code Supplier");
         }
 
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
     @PostMapping("/item-codes/delete-sell-price-contract")
@@ -171,7 +172,7 @@ public class ItemCodeController {
             result = itemSellPriceService.deleteByIdItemSellPrice(idItemSellPrice);
         }
         redirectAttributes.addFlashAttribute("result", result);
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
     @PostMapping("/item-codes/edit")
@@ -186,7 +187,7 @@ public class ItemCodeController {
             redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
             redirectAttributes.addFlashAttribute("errorType", "Editing new Item Code");
         }
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
     @PostMapping("item-codes/edit-item-code-supplier")
@@ -201,14 +202,14 @@ public class ItemCodeController {
             redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
             redirectAttributes.addFlashAttribute("errorType", "Editing new Item Code");
         }
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
     @PostMapping("item-codes/delete-item-code-supplier")
     public String deleteItemCodeSupplier(Integer idItemCode, Integer idSupplier, RedirectAttributes redirectAttributes) {
         String result = itemCodeSupplierService.deleteItemCodeSupplier(idItemCode, idSupplier);
         redirectAttributes.addFlashAttribute("result", result);
 
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
     @PostMapping("item-codes/edit-sales-contract")
     public String editSalesContract(@ModelAttribute @Valid ItemSellPriceDto itemSellPriceDto, Errors errors, RedirectAttributes redirectAttributes) {
@@ -221,7 +222,7 @@ public class ItemCodeController {
             redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
             redirectAttributes.addFlashAttribute("errorType", "Editing new Item Code");
         }
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
     @PostMapping("item-codes/remove-linked-contract")
@@ -229,7 +230,7 @@ public class ItemCodeController {
         String result = itemSellPriceService.removeLinkedContract(idItemSellPrice, idItemCode);
         redirectAttributes.addFlashAttribute("result", result);
 
-        return "redirect:/item-codes";
+        return "redirect:/item-codes/";
     }
 
 }

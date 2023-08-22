@@ -95,7 +95,7 @@ public class SalesController {
         model.addAttribute("suppliers", companyClusterService.findCompaniesByCompanyType("SELF", "SUPPLIER"));
         model.addAttribute("departureAddresses", companyClusterService.findAddressByCompanyType("SELF", "SUPPLIER"));
         model.addAttribute("destinationAddresses", companyClusterService.findAddressByCompanyType("CUSTOMER"));
-        model.addAttribute("receiverContacts", companyClusterService.findContactsByCompanyTypeAndAddressType("CUSTOMER", "HQ"));
+        model.addAttribute("receiverContacts", companyClusterService.findContactsByCompanyType("CUSTOMER"));
 
         model.addAttribute("itemCategories", itemCategoryService.findAllItemCategories());
         model.addAttribute("itemTypes", itemTypeService.findAllItemTypes());

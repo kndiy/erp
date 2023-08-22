@@ -323,4 +323,9 @@ public class CompanyClusterService {
         }
         return contact;
     }
+
+    public List<Contact> findContactsByCompanyType(String companyType) {
+
+        return contactRepository.findByCompanyType(companyType);
+    }
 }

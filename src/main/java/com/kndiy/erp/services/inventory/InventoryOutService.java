@@ -43,7 +43,6 @@ public class InventoryOutService {
 
             int idSaleLot = inv.getSaleLotList().get(0).getIdSaleLot();
             int idSaleContainer = inv.getSaleLotList().get(0).getSaleContainer().getIdSaleContainer();
-            String saleUnit = inv.getSaleLotList().get(0).getSaleContainer().getOrderUnit();
 
             idSaleLotSet.add(idSaleLot);
 
@@ -52,38 +51,41 @@ public class InventoryOutService {
             if (inventoryOutWrapper == null) {
                 inventoryOutWrapper = new InventoryOutWrapper(new ArrayList<>(List.of(inv)));
                 map.put(idSaleLot, inventoryOutWrapper);
-                return;
-            }
 
-            List<InventoryOut> inventoryOutList = inventoryOutWrapper.getInventoryOutList();
-
-            if (inventoryOutList == null) {
-                inventoryOutList = new ArrayList<>(List.of(inv));
             }
             else {
-                inventoryOutList.add(inv);
+                List<InventoryOut> inventoryOutList = inventoryOutWrapper.getInventoryOutList();
+
+                if (inventoryOutList == null) {
+                    inventoryOutList = new ArrayList<>(List.of(inv));
+                    inventoryOutWrapper.setInventoryOutList(inventoryOutList);
+                } else {
+                    inventoryOutList.add(inv);
+                }
             }
 
             Quantity saleLotQuantity = saleLotQuantityMap.get(idSaleLot);
             if (saleLotQuantity == null) {
-                saleLotQuantityMap.put(idSaleLot, new Quantity(inv.getInventoryOutEquivalent(), saleUnit));
+                saleLotQuantity = new Quantity(inv.getEquivalent());
+                saleLotQuantityMap.put(idSaleLot, saleLotQuantity);
             }
             else {
                 try {
-                    saleLotQuantity = saleLotQuantity.plus(new Quantity(inv.getInventoryOutEquivalent(), saleUnit));
+                    saleLotQuantity = saleLotQuantity.plus(new Quantity(inv.getEquivalent()));
                     saleLotQuantityMap.put(idSaleLot, saleLotQuantity);
                 } catch (MismatchedUnitException e) {
-                    throw new RuntimeException(e);
+
                 }
             }
 
             Quantity saleContainerQuantity = saleContainerQuantityMap.get(idSaleContainer);
             if (saleContainerQuantity == null) {
-                saleContainerQuantityMap.put(idSaleContainer, new Quantity(inv.getInventoryOutEquivalent(), saleUnit));
+                saleContainerQuantity = new Quantity(inv.getEquivalent());
+                saleContainerQuantityMap.put(idSaleContainer, saleContainerQuantity);
             }
             else {
                 try {
-                    saleContainerQuantity = saleContainerQuantity.plus(new Quantity(inv.getInventoryOutEquivalent(), saleUnit));
+                    saleContainerQuantity = saleContainerQuantity.plus(new Quantity(inv.getEquivalent()));
                     saleContainerQuantityMap.put(idSaleContainer, saleContainerQuantity);
                 } catch (MismatchedUnitException e) {
                     throw new RuntimeException(e);
@@ -160,21 +162,22 @@ public class InventoryOutService {
                 inventoryOut.setInventoryOutPurpose("WAREHOUSE_TRANSFER");
             }
 
-            Quantity out;
-            Quantity equiv;
+            Quantity quantity;
+            Quantity equivalent;
 
             if (dto.getTakeAll()) {
-                out = new Quantity(dto.getRemainingQuantity(), dto.getInventoryUnit(), RoundingMode.UP, 2);
-                equiv = new Quantity(dto.getEquivalentQuantity(), dto.getEquivalentUnit(), RoundingMode.DOWN, 2);
+                quantity = new Quantity(dto.getRemainingQuantity());
+                equivalent = new Quantity(dto.getEquivalent());
             }
             else {
-                equiv = new Quantity(dto.getSplitQuantity(), dto.getEquivalentUnit(), RoundingMode.DOWN, 2);
-                out = new Quantity(equiv.divides(Float.parseFloat(dto.getEquivalentValue()), RoundingMode.UP).toString(), dto.getInventoryUnit());
+                equivalent = new Quantity(dto.getSplitQuantity(), dto.getEquivalentUnit());
+                quantity = equivalent.divides(Float.parseFloat(dto.getEquivalentValue()), RoundingMode.UP);
+                quantity.setUnit(dto.getInventoryUnit());
             }
 
-            inventoryOut.setInventoryOutQuantity(out.toString());
-            inventory.setRemainingQuantity(new Quantity(inventory.getRemainingQuantity(), inventory.getUnit()).minus(out).toString());
-            inventoryOut.setInventoryOutEquivalent(equiv.toString());
+            inventoryOut.setQuantity(quantity.toString());
+            inventory.setRemainingQuantity(new Quantity(inventory.getRemainingQuantity()).minus(quantity).toString());
+            inventoryOut.setEquivalent(equivalent.toString());
             inventoryOut = inventoryOutRepository.save(inventoryOut);
 
             inventoryOutList.add(inventoryOut);
@@ -199,11 +202,11 @@ public class InventoryOutService {
             saleLotRepository.save(saleLot);
         }
 
-        Quantity quantity = new Quantity(inventoryOut.getInventoryOutQuantity(), inventoryOut.getInventory().getUnit());
+        Quantity quantity = new Quantity(inventoryOut.getQuantity());
 
         Inventory inventory = inventoryOut.getInventory();
         try {
-            inventory.setRemainingQuantity(new Quantity(inventory.getRemainingQuantity(), inventory.getUnit()).plus(quantity).toString());
+            inventory.setRemainingQuantity(new Quantity(inventory.getRemainingQuantity()).plus(quantity).toString());
         } catch (MismatchedUnitException e) {
             log.info("Unit not matched?");
         }
@@ -228,9 +231,8 @@ public class InventoryOutService {
 
     public InventoryOut addNewInventoryOut(List<String> results, InventoryOut inventoryOut) throws MismatchedUnitException {
 
-        String inventoryUnit = inventoryOut.getInventory().getUnit();
-        Quantity inventoryRemainingQuantity = new Quantity(inventoryOut.getInventory().getRemainingQuantity(), inventoryUnit);
-        Quantity inventoryOutQuantity = new Quantity(inventoryOut.getInventoryOutQuantity(), inventoryUnit);
+        Quantity inventoryRemainingQuantity = new Quantity(inventoryOut.getInventory().getRemainingQuantity());
+        Quantity inventoryOutQuantity = new Quantity(inventoryOut.getQuantity());
 
         if (inventoryRemainingQuantity.lessThan(inventoryOutQuantity)) {
             results.add("Could not export inventoryOut from Inventory with Id: " + inventoryOut.getInventory().getIdInventory() + " as remainingQuantity is less than export Quantity");

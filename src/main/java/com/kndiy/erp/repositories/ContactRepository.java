@@ -24,4 +24,8 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
     @Query("SELECT c FROM Contact c WHERE c.contactName = ?1 AND c.address.addressName = ?2")
     Contact findByContactNameAndAddressName(String orderPlacerContactName, String orderPlacerAddressName);
+
+    @Query("SELECT c FROM Contact c " +
+            "WHERE c.address.company.companyType LIKE CONCAT('%', ?1, '%')")
+    List<Contact> findByCompanyType(String companyType);
 }

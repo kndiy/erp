@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "inventories_in")
@@ -27,14 +28,16 @@ public class InventoryIn implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_company_source")
     private Company supplierSource;
+
+    @OneToMany(mappedBy = "inventoryIn")
+    private List<Inventory> inventoryList;
+
     @Column(name = "inventory_value")
     private String inventoryInValue; //cost, price in VND
     @Column(name = "exchange_rate")
     private String exchangeRate;
     @Column(name = "inventory_value_in_foreign")
     private String inventoryInValueForeign;
-    @Column(name = "foreignUnit")
-    private String foreignUnit;
     @Column(name = "voucher")
     private String voucher; //contracts, ect.
     private LocalDateTime createdAt;

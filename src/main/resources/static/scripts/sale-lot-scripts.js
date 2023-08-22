@@ -157,7 +157,7 @@ function onclickSaleLot(curLotGrid) {
     //container name
     editInputArr[0].value = sourceInputArr[0].textContent;
     //orderQuantity
-    editInputArr[1].value = sourceInputArr[1].textContent;
+    editInputArr[1].value = sourceInputArr[1].textContent.split(" ")[0];
     //style
     editInputArr[2].value = sourceInputArr[4].textContent;
     //color

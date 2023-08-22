@@ -45,9 +45,9 @@
                         <input type="text" th:field="*{inventoryInValueForeign}"/>
                     </div>
                     <div class="black-square-flex square-new-inventory-in">
-                        <label>Unit</label>
+                        <label>Foreign Unit</label>
                         <hr>
-                        <input type="text" th:field="*{foreignUnit}"/>
+                        <input class="input-edit-inventory-in" type="text" th:field="*{foreignUnit}"/>
                     </div>
                     <div class="black-square-flex square-new-inventory-in">
                         <label>Exchange Rate</label>
@@ -85,7 +85,7 @@
                     <div class="black-square-flex square-new-inventory-in">
                         <label>Inventory In Voucher</label>
                         <hr>
-                        <input class="input-edit-inventory-in" type="text" th:field="*{voucher}"/>
+                        <input class="voucher" type="text" th:field="*{voucher}"/>
                     </div>
                     <div class="black-square-flex square-new-inventory-in">
                         <label>Source</label>
@@ -106,22 +106,22 @@
                     <div class="black-square-flex square-new-inventory-in">
                         <label>Value (VND)</label>
                         <hr>
-                        <input class="input-edit-inventory-in" type="text" th:field="*{inventoryInValue}"/>
+                        <input class="value-vnd" type="text" th:field="*{inventoryInValue}"/>
                     </div>
                     <div class="black-square-flex square-new-inventory-in">
                         <label>Foreign Value</label>
                         <hr>
-                        <input class="input-edit-inventory-in" type="text" th:field="*{inventoryInValueForeign}"/>
+                        <input class="value-foreign" type="text" th:field="*{inventoryInValueForeign}"/>
                     </div>
                     <div class="black-square-flex square-new-inventory-in">
-                        <label>Unit</label>
+                        <label>Foreign Unit</label>
                         <hr>
-                        <input class="input-edit-inventory-in" type="text" th:field="*{foreignUnit}"/>
+                        <input class="foreign-unit" type="text" th:field="*{foreignUnit}"/>
                     </div>
                     <div class="black-square-flex square-new-inventory-in">
                         <label>Exchange Rate</label>
                         <hr>
-                        <input class="input-edit-inventory-in" type="text" th:field="*{exchangeRate}"/>
+                        <input class="exchange-rate" type="text" th:field="*{exchangeRate}"/>
                     </div>
                     <div class="black-square-flex square-new-inventory-in">
                         <label>Inventory Articles</label>
@@ -135,7 +135,7 @@
                         <h4>**Please skip Inventory Article Field if you don't want to modify attached Inventories!**</h4>
                     </div>
                     <div class="black-square-flex square-new-inventory-in">
-                        <input class="input-edit-inventory-in" type="hidden" th:field="*{idInventoryIn}">
+                        <input class="id-inventory-in" type="hidden" th:field="*{idInventoryIn}">
                     </div>
                 </div>
             </form>

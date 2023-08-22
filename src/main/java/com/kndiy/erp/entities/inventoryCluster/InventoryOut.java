@@ -20,26 +20,35 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InventoryOut implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_inventory_out")
     private Integer idInventoryOut;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_inventory")
     private Inventory inventory;
+
     @Column(name = "inventory_out_purpose")
     private String inventoryOutPurpose;
+
     @Column(name = "inventory_out_quantity")
-    private String inventoryOutQuantity;
+    private String quantity;
+
     @Column(name = "equivalent_quantity")
-    private String inventoryOutEquivalent;
+    private String equivalent;
+
     @ManyToMany(mappedBy = "inventoryOutList")
     private List<SaleLot> saleLotList;
+
     @ManyToMany(mappedBy = "materialInList")
     private List<Manufacture> manufactureList;
+
     @ManyToMany(mappedBy = "inventoryOutList")
     private List<WarehouseTransfer> warehouseTransferList;
+
     @ManyToMany(mappedBy = "inventoryOutList")
     private List<GiftOut> giftOutList;
 

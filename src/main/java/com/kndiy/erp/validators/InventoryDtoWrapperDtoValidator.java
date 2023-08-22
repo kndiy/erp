@@ -27,7 +27,7 @@ public class InventoryDtoWrapperDtoValidator implements ConstraintValidator<Inve
         constraintValidatorContext.disableDefaultConstraintViolation();
 
         boolean isFine = true;
-        if (inventoryDtoWrapperDto.getNewArticleNumber().equals("")) {
+        if (inventoryDtoWrapperDto.getNewArticleNumber().isEmpty()) {
 
             List<InventoryDto> inventoryDtoList = inventoryDtoWrapperDto.getInventoryDtoList();
             for (InventoryDto inventoryDto : inventoryDtoList) {
@@ -48,7 +48,7 @@ public class InventoryDtoWrapperDtoValidator implements ConstraintValidator<Inve
                     isFine = false;
                     break;
                 }
-                if (inventoryDto.getSupplierProductionCode().equals("")) {
+                if (inventoryDto.getSupplierProductionCode().isEmpty()) {
                     constraintValidatorContext.buildConstraintViolationWithTemplate(
                             "Please input all ProductionCode!"
                     ).addConstraintViolation();

@@ -1,99 +1,60 @@
 
 function openNewInventoryInModal() {
-    var newInventoryInModal = document.getElementById('new-inventory-in-modal');
-    var closeButton = newInventoryInModal.getElementsByClassName('close-button')[0];
+    let modal = document.getElementById('new-inventory-in-modal');
+    addClosingAction(modal);
 
-    newInventoryInModal.style.display = 'block';
-
-    newInventoryInModal.addEventListener("click", function(event) {
-        if (event.target == newInventoryInModal) {
-            newInventoryInModal.style.display = 'none';
-        }
-    });
-    closeButton.addEventListener("click", function(event) {
-        if (event.target == closeButton) {
-            newInventoryInModal.style.display = 'none';
-        }
-    });
-    window.addEventListener("keydown", function(event) {
-        if (event.keyCode == 27) {
-            newInventoryInModal.style.display = 'none';
-        }
-    });
+    modal.style.display = 'block';
 }
 
-window.addEventListener('load', function(event) {
-    var inventoryInEles = document.getElementsByClassName('grid-inventory-in');
-    var lastCheckMarkEle;
+let lastToDisplay;
+let lastCheckMarkEle;
+function filterInventories(curInventoryInGrid) {
 
-    for (let i = 0; i < inventoryInEles.length; i ++) {
-        inventoryInEles[i].addEventListener('click', function() {
-            var idInventoryIn = parseInt(inventoryInEles[i].children[0].children[1].textContent);
-            var checkMarkEle = inventoryInEles[i].children[0].children[0];
-            var deleteInventoryInIdInput = document.getElementById('delete-inventory-in-id-input');
-
-            deleteInventoryInIdInput.value = idInventoryIn;
-
-            checkMarkEle.style.background = '#F9D997';
-
-            filterInventories(idInventoryIn);
-
-            if (lastCheckMarkEle != null && checkMarkEle != lastCheckMarkEle) {
-                lastCheckMarkEle.style.background = 'white';
-            }
-            lastCheckMarkEle = checkMarkEle;
-        });
-    }
-});
-
-var lastToDisplay;
-function filterInventories(idInventoryIn) {
-    var inventoryInEleArr = document.getElementsByClassName('id-inventory-in');
-    var testEle = document.getElementById('test');
+    let idInventoryIn = curInventoryInGrid.getElementsByClassName('check-radio-id')[0].textContent;
 
     if (lastToDisplay != null) {
         lastToDisplay.style.display = 'none';
     }
 
-    for (let i = 0; i < inventoryInEleArr.length; i ++) {
-        var idInventoryInCheck = parseInt(inventoryInEleArr[i].children[0].textContent);
+    let inventoryGridArr = document.getElementsByClassName('id-inventory-in-key');
+    for (let i = 0; i < inventoryGridArr.length; i ++) {
+        let idInventoryInKey = inventoryGridArr[i].children[0].textContent;
 
-        if (idInventoryInCheck == idInventoryIn) {
-            inventoryInEleArr[i].style.display = 'block';
-            var numberingEleArr = inventoryInEleArr[i].getElementsByClassName('numbering-filter');
-            for (let j = 0; j < numberingEleArr.length; j ++) {
-                numberingEleArr[j].textContent = (j + 1).toString();
-            }
-
-            if (lastToDisplay != null && lastToDisplay != inventoryInEleArr[i]) {
-                lastToDisplay.style.display = 'none';
-            }
-
-            lastToDisplay = inventoryInEleArr[i];
+        if (idInventoryInKey == idInventoryIn) {
+            inventoryGridArr[i].style.display = 'block';
+            lastToDisplay = inventoryGridArr[i];
             break;
         }
     }
 
+    let checkMarkEle = curInventoryInGrid.getElementsByClassName('check-radio')[0];
+    document.getElementById('delete-inventory-in-id-input').value = idInventoryIn;
 
+    checkMarkEle.style.background = '#F9D997';
 
+    if (lastCheckMarkEle != null && checkMarkEle != lastCheckMarkEle) {
+        lastCheckMarkEle.style.background = 'white';
+    }
 
-
+    lastCheckMarkEle = checkMarkEle;
 }
 
-function openEditInventoryInModal(voucher, source, supplierSource, value, foreignValue, unit, exchangeRate, idInventoryIn) {
-    var modal = document.getElementById('edit-inventory-in-modal');
-    var closeButton = modal.getElementsByClassName('close-button')[0];
+
+function openEditInventoryInModal(voucher, source, supplierSource, value, foreignValue, exchangeRate, idInventoryIn) {
+    let modal = document.getElementById('edit-inventory-in-modal');
+    addClosingAction(modal);
+
+    modal.getElementsByClassName('voucher')[0].value = voucher;
+    modal.getElementsByClassName('value-vnd')[0].value = value.split(" ")[0];
+    if (foreignValue != null && foreignValue != "") {
+        modal.getElementsByClassName('value-foreign')[0].value = foreignValue.split(" ")[0];
+        modal.getElementsByClassName('foreign-unit')[0].value = foreignValue.split(" ")[1];
+    }
+    modal.getElementsByClassName('exchange-rate')[0].value = exchangeRate;
+    modal.getElementsByClassName('id-inventory-in')[0].value = idInventoryIn;
 
 
-    var inputArr = document.getElementsByClassName('input-edit-inventory-in');
-    var selectArr = document.getElementsByClassName('select-edit-inventory-in');
-
-    inputArr[0].value = voucher;
-    inputArr[1].value = value
-    inputArr[2].value = foreignValue;
-    inputArr[3].value = unit;
-    inputArr[4].value = exchangeRate;
-    inputArr[5].value = idInventoryIn;
+    let selectArr = document.getElementsByClassName('select-edit-inventory-in');
 
     for (let i = 0; i < selectArr[0].children.length; i ++) {
         if (selectArr[0].children[i].value == source) {
@@ -111,43 +72,11 @@ function openEditInventoryInModal(voucher, source, supplierSource, value, foreig
 
     modal.style.display = 'block';
 
-        modal.addEventListener("click", function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        });
-        closeButton.addEventListener("click", function(event) {
-            if (event.target == closeButton) {
-                modal.style.display = 'none';
-            }
-        });
-        window.addEventListener("keydown", function(event) {
-            if (event.keyCode == 27) {
-                modal.style.display = 'none';
-            }
-        });
 }
 
 function openDeleteInventoryInModal() {
-    var modal = document.getElementById('delete-inventory-in-modal');
-    var closeButton = modal.getElementsByClassName('close-button')[0];
-
+    let modal = document.getElementById('delete-inventory-in-modal');
+    addClosingAction(modal);
 
     modal.style.display = 'block';
-
-    modal.addEventListener("click", function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    });
-    closeButton.addEventListener("click", function(event) {
-        if (event.target == closeButton) {
-            modal.style.display = 'none';
-        }
-    });
-    window.addEventListener("keydown", function(event) {
-        if (event.keyCode == 27) {
-            modal.style.display = 'none';
-        }
-    });
 }

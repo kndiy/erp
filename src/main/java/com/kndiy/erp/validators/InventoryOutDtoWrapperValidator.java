@@ -32,7 +32,7 @@ public class InventoryOutDtoWrapperValidator implements ConstraintValidator<Inve
 
             InventoryOutDto out = inventoryOutDtoList.get(i);
 
-            Quantity equivalentQuantity = new Quantity(out.getEquivalentQuantity(), out.getEquivalentUnit());
+            Quantity equivalentQuantity = new Quantity(out.getEquivalent(), out.getEquivalentUnit());
             Quantity splitQuantity = new Quantity(out.getSplitQuantity(), out.getEquivalentUnit());
 
             if (equivalentQuantity.lessThan(splitQuantity)) {

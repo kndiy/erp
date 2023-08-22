@@ -7,11 +7,188 @@
     <link th:href="@{/styles/sales-reporting-template.css}" rel="stylesheet">
 
     <script th:src="@{/scripts/sales-reporting-scripts.js}" type="text/javascript"></script>
+    <script th:src="@{/scripts/api/Generals.js}" type="text/javascript"></script>
+
 </head>
 <body>
     <div class="everything-container">
         <div th:insert="~{fragments/header-footer :: header}"></div>
 
+        <div th:if="${results != null && !results.isEmpty()}">
+            <div th:each="result : ${results}">
+                <ul>
+                    <li th:text="${result}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <div th:if="${errors != null && !errors.isEmpty()}" >
+            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
+            <div th:each="error : ${errors}">
+                <ul>
+                    <li th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+        <input type="text" id="test">
+        <hr>
+
+        <h2>Sales Reporting</h2>
+
+        <hr>
+
+        <div class="ultra-grid">
+
+            <div class="ultra-square filter-date">
+
+                <form th:action="@{/sales-reporting/}" method="get" id="filter-date-form">
+                    <div class="grid filter-date-grid">
+                        <div class="square filter-date-square flex center">
+                            <h4>From Date:</h4>
+                        </div>
+                        <div class="square filter-date-square flex center">
+                            <input type="date" th:value="${fromDate}" id="from-date">
+                        </div>
+                        <div class="square filter-date-square flex center">
+                            <h4>To Date: </h4>
+                        </div>
+                        <div class="square filter-date-square flex center">
+                            <input type="date" th:value="${toDate}" id="to-date">
+                        </div>
+                        <div class="square filter-date-square flex center">
+                            <input type="button" value="Filter" onclick="filterFromDateToDate()">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <hr>
+
+            <h3>If desired SaleLot does not show up, please check and input its Delivery data in Sale Section!</h3>
+            <hr>
+            <h3>Please go to the corresponding SaleLot and change its data if required!</h3>
+
+            <hr>
+
+            <div class="ultra-square delivery-summary">
+                <form th:action="@{check-wrapper}" method="post" th:object="${saleDeliveryDtoWrapper}" id="print-form">
+
+                    <div class="grid date-turn-grid">
+                        <div class="square flex black date-turn-square">
+                            <h4>Date</h4>
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <h4>Turn</h4>
+                        </div>
+                        <div class="square flex black date-turn-square"></div>
+                        <div class="square flex black date-turn-square">
+                            <input type="text" readonly th:field="*{deliveryDate}" id="date-input">
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <input type="text" readonly th:field="*{deliveryTurn}" id="turn-input">
+                            <input type="hidden" th:field="*{reportName}" id="report-name">
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <input type="button" value="Print Delivery Note" onclick="checkBeforePrint('delivery-note')">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="grid delivery-summary-grid header-grid">
+                        <div class="square delivery-summary-square white flex center header-square">
+                            <span>Date</span>
+                        </div>
+                        <div class="square delivery-summary-square white flex center header-square">
+                            <span>From</span>
+                        </div>
+                        <div class="square delivery-summary-square white flex center header-square">
+                            <span>Turn</span>
+                        </div>
+                        <div class="square delivery-summary-square white flex center header-square">
+                            <span>To</span>
+                        </div>
+                        <div class="square delivery-summary-square white flex center header-square">
+                            <span>Type</span>
+                        </div>
+                        <div class="square delivery-summary-square white flex center header-square">
+                            <span>Order</span>
+                        </div>
+                        <div class="square delivery-summary-square white flex center header-square">
+                            <span>Code</span>
+                        </div>
+                        <div class="square delivery-summary-square white flex center header-square">
+                            <span>Cont</span>
+                        </div>
+                        <div class="square delivery-summary-square white flex center header-square">
+                            <span>Lot</span>
+                        </div>
+
+                    </div>
+
+                    <div class="grid delivery-summary-grid main" th:each="dto, stat : *{saleDeliveryDtoList}" onclick="onclickSummaryGrid(this)">
+                        <div class="square delivery-summary-square white flex center main" style="">
+                            <span th:text="${#temporals.format(saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].deliveryDate, 'yy-MMM-dd')}" class="summary-date"></span>
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].deliveryDate}" type="hidden">
+                        </div>
+                        <div class="square delivery-summary-square white flex center main">
+                            <span th:text="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].departFrom}"></span>
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].departFrom}" type="hidden">
+                        </div>
+                        <div class="square delivery-summary-square white flex center main">
+                            <span th:text="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].deliveryTurn}" class="summary-turn"></span>
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].deliveryTurn}" type="hidden">
+                        </div>
+                        <div class="square delivery-summary-square white flex center main">
+                            <span th:text="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].deliverTo}"></span>
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].deliverTo}" type="hidden">
+                        </div>
+                        <div class="square delivery-summary-square white flex center main">
+                            <span th:text="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].itemType}"></span>
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].itemType}" type="hidden">
+                        </div>
+                        <div class="square delivery-summary-square white flex center main">
+                            <span th:text="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].orderName}"></span>
+                            <input type="hidden" readonly th:field="*{saleDeliveryDtoList[__${stat.index}__].idSale}">
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].orderName}" type="hidden">
+                        </div>
+
+                        <div class="square delivery-summary-square white flex center main">
+                            <span th:text="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].itemCode}"></span>
+                            <input type="hidden" readonly th:field="*{saleDeliveryDtoList[__${stat.index}__].idSaleArticle}">
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].itemCode}" type="hidden">
+                        </div>
+                        <div class="square delivery-summary-square white flex center main">
+                            <span th:text="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].container}"></span>
+                            <input type="hidden" readonly th:field="*{saleDeliveryDtoList[__${stat.index}__].idSaleContainer}" style="direction: rtl; text-align: left;">
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].container}" type="hidden">
+                        </div>
+                        <div class="square delivery-summary-square white flex center main">
+                            <span th:text="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].lotName}"></span>
+                            <input type="hidden" readonly th:field="*{saleDeliveryDtoList[__${stat.index}__].idSaleLot}" style="direction: rtl; text-align: left;">
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].lotName}" type="hidden">
+                        </div>
+                        <div class="square delivery-summary-square black flex center main">
+                            <input type="button" value="ToLot"
+                                   th:data-idsale="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].idSale}"
+                                   th:data-idSaleArticle="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].idSaleArticle}"
+                                   th:data-idSaleContainer="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].idSaleContainer}"
+                                   th:data-idSaleLot="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].idSaleLot}"
+                                   onclick="goToSaleLot(this.getAttribute('data-idSale'),
+                                                        this.getAttribute('data-idSaleArticle'),
+                                                        this.getAttribute('data-idSaleContainer'),
+                                                        this.getAttribute('data-idSaleLot'))">
+                        </div>
+                    </div>
+                </form>
+                <form th:action="@{/sales/}" method="get" id="go-to-sale-lot"></form>
+            </div>
+
+        </div>
 
 
 

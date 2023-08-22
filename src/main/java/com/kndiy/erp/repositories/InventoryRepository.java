@@ -12,8 +12,8 @@ import java.util.TreeSet;
 
 @Repository
 public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
-    @Query("SELECT i.unit FROM Inventory i")
-    TreeSet<String> findAllUnits();
+    @Query("SELECT i.initQuantity FROM Inventory i")
+    List<String> findAllUnits();
 
     @Query("SELECT i FROM Inventory i WHERE i.inventoryIn.idInventoryIn = ?1")
     List<Inventory> findByIdInventoryIn(Integer idInventoryIn);

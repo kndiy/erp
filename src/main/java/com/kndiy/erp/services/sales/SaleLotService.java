@@ -213,10 +213,10 @@ public class SaleLotService {
         List<SaleLot> saleLotList = findAllByIdSaleContainer(results, idSaleContainer);
 
         for (SaleLot saleLot : saleLotList) {
-            sumOrder = sumOrder.plus(new Quantity(saleLot.getOrderQuantity(), saleUnit));
+            sumOrder = sumOrder.plus(new Quantity(saleLot.getOrderQuantity()));
 
             for (InventoryOut inventoryOut : saleLot.getInventoryOutList()) {
-                sumDelivered = sumDelivered.plus(new Quantity(inventoryOut.getInventoryOutEquivalent(), saleUnit));
+                sumDelivered = sumDelivered.plus(new Quantity(inventoryOut.getEquivalent()));
             }
         }
 
@@ -225,11 +225,11 @@ public class SaleLotService {
         Quantity differential = new Quantity(sumDelivered.minus(sumOrder).getQuantityValue(), saleUnit);
         Quantity percentageDiff = differential.percentage(sumOrder);
 
-        return new SummaryQuantityDto(sumOrder.toString(),
-                allowedQuantity.toString(),
-                sumDelivered.toString(),
-                differential.toString(),
-                percentageDiff.toString(),
+        return new SummaryQuantityDto(sumOrder.getQuantityValue().toString(),
+                allowedQuantity.getQuantityValue().toString(),
+                sumDelivered.getQuantityValue().toString(),
+                differential.getQuantityValue().toString(),
+                percentageDiff.getQuantityValue().toString(),
                 allowedSurplus.toString(),
                 saleUnit);
     }
@@ -295,5 +295,35 @@ public class SaleLotService {
 
     public List<SaleLot> findAllByDeliveryDate(LocalDate fromDate, LocalDate toDate) {
         return saleLotRepository.findAllByDeliveryDate(fromDate, toDate);
+    }
+
+
+    public static SaleLotDto mapSaleLotDto(SaleLot saleLot) {
+
+        SaleLotDto saleLotDto = new SaleLotDto();
+
+        saleLotDto.setIdSaleLot(saleLot.getIdSaleLot());
+        saleLotDto.setIdSaleContainer(saleLot.getSaleContainer().getIdSaleContainer());
+        saleLotDto.setLotName(saleLot.getLotName());
+        saleLotDto.setDeliveryDate(saleLot.getDeliveryDate());
+        saleLotDto.setNote(saleLot.getNote());
+        saleLotDto.setDeliveryTurn(saleLot.getDeliveryTurn().toString());
+        saleLotDto.setIdCompanySupplier(saleLot.getSupplier().getIdCompany().toString());
+        saleLotDto.setSupplierNameEn(saleLot.getSupplier().getNameEn());
+        saleLotDto.setIdContactReceiver(saleLot.getReceiver().getIdContact().toString());
+        saleLotDto.setReceiverName(saleLot.getReceiver().getContactName());
+        saleLotDto.setReceiverPhone(saleLot.getReceiver().getPhone1());
+        saleLotDto.setIdFromAddress(saleLot.getFromAddress().getIdAddress().toString());
+        saleLotDto.setFromAddressName(saleLot.getFromAddress().getAddressName());
+        saleLotDto.setFromAddressName(saleLot.getFromAddress().getAddressVn());
+        saleLotDto.setIdToAddress(saleLot.getToAddress().getIdAddress().toString());
+        saleLotDto.setToAddressName(saleLot.getToAddress().getAddressName());
+        saleLotDto.setToAddressName(saleLot.getToAddress().getAddressVn());
+
+        return saleLotDto;
+    }
+
+    public SaleLot findByIdSaleLot(Integer idSaleLot) {
+        return saleLotRepository.findById(idSaleLot).orElse(null);
     }
 }

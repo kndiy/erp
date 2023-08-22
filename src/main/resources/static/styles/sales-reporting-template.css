@@ -1,0 +1,85 @@
+
+
+.ultra-square {
+    margin-bottom: 30px;
+}
+
+.filter-date-grid {
+    grid-template-columns: 100px 200px 80px 200px 150px;
+    grid-auto-rows: 50px;
+    grid-gap: 30px;
+}
+
+.filter-date-square input[type="date"] {
+    background-color: white;
+    padding: 0;
+    padding-left: 5px;
+    width: 90%;
+    height: 90%;
+}
+
+.filter-date-square input[type="button"] {
+    padding: 0px;
+    width: 90%;
+    height: 90%;
+}
+
+.square h4 {
+    margin: 0;
+}
+
+.square.header-square {
+    padding-left: 5px;
+}
+
+.delivery-summary-grid {
+    grid-template-columns: 1fr 2fr 1fr 2fr 2.2fr 2.2fr 2.5fr 1fr 1fr 1.5fr;
+    grid-auto-rows: 40px;
+    grid-gap: 1px;
+    margin-bottom: 3px;
+    width: 80vw;
+}
+
+.delivery-summary-grid.main {
+    cursor: pointer;
+}
+
+.delivery-summary-square.main {
+    font-size: 18px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.delivery-summary-grid.header-grid {
+}
+
+.delivery-summary-square input[type=button] {
+    width: 95%;
+    height: 95%;
+    padding: 0;
+}
+
+.date-turn-grid {
+    grid-template-columns: 150px 150px 220px;
+    grid-template-rows: 20px 50px;
+    grid-column-gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.date-turn-square input[type=text], .date-turn-square input[type=date]  {
+    width: 100%;
+    height: 90%;
+    padding: 0;
+    padding-left: 5px;
+}
+
+.date-turn-square input[type=submit] {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+
+
+

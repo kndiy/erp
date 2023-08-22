@@ -4,6 +4,7 @@
 
     <meta charset="UTF-8">
 
+
 </head>
 <body>
     <div th:fragment="header">
@@ -13,7 +14,7 @@
                 <img class="header-logo" th:src="@{/images/ds.jpg}">
             </div>
             <div class="square-header">
-                <form th:action="@{/}" id="goToHome" method="get">
+                <form th:action="@{/home}" id="goToHome" method="get">
                     <input class="input-header" type="submit" value="Home">
                 </form>
             </div>
@@ -35,6 +36,11 @@
             <div class="square-header">
                 <form th:action="@{/sales/}" method="get">
                     <input class="input-header" type="submit" value="Sales"/>
+                </form>
+            </div>
+            <div class="square-header">
+                <form th:action="@{/sales-reporting/}" method="get" id="header-sale-reporting-form">
+                    <input class="input-header" type="button" value="SalesRpt" onclick="openSalesReportingHeader()"/>
                 </form>
             </div>
         </div>

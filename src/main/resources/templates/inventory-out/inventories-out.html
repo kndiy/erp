@@ -9,6 +9,8 @@
 
     <script type="text/javascript" th:src="@{/scripts/inventory-out-scripts.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/api/BigDecimal.js}"></script>
+    <script th:src="@{/scripts/api/Generals.js}" type="text/javascript"></script>
+
 </head>
 <body>
     <div class="everything-container">
@@ -72,16 +74,12 @@
                     </div>
                     <div class="summary-square data">
                         <h3 th:text="${summaryQuantity.allowedQuantity}" id="allowed-quantity"></h3>
-                        &nbsp
-                        <h3 th:text="${summaryQuantity.saleUnit}"></h3>
                     </div>
                     <div class="summary-square">
                         Sum Delivered Quantity:
                     </div>
                     <div class="summary-square data">
                         <h3 th:text="${summaryQuantity.deliveredQuantity}" id="delivered-quantity"></h3>
-                        &nbsp
-                        <h3 th:text="${summaryQuantity.saleUnit}"></h3>
                     </div>
                     <div class="summary-square">
                         Differential Quantity:
@@ -131,16 +129,10 @@
                         <span>Remaining</span>
                     </div>
                     <div class="square inventory-out-square header-square">
-                        <span>Inv. Unit</span>
-                    </div>
-                    <div class="square inventory-out-square header-square">
                         <span>Eqv. Value</span>
                     </div>
                     <div class="square inventory-out-square header-square">
                         <span>Eqv. Quantity</span>
-                    </div>
-                    <div class="square inventory-out-square header-square">
-                        <span>Sale Unit</span>
                     </div>
                     <div class="square-center inventory-out-square header-square">
                         <span>Take All?</span>
@@ -169,28 +161,24 @@
                             <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].productionCode}">
                         </div>
                         <div class="square inventory-out-square main">
-                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].remainingQuantity}">
-                        </div>
-                        <div class="square inventory-out-square main">
-                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].inventoryUnit}">
+                            <input class="remaining" type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].remainingQuantity}">
+                            <input type="hidden" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].inventoryUnit}">
                         </div>
                         <div class="square inventory-out-square main">
                             <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentValue}">
                         </div>
                         <div class="square inventory-out-square main">
-                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentQuantity}">
-                        </div>
-                        <div class="square inventory-out-square main">
-                            <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentUnit}">
+                            <input class="equivalent" type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentQuantity}">
+                            <input type="hidden" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentUnit}">
                         </div>
                         <div class="square-center inventory-out-square main">
-                            <input type="checkbox" th:field="*{inventoryOutDtoList[__${stat.index}__].takeAll}">
+                            <input class="take-all-cb" type="checkbox" th:field="*{inventoryOutDtoList[__${stat.index}__].takeAll}">
                         </div>
                         <div class="square-center inventory-out-square main">
-                            <input type="checkbox" th:field="*{inventoryOutDtoList[__${stat.index}__].split}">
+                            <input class="split-cb" type="checkbox" th:field="*{inventoryOutDtoList[__${stat.index}__].split}">
                         </div>
                         <div class="square inventory-out-square main">
-                            <input type="text" th:field="*{inventoryOutDtoList[__${stat.index}__].splitQuantity}">
+                            <input class="split-quantity" type="text" th:field="*{inventoryOutDtoList[__${stat.index}__].splitQuantity}">
                         </div>
                     </div>
                     <input type="text" th:field="*{idSaleLot}" style="display: none;">

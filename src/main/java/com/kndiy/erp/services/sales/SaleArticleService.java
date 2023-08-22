@@ -1,9 +1,12 @@
 package com.kndiy.erp.services.sales;
 
 import com.kndiy.erp.dto.SaleArticleDto;
+import com.kndiy.erp.dto.SaleContainerDto;
+import com.kndiy.erp.dto.deliveryDto.SaleDeliveryDto;
 import com.kndiy.erp.entities.itemCodeCluster.ItemCode;
 import com.kndiy.erp.entities.salesCluster.Sale;
 import com.kndiy.erp.entities.salesCluster.SaleArticle;
+import com.kndiy.erp.entities.salesCluster.SaleContainer;
 import com.kndiy.erp.entities.salesCluster.SaleLot;
 import com.kndiy.erp.others.MismatchedUnitException;
 import com.kndiy.erp.repositories.ItemCodeRepository;
@@ -157,5 +160,17 @@ public class SaleArticleService {
         }
 
         return saleArticleRepository.findByOrderNameAndItemCodeString(orderName, itemCodeString);
+    }
+
+    public static SaleArticleDto mapSaleArticleDto(SaleArticle saleArticle) {
+
+        SaleArticleDto saleArticleDto = new SaleArticleDto();
+        saleArticleDto.setIdSaleArticle(saleArticle.getIdSaleArticle());
+        saleArticleDto.setIdSale(saleArticle.getSale().getIdSale());
+        saleArticleDto.setAllowedSurplus(saleArticle.getAllowedSurplus().toString());
+        saleArticleDto.setIdItemCode(saleArticle.getItemCode().getIdItemCode().toString());
+        saleArticleDto.setRequestDeliveryDate(saleArticle.getRequestDeliveryDate());
+
+        return saleArticleDto;
     }
 }

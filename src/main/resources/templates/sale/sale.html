@@ -13,6 +13,7 @@
     <script type="text/javascript" th:src="@{/scripts/sale-lot-scripts.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/sale-inventory-out-scripts.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/api/Generals.js}"></script>
+
 </head>
 <body>
     <div th:insert="~{/fragments/header-footer :: header}"></div>
@@ -364,13 +365,7 @@
                         <span>Quantity</span>
                     </div>
                     <div class="square square-inventory-out square-table-header">
-                        <span>Unit</span>
-                    </div>
-                    <div class="square square-inventory-out square-table-header">
                         <span>Equiv.</span>
-                    </div>
-                    <div class="square square-inventory-out square-table-header">
-                        <span>Unit</span>
                     </div>
                     <div class="square square-inventory-out square-table-header">
                         <span>Prod.Code</span>
@@ -391,13 +386,7 @@
                             <span th:text="${inventoryOut.inventoryOutQuantity}"></span>
                         </div>
                         <div class="square square-flex square-inventory-out main">
-                            <span th:text="${inventoryOut.inventory.unit}"></span>
-                        </div>
-                        <div class="square square-flex square-inventory-out main">
                             <span th:text="${inventoryOut.inventoryOutEquivalent}"></span>
-                        </div>
-                        <div class="square square-flex square-inventory-out main">
-                            <span th:text="${inventoryOut.saleLotList.get(0).saleContainer.orderUnit}"></span>
                         </div>
                         <div class="square square-flex square-inventory-out main">
                             <span th:text="${inventoryOut.inventory.productionCode}"></span>

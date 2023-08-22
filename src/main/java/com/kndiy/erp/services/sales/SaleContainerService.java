@@ -166,4 +166,16 @@ public class SaleContainerService {
 
         return saleContainer;
     }
+
+    public static SaleContainerDto mapSaleContainerDto(SaleContainer saleContainer) {
+
+        SaleContainerDto saleContainerDto = new SaleContainerDto();
+        saleContainerDto.setIdSaleContainer(saleContainer.getIdSaleContainer());
+        saleContainerDto.setContainer(saleContainer.getContainer());
+        saleContainerDto.setIdSaleArticle(saleContainer.getSaleArticle().getIdSaleArticle());
+        saleContainerDto.setForClaim(saleContainer.getForClaim());
+        saleContainerDto.setOrderUnit(saleContainer.getOrderUnit());
+
+        return saleContainerDto;
+    }
 }

@@ -2,22 +2,18 @@ package com.kndiy.erp.wrapper;
 
 import com.kndiy.erp.entities.inventoryCluster.Inventory;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.List;
+import java.util.TreeSet;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class InventoryMapWrapper {
 
-    List<Inventory> inventoryList;
-
-    public List<Inventory> getInventoryList() {
-        return inventoryList;
-    }
-
-    public void setInventoryList(List<Inventory> inventoryList) {
-        this.inventoryList = inventoryList;
-    }
+    TreeSet<Inventory> inventorySet;
 
 }

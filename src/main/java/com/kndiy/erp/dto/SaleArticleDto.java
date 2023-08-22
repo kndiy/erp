@@ -3,60 +3,37 @@ package com.kndiy.erp.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
-public class SaleArticleDto {
+@Getter
+@Setter
+public class SaleArticleDto implements Comparable<SaleArticleDto> {
 
     @NotNull(message = "Please select one row on Sale Data table to get its Id!")
     private Integer idSale;
+
     private Integer idSaleArticle;
+
     @Pattern(regexp = "^[1-9][0-9]*$", message = "Please select corresponding ItemCode!")
     private String idItemCode;
+
     @NotNull(message = "Please enter the ETD!")
     private LocalDate requestDeliveryDate;
+
     @Pattern(regexp = "^0[.][0-9][0-9]$", message = "Please enter allowed surplus number to calculate Settled Quantity!")
     private String allowedSurplus = "0.03";
 
-    public Integer getIdSale() {
-        return idSale;
-    }
+    private String quantity;
 
-    public void setIdSale(Integer idSale) {
-        this.idSale = idSale;
-    }
+    private String equivalent;
 
-    public Integer getIdSaleArticle() {
-        return idSaleArticle;
-    }
-
-    public void setIdSaleArticle(Integer idSaleArticle) {
-        this.idSaleArticle = idSaleArticle;
-    }
-
-    public String getIdItemCode() {
-        return idItemCode;
-    }
-
-    public void setIdItemCode(String idItemCode) {
-        this.idItemCode = idItemCode;
-    }
-
-    public LocalDate getRequestDeliveryDate() {
-        return requestDeliveryDate;
-    }
-
-    public void setRequestDeliveryDate(LocalDate requestDeliveryDate) {
-        this.requestDeliveryDate = requestDeliveryDate;
-    }
-
-    public String getAllowedSurplus() {
-        return allowedSurplus;
-    }
-
-    public void setAllowedSurplus(String allowSurplus) {
-        this.allowedSurplus = allowSurplus;
+    @Override
+    public int compareTo(SaleArticleDto o) {
+        return idSaleArticle.compareTo(o.idSaleArticle);
     }
 }

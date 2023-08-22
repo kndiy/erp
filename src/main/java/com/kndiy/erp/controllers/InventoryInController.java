@@ -1,6 +1,7 @@
 package com.kndiy.erp.controllers;
 
 import com.kndiy.erp.dto.InventoryDto;
+import com.kndiy.erp.entities.inventoryCluster.InventoryIn;
 import com.kndiy.erp.wrapper.InventoryDtoWrapperDto;
 import com.kndiy.erp.dto.InventoryInDto;
 import com.kndiy.erp.entities.inventoryCluster.Inventory;
@@ -161,9 +162,11 @@ public class InventoryInController {
 
         Integer idInventoryIn = null;
         Integer articleNumber = null;
+        InventoryIn inventoryIn;
 
         if (!errors.hasErrors()) {
-            List<String> results = inventoryInService.addNewInventoryIn(inventoryInDto);
+            List<String> results = new ArrayList<>();
+            inventoryIn = inventoryInService.addNewInventoryIn(results, inventoryInDto);
             idInventoryIn = inventoryInService.findByVoucher(inventoryInDto.getVoucher()).getIdInventoryIn();
             redirectAttributes.addFlashAttribute("results", results);
         }
@@ -178,6 +181,10 @@ public class InventoryInController {
             articleNumber = Integer.parseInt(inventoryInDto.getNumberOfInventoryArticles());
         }
         catch (Exception ex) {
+            return "redirect:/inventories-in/";
+        }
+
+        if (inventoryIn == null) {
             return "redirect:/inventories-in/";
         }
 
@@ -221,7 +228,7 @@ public class InventoryInController {
         }
 
         Integer idInventoryIn = inventoryDtoWrapperDto.getIdInventoryIn();
-        if (!inventoryDtoWrapperDto.getNewArticleNumber().equals("")) {
+        if (!inventoryDtoWrapperDto.getNewArticleNumber().isEmpty()) {
             Integer articleNumber = Integer.parseInt(inventoryDtoWrapperDto.getNewArticleNumber());
 
             redirectAttributes.addFlashAttribute("submittedWrapperDto", inventoryDtoWrapperDto);

@@ -45,7 +45,7 @@
     display: grid;
     grid-gap: 1px;
     margin-bottom: 3px;
-    background-color: black;
+    background-color: rgb(10,25,47);
 
     grid-auto-rows: 25px;
 
@@ -138,14 +138,8 @@
     cursor: pointer;
 }
 
-
-
-
-
-
-
 .grid-inventory-out {
-    grid-template-columns: 0.5fr 1fr 0.5fr 1fr 0.5fr 1.5fr;
+    grid-template-columns: 0.5fr 2fr 2fr 2fr;
     cursor: pointer;
 }
 
@@ -167,7 +161,7 @@
     left: 20%;
 
     padding: 50px;
-    background-color: black;
+    background-color: rgb(10,25,47);
 }
 
 .square-new-sale input[type="text"] {

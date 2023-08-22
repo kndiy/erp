@@ -55,7 +55,15 @@ public class InventoryService {
     private InventoryOutService inventoryOutService;
 
     public TreeSet<String> findAllUnits() {
-        return inventoryRepository.findAllUnits();
+        TreeSet<String> units = new TreeSet<>();
+
+        List<String> quantityWithUnit = inventoryRepository.findAllUnits();
+        for (String s : quantityWithUnit) {
+            if (s.split(" ").length == 2) {
+                units.add(s.split(" ")[1]);
+            }
+        }
+        return units;
     }
 
     public List<String> parseModifyingInventoryErrors(Errors errors) {
@@ -124,9 +132,8 @@ public class InventoryService {
         inventory.setItemCode(itemCode);
         inventory.setStoredAtAddress(storedAt);
         inventory.setNumberInBatch(inventoryDto.getNumberInBatch());
-        inventory.setInitQuantity(new Quantity(inventoryDto.getInitQuantity(), inventoryDto.getUnit()).getQuantityValue().toString());
-        inventory.setRemainingQuantity(inventoryDto.getInitQuantity());
-        inventory.setUnit(inventoryDto.getUnit());
+        inventory.setInitQuantity(new Quantity(inventoryDto.getInitQuantity(), inventoryDto.getUnit()).toString());
+        inventory.setRemainingQuantity(inventory.getInitQuantity());
         inventory.setProductionCode(inventoryDto.getSupplierProductionCode());
 
         inventoryRepository.save(inventory);
@@ -148,18 +155,18 @@ public class InventoryService {
             InventoryMapWrapper inventoryMapWrapper = map.get(idInventoryIn);
 
             if (inventoryMapWrapper == null) {
-                inventoryMapWrapper = new InventoryMapWrapper(new ArrayList<>(List.of(inv)));
+                inventoryMapWrapper = new InventoryMapWrapper(new TreeSet<>(List.of(inv)));
                 map.put(idInventoryIn, inventoryMapWrapper);
                 return;
             }
 
-            List<Inventory> inventoryList = inventoryMapWrapper.getInventoryList();
+            TreeSet<Inventory> inventorySet = inventoryMapWrapper.getInventorySet();
 
-            if (inventoryList == null) {
-                inventoryList = new ArrayList<>(List.of(inv));
+            if (inventorySet == null) {
+                inventorySet = new TreeSet<>(List.of(inv));
             }
             else {
-                inventoryList.add(inv);
+                inventorySet.add(inv);
             }
 
         });
@@ -198,10 +205,15 @@ public class InventoryService {
         inventoryDto.setIdItemCode(inventory.getItemCode().getIdItemCode());
         inventoryDto.setIdInventoryIn(inventory.getInventoryIn().getIdInventoryIn());
         inventoryDto.setNumberInBatch(inventory.getNumberInBatch());
-        inventoryDto.setUnit(inventory.getUnit());
         inventoryDto.setIdInventory(inventory.getIdInventory());
-        inventoryDto.setInitQuantity(inventory.getInitQuantity());
-        inventoryDto.setRemainingQuantity(inventory.getRemainingQuantity());
+
+        inventoryDto.setInitQuantity(inventory.getInitQuantity().split(" ")[0]);
+        if (inventory.getInitQuantity().split(" ").length == 2) {
+            inventoryDto.setUnit(inventory.getInitQuantity().split(" ")[1]);
+        }
+
+        inventoryDto.setRemainingQuantity(inventory.getRemainingQuantity().split(" ")[0]);
+
         inventoryDto.setIdAddressStoredAt(inventory.getStoredAtAddress().getIdAddress());
         inventoryDto.setPlacementInWarehouse(inventory.getPlacementInWarehouse());
         inventoryDto.setSupplierProductionCode(inventory.getProductionCode());
@@ -222,6 +234,15 @@ public class InventoryService {
                 inventory = inventoryRepository.findById(inventoryDto.getIdInventory()).orElse(null);
             }
             else {
+                inventory = new Inventory();
+            }
+
+            if (inventory != null && !inventory.getInitQuantity().equals(inventory.getRemainingQuantity())) {
+                results.add("Could not edit Inventory with Id: " + inventory.getIdInventory() + " because it has been used!");
+                continue;
+            }
+
+            if (inventory == null) {
                 inventory = new Inventory();
             }
 
@@ -255,8 +276,7 @@ public class InventoryService {
             inventory.setStoredAtAddress(storedAt);
             inventory.setNumberInBatch(inventoryDto.getNumberInBatch());
             inventory.setInitQuantity(new Quantity(inventoryDto.getInitQuantity(), inventoryDto.getUnit()).toString());
-            inventory.setRemainingQuantity(inventoryDto.getInitQuantity());
-            inventory.setUnit(inventoryDto.getUnit());
+            inventory.setRemainingQuantity(inventory.getInitQuantity());
             inventory.setProductionCode(inventoryDto.getSupplierProductionCode());
 
             inventoryRepository.save(inventory);
@@ -344,13 +364,19 @@ public class InventoryService {
             Company supplier = saleLot.getSupplier();
             ItemCodeSupplier itemCodeSupplier = itemCodeSupplierService.findByItemCodeAndSupplier(results, itemCode, supplier);
 
-            String inventoryUnit = inventory.getUnit();
+            String inventoryUnit = new Quantity(inventory.getInitQuantity()).getUnit();
             String saleUnit = saleLot.getSaleContainer().getOrderUnit();
 
             String equivalentValue = itemCodeSupplierEquivalentService.findEquivalentValueByItemCodeSupplierAndUnits(results, itemCodeSupplier, inventoryUnit, saleUnit);
+            if (equivalentValue.equals("1")) {
+                return new InventoryOutDtoWrapper(List.of(), idSaleLot);
+            }
             inventoryOutDto.setEquivalentValue(equivalentValue);
             inventoryOutDto.setEquivalentUnit(saleUnit);
-            inventoryOutDto.setEquivalentQuantity(new Quantity(inventory.getRemainingQuantity(), saleUnit).times(Float.parseFloat(equivalentValue)).getQuantityValue().toString());
+
+            Quantity equivalent = new Quantity(inventory.getRemainingQuantity()).times(Float.parseFloat(equivalentValue));
+            equivalent.setUnit(saleUnit);
+            inventoryOutDto.setEquivalent(equivalent.toString());
 
             inventoryOutDtoList.add(inventoryOutDto);
         }
@@ -366,7 +392,7 @@ public class InventoryService {
         inventoryOutDto.setProductionCode(inventory.getProductionCode());
         inventoryOutDto.setStoredAtAddress(inventory.getStoredAtAddress().getAddressName());
         inventoryOutDto.setRemainingQuantity(inventory.getRemainingQuantity());
-        inventoryOutDto.setInventoryUnit(inventory.getUnit());
+        inventoryOutDto.setInventoryUnit(new Quantity(inventory.getRemainingQuantity()).getUnit());
 
         return inventoryOutDto;
     }
