@@ -25,6 +25,10 @@ public class SaleDeliveryDto {
 
     private Integer idSale;
 
+    private String saleSource;
+
+    private String customer;
+
     private String orderName;
 
     private Integer idSaleArticle;
@@ -51,5 +55,5 @@ public class SaleDeliveryDto {
 
     private String lotStyle;
 
-    private TreeSet<InventoryOutDto> inventoryOutDtoList;
+    private TreeSet<InventoryOutDto> inventoryOutDtoTreeSet;
 }

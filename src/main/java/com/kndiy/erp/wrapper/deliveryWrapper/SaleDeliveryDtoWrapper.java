@@ -1,6 +1,7 @@
 package com.kndiy.erp.wrapper.deliveryWrapper;
 
 import com.kndiy.erp.dto.deliveryDto.SaleDeliveryDto;
+import com.kndiy.erp.validators.SaleDeliveryDtoWrapperConstraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@SaleDeliveryDtoWrapperConstraint
 public class SaleDeliveryDtoWrapper {
 
     @NotNull(message = "Please select a delivery date By clicking on desired Summary Grid!")
@@ -22,6 +24,8 @@ public class SaleDeliveryDtoWrapper {
 
     @NotNull(message = "Please select a delivery turn By clicking on desired Summary Grid!")
     private Integer deliveryTurn;
+
+    private Integer idSaleLot;
 
     private String reportName;
 

@@ -2,18 +2,23 @@ package com.kndiy.erp.services;
 
 import com.kndiy.erp.dto.InventoryOutDto;
 import com.kndiy.erp.dto.deliveryDto.SaleDeliveryDto;
+import com.kndiy.erp.dto.deliveryDto.SaleDeliveryHeaderDto;
 import com.kndiy.erp.dto.deliveryDto.SaleDeliverySummaryDto;
+import com.kndiy.erp.entities.companyCluster.Address;
+import com.kndiy.erp.entities.companyCluster.Company;
+import com.kndiy.erp.entities.companyCluster.Contact;
 import com.kndiy.erp.entities.inventoryCluster.InventoryOut;
 import com.kndiy.erp.entities.salesCluster.SaleLot;
 import com.kndiy.erp.others.MismatchedUnitException;
 import com.kndiy.erp.others.Quantity;
+import com.kndiy.erp.pdfExpoter.DeliveryNotePDFExporter;
 import com.kndiy.erp.services.sales.SaleLotService;
 import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliveryDtoWrapper;
 import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliverySummaryDtoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.*;
@@ -24,6 +29,8 @@ public class SalesReportPrintingService {
 
     @Autowired
     private SaleLotService saleLotService;
+    @Autowired
+    private CompanyClusterService companyClusterService;
 
     public SaleDeliveryDtoWrapper makeSaleDeliveryDtoWrapperFromDateToDate(LocalDate fromDate, LocalDate toDate) {
 
@@ -80,6 +87,7 @@ public class SalesReportPrintingService {
     }
 
     private static SaleDeliveryDto mapSaleDeliveryDtoFromSaleLot(SaleLot lot) {
+
         SaleDeliveryDto saleDeliveryDto = new SaleDeliveryDto();
         saleDeliveryDto.setDeliveryDate(lot.getDeliveryDate());
         saleDeliveryDto.setDepartFrom(lot.getFromAddress().getAddressName());
@@ -92,20 +100,52 @@ public class SalesReportPrintingService {
         saleDeliveryDto.setItemCode(lot.getSaleContainer().getSaleArticle().getItemCode().getItemCodeString());
         saleDeliveryDto.setIdSaleContainer(lot.getSaleContainer().getIdSaleContainer());
         saleDeliveryDto.setContainer(lot.getSaleContainer().getContainer());
-        saleDeliveryDto.setIdSaleLot(lot.getIdSaleLot());
         saleDeliveryDto.setLotName(lot.getLotName());
+        saleDeliveryDto.setSaleSource(lot.getSaleContainer().getSaleArticle().getSale().getCompanySource().getAbbreviation());
+        saleDeliveryDto.setCustomer(lot.getSaleContainer().getSaleArticle().getSale().getCustomer().getAbbreviation());
+        saleDeliveryDto.setIdSaleLot(lot.getIdSaleLot());
+
         return saleDeliveryDto;
     }
 
-    public void serveDeliveryNote(OutputStream outputStream, SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws MismatchedUnitException {
+    public void serveDeliveryNote(OutputStream outputStream, SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws MismatchedUnitException, IOException {
 
         TreeMap<List<String>, SaleDeliveryDtoWrapper> detailMap = mapDetailDeliveryData(saleDeliveryDtoWrapper);
-
         TreeMap<String, SaleDeliverySummaryDtoWrapper> summaryMap = mapSummaryData(detailMap);
 
-        System.out.println(summaryMap);
-        System.out.println();
-        System.out.println(detailMap);
+        SaleDeliveryHeaderDto saleDeliveryHeaderDto = new SaleDeliveryHeaderDto();
+        saleDeliveryHeaderDto.setIdSaleLot(saleDeliveryDtoWrapper.getIdSaleLot());
+        saleDeliveryHeaderDto.setDeliveryDate(saleDeliveryDtoWrapper.getDeliveryDate());
+        saleDeliveryHeaderDto.setDeliveryTurn(saleDeliveryDtoWrapper.getDeliveryTurn());
+        fillInHeaderData(saleDeliveryHeaderDto);
+
+        DeliveryNotePDFExporter deliveryNotePDFExporter = new DeliveryNotePDFExporter();
+        deliveryNotePDFExporter.export(outputStream, detailMap, summaryMap, saleDeliveryHeaderDto);
+    }
+
+    private void fillInHeaderData(SaleDeliveryHeaderDto saleDeliveryHeaderDto) {
+
+        SaleLot saleLot = saleLotService.findByIdSaleLot(saleDeliveryHeaderDto.getIdSaleLot());
+
+        Company saleSource = saleLot.getSaleContainer().getSaleArticle().getSale().getCompanySource();
+        Company customer = saleLot.getSaleContainer().getSaleArticle().getSale().getCustomer();
+
+        Address saleSourceHQ = companyClusterService.findHQAddressByCompanyNameEn(saleSource.getNameEn());
+        Address customerHQ = companyClusterService.findHQAddressByCompanyNameEn(customer.getNameEn());
+
+        Contact saleSourceLandLine = companyClusterService.findLandLineContactByHQAddressName(saleSourceHQ.getAddressName());
+        Contact receiver = saleLot.getReceiver();
+
+        saleDeliveryHeaderDto.setSaleSourceNameVn(saleSource.getNameVn());
+        saleDeliveryHeaderDto.setSaleSourceHQAddress(saleSourceHQ.getAddressVn());
+        saleDeliveryHeaderDto.setSaleSourceLandLine(saleSourceLandLine.getPhone1());
+        saleDeliveryHeaderDto.setCustomerNameVn(customer.getNameVn());
+        saleDeliveryHeaderDto.setCustomerHQAddress(customerHQ.getAddressVn());
+        saleDeliveryHeaderDto.setDeliverToAddressName(receiver.getAddress().getAddressName());
+        saleDeliveryHeaderDto.setDeliverToAddressVn(receiver.getAddress().getAddressVn());
+        saleDeliveryHeaderDto.setReceiverName(receiver.getContactName());
+        saleDeliveryHeaderDto.setReceiverPhone(receiver.getPhone1());
+
     }
 
     private TreeMap<String, SaleDeliverySummaryDtoWrapper> mapSummaryData(TreeMap<List<String>, SaleDeliveryDtoWrapper> detailMap) throws MismatchedUnitException {
@@ -218,10 +258,13 @@ public class SalesReportPrintingService {
                 inventoryOutDtoList.add(inventoryOutDto);
             }
 
-            saleDeliveryDto.setInventoryOutDtoList(new TreeSet<>(inventoryOutDtoList));
+            saleDeliveryDto.setInventoryOutDtoTreeSet(new TreeSet<>(inventoryOutDtoList));
             saleDeliveryDto.setLotQuantity(lotQuantity.toString());
             saleDeliveryDto.setLotEquivalent(lotEquivalent.toString());
             saleDeliveryDto.setLotRolls(lotRolls);
+            saleDeliveryDto.setLotColor(saleLot.getOrderColor());
+            saleDeliveryDto.setLotStyle(saleLot.getOrderStyle());
+            saleDeliveryDto.setLotName(saleLot.getLotName());
 
             SaleDeliveryDtoWrapper outputDeliveryDtoWrapper = detailMap.get(key);
             if (outputDeliveryDtoWrapper == null) {

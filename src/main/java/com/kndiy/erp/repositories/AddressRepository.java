@@ -30,4 +30,10 @@ public interface AddressRepository extends JpaRepository<Address, Integer> {
             "OR a.company.companyType LIKE CONCAT('%', ?2, '%') " +
             "ORDER BY a.addressName ASC")
     List<Address> findByCompanyType(String companyType1, String companyType2);
+
+    @Query("SELECT a " +
+            "FROM Address a " +
+            "WHERE a.company.nameEn = ?1 " +
+            "   AND a.addressType LIKE CONCAT('%HQ%')")
+    Address findHQAddressByCompanyNameEn(String companyNameEn);
 }

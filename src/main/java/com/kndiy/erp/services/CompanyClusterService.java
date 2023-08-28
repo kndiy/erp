@@ -42,6 +42,10 @@ public class CompanyClusterService {
 
         return company;
     }
+
+    public Company findCompanyByAbbreviation(String abbreviation) {
+        return companyRepository.findByAbbreviation(abbreviation);
+    }
     public Company findCompanyByCompanyNameVn(String nameVn) {
         return companyRepository.findCompanyByNameVn(nameVn);
     }
@@ -327,5 +331,21 @@ public class CompanyClusterService {
     public List<Contact> findContactsByCompanyType(String companyType) {
 
         return contactRepository.findByCompanyType(companyType);
+    }
+
+    public Address findHQAddressByCompanyNameEn(String companyNameEn) {
+        return addressRepository.findHQAddressByCompanyNameEn(companyNameEn);
+    }
+
+    public Address findAddressByAddressName(String addressName) {
+        return addressRepository.findByAddressName(addressName);
+    }
+
+    public Contact findLandLineContactByHQAddressName(String hqAddressName) {
+        return contactRepository.findLandLineContactByHQAddressName(hqAddressName);
+    }
+
+    public Contact findContactByIdContact(String idContact) {
+        return contactRepository.findById(Integer.parseInt(idContact)).orElse(null);
     }
 }

@@ -33,11 +33,11 @@
 }
 
 .delivery-summary-grid {
-    grid-template-columns: 1fr 2fr 1fr 2fr 2.2fr 2.2fr 2.5fr 1fr 1fr 1.5fr;
+    grid-template-columns: 1fr 1fr 1fr 2fr 1fr 2fr 2.2fr 2.2fr 2.5fr 1fr 1fr 1.5fr;
     grid-auto-rows: 40px;
     grid-gap: 1px;
     margin-bottom: 3px;
-    width: 80vw;
+    width: 90vw;
 }
 
 .delivery-summary-grid.main {

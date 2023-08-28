@@ -21,6 +21,7 @@ function goToSaleLot(idSale, idArticle, idContainer, idLot) {
 function onclickSummaryGrid(curGrid) {
     let dateInput = document.getElementById('date-input');
     let turnInput = document.getElementById('turn-input');
+    let idSaleLotInput = document.getElementById('id-sale-lot');
 
     turnInput.value = curGrid.getElementsByClassName('summary-turn')[0].textContent;
     let dateArr = curGrid.getElementsByClassName('summary-date')[0].textContent.split('-');
@@ -28,6 +29,7 @@ function onclickSummaryGrid(curGrid) {
     dateArr[1] = months.get(dateArr[1]);
     dateInput.value = dateArr.join('-');
 
+    idSaleLotInput.value = curGrid.getElementsByClassName('id-sale-lot')[0].value;
 }
 
 function checkBeforePrint(reportName) {

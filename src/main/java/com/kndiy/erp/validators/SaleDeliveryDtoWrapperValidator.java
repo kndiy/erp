@@ -21,11 +21,20 @@ public class SaleDeliveryDtoWrapperValidator implements ConstraintValidator<Sale
     @Override
     public boolean isValid(SaleDeliveryDtoWrapper saleDeliveryDtoWrapper, ConstraintValidatorContext constraintValidatorContext) {
 
+        constraintValidatorContext.disableDefaultConstraintViolation();
+
+        if (saleDeliveryDtoWrapper.getDeliveryDate() == null || saleDeliveryDtoWrapper.getDeliveryTurn() == null) {
+
+            constraintValidatorContext.buildConstraintViolationWithTemplate(
+                    "Please input Delivery Date and Turn by selecting corresponding Summary Grid!"
+            ).addConstraintViolation();
+            return false;
+        }
+
         Map<List<String>, List<String>> checkValidMap = new HashMap<>();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate toPrintDate = saleDeliveryDtoWrapper.getDeliveryDate();
         Integer toPrintTurn = saleDeliveryDtoWrapper.getDeliveryTurn();
-        constraintValidatorContext.disableDefaultConstraintViolation();
 
         for (SaleDeliveryDto saleDeliveryDto : saleDeliveryDtoWrapper.getSaleDeliveryDtoList()) {
 

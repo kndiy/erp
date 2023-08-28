@@ -21,4 +21,7 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     List<Company> findByCompanyType(String companyType);
     @Query("SELECT c FROM Company c WHERE c.companyType LIKE CONCAT('%', ?1, '%') OR c.companyType LIKE CONCAT('%', ?2, '%')")
     List<Company> findByCompanyType(String companyType1, String companyType2);
+
+    @Query("SELECT c FROM Company c WHERE c.abbreviation = ?1")
+    Company findByAbbreviation(String abbreviation);
 }

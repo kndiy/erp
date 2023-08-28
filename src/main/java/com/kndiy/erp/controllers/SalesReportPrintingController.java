@@ -63,7 +63,7 @@ public class SalesReportPrintingController {
 
         if (errors.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", errorHandlingService.parseError(errors));
-            redirectAttributes.addFlashAttribute("errorType", "Printing Delivery Note");
+            redirectAttributes.addFlashAttribute("errorType", "Printing Note");
         }
         else {
             redirectAttributes.addFlashAttribute("saleDeliveryDtoWrapper", saleDeliveryDtoWrapper);
@@ -91,5 +91,7 @@ public class SalesReportPrintingController {
 
         response.flushBuffer();
     }
+
+
 
 }
