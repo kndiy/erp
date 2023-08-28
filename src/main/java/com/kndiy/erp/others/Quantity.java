@@ -1,9 +1,14 @@
 package com.kndiy.erp.others;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Getter
+@Setter
 public class Quantity implements Comparable<Quantity>, Serializable {
 
     private static final RoundingMode DEFAULT_ROUNDINGMODE = RoundingMode.DOWN;
@@ -200,37 +205,7 @@ public class Quantity implements Comparable<Quantity>, Serializable {
     public boolean equal(Quantity other) {
         return this.compareTo(other) == 0;
     }
-    public BigDecimal getQuantityValue() {
-        return quantityValue;
-    }
 
-    public void setQuantityValue(BigDecimal quantityValue) {
-        this.quantityValue = quantityValue;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public RoundingMode getRoundingMode() {
-        return roundingMode;
-    }
-
-    public void setRoundingMode(RoundingMode roundingMode) {
-        this.roundingMode = roundingMode;
-    }
-
-    public int getScale() {
-        return scale;
-    }
-
-    public void setScale(int scale) {
-        this.scale = scale;
-    }
 
     @Override
     public int compareTo(Quantity other) {
