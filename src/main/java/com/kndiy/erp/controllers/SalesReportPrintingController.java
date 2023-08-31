@@ -87,11 +87,26 @@ public class SalesReportPrintingController {
         response.setCharacterEncoding("UTF-8");
 
         OutputStream outputStream = response.getOutputStream();
-        salesReportPrintingService.serveDeliveryNote(outputStream, saleDeliveryDtoWrapper);
+        salesReportPrintingService.serveNote(outputStream, saleDeliveryDtoWrapper);
 
         response.flushBuffer();
     }
 
+    @PostMapping("/sales-reporting/{dateRestriction}/print-account-settling-note")
+    public void printAccountSettlingNote(HttpServletResponse response, @ModelAttribute SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws IOException, MismatchedUnitException {
 
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd");
+        LocalDate deliveryDate = saleDeliveryDtoWrapper.getDeliveryDate();
 
+        String fileName = dtf.format(deliveryDate) + "_AccountSettlingNote.pdf";
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-disposition","inline; filename=" + fileName);
+        response.setCharacterEncoding("UTF-8");
+
+        OutputStream outputStream = response.getOutputStream();
+        salesReportPrintingService.serveNote(outputStream, saleDeliveryDtoWrapper);
+
+        response.flushBuffer();
+    }
 }

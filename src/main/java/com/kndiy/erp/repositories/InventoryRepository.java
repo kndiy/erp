@@ -31,4 +31,10 @@ public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
             "WHERE i.productionCode = ?1 " +
             "   AND i.numberInBatch = ?2")
     Inventory findByProductionCodeAndNumberInBatch(String productionCode, Integer numberInBatch);
+
+    @Query("SELECT i FROM Inventory i " +
+            "WHERE i.inventoryIn.idInventoryIn = ?1 " +
+            "   AND i.productionCode = ?2 " +
+            "   AND i.numberInBatch = ?3")
+    Inventory findByIdInventoryInAndProductionCodeAndNumberInBatch(Integer idInventoryIn, String supplierProductionCode, Integer numberInBatch);
 }

@@ -105,8 +105,8 @@ public class SaleContainerService {
         }
         SaleContainer saleContainer = saleContainerRepository.findByContainerAndSaleArticle(saleContainerDto.getContainer(), saleArticle);
 
-        if (saleContainer != null) {
-            results.add("SaleContainer corresponds with idSaleArticle of: " + saleContainerDto.getIdSaleArticle() + " and Container " + saleContainerDto.getContainer() + " already exists!");
+        if (saleContainer == null) {
+            results.add("SaleContainer corresponds with idSaleArticle of: " + saleContainerDto.getIdSaleArticle() + " and Container " + saleContainerDto.getContainer() + " does not exist!");
             return null;
         }
         saleContainer = findByIdSaleContainer(results, saleContainerDto.getIdSaleContainer());
@@ -114,7 +114,18 @@ public class SaleContainerService {
         saleContainer.setContainer(saleContainerDto.getContainer());
         saleContainer.setSaleArticle(saleArticle);
         saleContainer.setForClaim(saleContainerDto.getForClaim());
-        saleContainer.setOrderUnit(saleContainerDto.getOrderUnit());
+
+        if (!saleContainerDto.getOrderUnit().equals(saleContainer.getOrderUnit()) && saleContainer.getSaleLotList() != null) {
+
+            for (SaleLot saleLot : saleContainer.getSaleLotList()) {
+                if (saleLot.getInventoryOutList() != null && !saleLot.getInventoryOutList().isEmpty()) {
+                    results.add("SaleContainer with Id:" + saleContainer.getIdSaleContainer() + " already contained InventoryOut. Therefore its Unit cannot be changed!");
+                    return null;
+                }
+            }
+
+            saleContainer.setOrderUnit(saleContainerDto.getOrderUnit());
+        }
 
         results.add("Successfully edited SaleContainer with id: " + saleContainer.getIdSaleContainer());
 
@@ -157,6 +168,10 @@ public class SaleContainerService {
         return saleContainer;
     }
 
+    public SaleContainer findByIdSaleContainer(Integer idSaleContainer) {
+
+        return saleContainerRepository.findById(idSaleContainer).orElse(null);
+    }
     public SaleContainer findByContainerAndItemCodeStringAndOrderName(List<String> results, String container, String itemCodeString, String orderName) {
 
         SaleContainer saleContainer = saleContainerRepository.findByContainerAndItemCodeStringAndOrderName(container, itemCodeString, orderName);

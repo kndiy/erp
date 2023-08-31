@@ -34,8 +34,6 @@
         </div>
 
         <hr>
-        <input type="text" id="test">
-        <hr>
 
         <h2>Sales Reporting</h2>
 
@@ -86,6 +84,17 @@
                         </div>
                         <div class="square flex black date-turn-square"></div>
                         <div class="square flex black date-turn-square">
+                            <h4>VAT Rate</h4>
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <h4>Source</h4>
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <h4>Customer</h4>
+                        </div>
+                        <div class="square flex black date-turn-square"></div>
+
+                        <div class="square flex black date-turn-square">
                             <input type="text" readonly th:field="*{deliveryDate}" id="date-input">
                         </div>
                         <div class="square flex black date-turn-square">
@@ -95,6 +104,18 @@
                         </div>
                         <div class="square flex black date-turn-square">
                             <input type="button" value="Print Delivery Note" onclick="checkBeforePrint('delivery-note')">
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <input type="text" th:field="*{vatRate}">
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <input type="text" th:field="*{saleSource}" id="sale-source">
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <input type="text" th:field="*{customer}" id="customer">
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <input type="button" value="Settle by Date" onclick="checkBeforePrint('account-settling-note')">
                         </div>
                     </div>
 
@@ -170,6 +191,7 @@
                             <span th:text="${saleDeliveryDtoWrapper.saleDeliveryDtoList[__${stat.index}__].orderName}"></span>
                             <input type="hidden" readonly th:field="*{saleDeliveryDtoList[__${stat.index}__].idSale}">
                             <input th:field="*{saleDeliveryDtoList[__${stat.index}__].orderName}" type="hidden">
+                            <input th:field="*{saleDeliveryDtoList[__${stat.index}__].orderBatch}" type="hidden">
                         </div>
 
                         <div class="square delivery-summary-square white flex center main">

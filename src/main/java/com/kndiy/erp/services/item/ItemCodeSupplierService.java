@@ -10,6 +10,7 @@ import com.kndiy.erp.repositories.ItemCodeRepository;
 import com.kndiy.erp.repositories.ItemCodeSupplierRepository;
 import com.kndiy.erp.services.CompanyClusterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
@@ -136,5 +137,9 @@ public class ItemCodeSupplierService {
         }
 
         return findByItemCodeAndSupplier(results, itemCode, supplier);
+    }
+
+    public ItemCodeSupplier findByItemCodeStringAndSupplierNameEn(String itemCodeString, String supplierNameEn) {
+        return itemCodeSupplierRepository.findByItemCodeStringAndSupplierNameEn(itemCodeString, supplierNameEn);
     }
 }

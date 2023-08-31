@@ -37,6 +37,12 @@
 
         <hr>
 
+        <div th:if="${inventoryOutDtoWrapper.inventoryOutDtoList == null || inventoryOutDtoWrapper.inventoryOutDtoList.isEmpty()}">
+            <h1>Please check InventoryIn of corresponding ItemCode. if there are Inventories, they will show up here!</h1>
+        </div>
+
+        <hr>
+
         <div class="title-grid">
             <div class="title-square">
                 <h3>Please Select Inventories Out For:</h3>
@@ -168,7 +174,7 @@
                             <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentValue}">
                         </div>
                         <div class="square inventory-out-square main">
-                            <input class="equivalent" type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentQuantity}">
+                            <input class="equivalent" type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalent}">
                             <input type="hidden" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].equivalentUnit}">
                         </div>
                         <div class="square-center inventory-out-square main">

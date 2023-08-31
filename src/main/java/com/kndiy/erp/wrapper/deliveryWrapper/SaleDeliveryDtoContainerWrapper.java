@@ -1,7 +1,6 @@
 package com.kndiy.erp.wrapper.deliveryWrapper;
 
 import com.kndiy.erp.dto.deliveryDto.SaleDeliveryDto;
-import com.kndiy.erp.validators.SaleDeliveryDtoWrapperConstraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,16 +9,13 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
-import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@SaleDeliveryDtoWrapperConstraint
-public class SaleDeliveryDtoWrapper {
+@AllArgsConstructor
+@NoArgsConstructor
+public class SaleDeliveryDtoContainerWrapper {
 
-    @NotNull(message = "Please select a delivery date By clicking on desired Summary Grid!")
     private LocalDate deliveryDate;
 
     @NotNull(message = "Please select a delivery turn By clicking on desired Summary Grid!")
@@ -29,11 +25,17 @@ public class SaleDeliveryDtoWrapper {
 
     private String reportName;
 
-    private String saleSource;
+    private String containerOrder;
 
-    private String customer;
+    private String containerQuantity;
 
-    private Float vatRate = 0.08f;
+    private String containerEquivalent;
+
+    private String containerEquivalentAdjusted;
+
+    private String containerAmount;
+
+    private Integer containerRolls;
 
     private LinkedList<SaleDeliveryDto> saleDeliveryDtoList;
 }

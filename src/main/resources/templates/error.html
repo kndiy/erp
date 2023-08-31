@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+
+    <link th:href="@{/styles/template.css}" rel="stylesheet">
+
+
+</head>
+<body>
+    <div class="everything-container">
+        <div th:insert="~{/fragments/header-footer :: header}"></div>
+
+        <h3>Error Message</h3>
+        <hr>
+        <h4 th:text="${message}"></h4>
+    </div>
+
+</body>
+</html>

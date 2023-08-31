@@ -12,4 +12,10 @@ public interface ItemCodeSupplierRepository extends JpaRepository<ItemCodeSuppli
     ItemCodeSupplier findByIdItemCodeAndIdSupplier(Integer idItemCode, Integer idSupplier); //idSupplier == idCompany
     @Query("SELECT ics FROM ItemCodeSupplier ics WHERE ics.itemCodeSupplierString = ?1")
     ItemCodeSupplier findByItemCodeSupplierString(String itemCodeSupplierString);
+
+    @Query("SELECT i FROM ItemCodeSupplier i " +
+            "WHERE i.itemCode.itemCodeString = ?1 " +
+            "   AND i.supplier.nameEn = ?2")
+    ItemCodeSupplier findByItemCodeStringAndSupplierNameEn(String itemCodeString, String supplierNameEn);
+
 }

@@ -185,15 +185,16 @@ public class Quantity implements Comparable<Quantity>, Serializable {
     }
 
     public Quantity times(Quantity rate) throws MismatchedUnitException {
-        String rateDivisorUnit = rate.getUnit().split("/")[1];
+
         String rateDividendUnit = rate.getUnit().split("/")[0];
+        String rateDivisorUnit = rate.getUnit().split("/")[1];
         String unit = this.unit;
 
-        if (!rateDividendUnit.equals(unit)) {
+        if (!rateDivisorUnit.equals(unit)) {
             throw new MismatchedUnitException("This is not the correct Exchange Rate Unit!");
         }
 
-        return new Quantity(quantityValue.multiply(new BigDecimal(rate.toString())), rateDivisorUnit, roundingMode, scale);
+        return new Quantity(quantityValue.multiply(rate.getQuantityValue()), rateDividendUnit, roundingMode, scale);
     }
 
     public boolean lessThan(Quantity other) {

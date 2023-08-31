@@ -220,7 +220,7 @@ public class ItemCodeSupplierEquivalentService {
         ItemCodeSupplierEquivalent itemCodeSupplierEquivalent = itemCodeSupplierEquivalentRepository.findByItemCodeSupplierAndUnits(itemCodeSupplier, inventoryUnit, saleUnit);
 
         if (itemCodeSupplierEquivalent == null) {
-            results.add("Could not find EquivalentValue for ItemCodeSupplier named: " + itemCodeSupplier.getItemCodeSupplierString() + " with SourceUnit: " + inventoryUnit + " and EquivalentUnit:" + saleUnit);
+            results.add("Could not find EquivalentValue for ItemCodeSupplier named: " + itemCodeSupplier.getItemCodeSupplierString() + " with SourceUnit: " + inventoryUnit + " and EquivalentUnit: " + saleUnit);
             return "1";
         }
 

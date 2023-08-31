@@ -72,4 +72,5 @@ public class SaleContainerController {
 
         return "redirect:/sales/{idSale}/articles/{idSaleArticle}/";
     }
+
 }

@@ -38,4 +38,12 @@ public class SaleDeliveryHeaderDto {
 
     private Integer idSaleLot;
 
+    private String deliveryAmount;
+
+    private String vatRate;
+
+    private String vat;
+
+    private String deliveryAmountWithVat;
+
 }

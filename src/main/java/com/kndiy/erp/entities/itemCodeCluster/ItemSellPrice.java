@@ -43,7 +43,14 @@ public class ItemSellPrice implements Serializable, Comparable<ItemSellPrice> {
 
     @Override
     public int compareTo(ItemSellPrice isp) {
-        return isp.itemSellPriceContract.compareTo(this.itemSellPriceContract);
+
+        if (!fromDate.equals(isp.fromDate)) {
+            return isp.fromDate.compareTo(fromDate);
+        }
+        else {
+            return isp.itemSellPriceContract.compareTo(this.itemSellPriceContract);
+
+        }
     }
 
     @Override

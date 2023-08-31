@@ -31,6 +31,8 @@ public class SaleDeliveryDto {
 
     private String orderName;
 
+    private String orderBatch;
+
     private Integer idSaleArticle;
 
     private String itemType;
@@ -45,15 +47,29 @@ public class SaleDeliveryDto {
 
     private String lotName;
 
+    private String lotOrder;
+
     private String lotQuantity;
 
     private String lotEquivalent;
+
+    private String lotEquivalentAdjusted;
+
+    private String lotAmount;
+
+    private String itemSellPrice;
 
     private Integer lotRolls;
 
     private String lotColor;
 
     private String lotStyle;
+
+    private String lotItemCodeSupplierString;
+
+    private String supplierAbbreviation;
+
+    private String lotNote;
 
     private TreeSet<InventoryOutDto> inventoryOutDtoTreeSet;
 }

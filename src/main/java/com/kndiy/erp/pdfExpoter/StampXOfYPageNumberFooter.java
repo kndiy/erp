@@ -28,8 +28,9 @@ public class StampXOfYPageNumberFooter {
     private final PdfDocument pdfDocument;
     private final PdfFont font;
     private final float stampingHeight;
+    private final String reportName;
 
-    public StampXOfYPageNumberFooter(Document document, PdfDocument pdfDocument, PdfFont font) {
+    public StampXOfYPageNumberFooter(Document document, PdfDocument pdfDocument, PdfFont font, String reportName) {
         this.document = document;
         this.pdfDocument = pdfDocument;
         this.font = font;
@@ -54,6 +55,8 @@ public class StampXOfYPageNumberFooter {
 
         LayoutResult result = renderer.layout((new LayoutContext(new LayoutArea(0, PageSize.A4))));
         stampingHeight = result.getOccupiedArea().getBBox().getHeight();
+
+        this.reportName = reportName;
     }
 
     public void stamp() {
@@ -80,18 +83,31 @@ public class StampXOfYPageNumberFooter {
             Paragraph paragraph = ItextStaticConstructors.createParagraphSmallLeading()
                     .setFont(font)
                     .setFontSize(10)
-                    .add(String.format("Page %s of %s", i, totalPages));
+                    .add(reportName);
 
             Cell cell = new Cell()
+                    .setBorder(Border.NO_BORDER)
+                    .setBorderTop(new SolidBorder(0.5f))
+                    .setTextAlignment(TextAlignment.LEFT)
+                    .add(paragraph);
+
+            Table table = new Table(new float[] {2, 1})
+                    .useAllAvailableWidth()
+                    .setFixedLayout()
+                    .addCell(cell);
+
+            paragraph = ItextStaticConstructors.createParagraphSmallLeading()
+                    .setFont(font)
+                    .setFontSize(10)
+                    .add(String.format("Page %s of %s", i, totalPages));
+
+            cell = new Cell()
                     .setBorder(Border.NO_BORDER)
                     .setBorderTop(new SolidBorder(0.5f))
                     .setTextAlignment(TextAlignment.RIGHT)
                     .add(paragraph);
 
-            Table table = new Table(new float[] {1})
-                    .useAllAvailableWidth()
-                    .setFixedLayout()
-                    .addCell(cell);
+            table.addCell(cell);
 
             Canvas canvas = new Canvas(pdfCanvas, pdfDocument, rectangle)
                     .add(table);

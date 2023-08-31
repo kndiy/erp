@@ -42,6 +42,7 @@ public class HomeController {
                             // spring will find a view named: "welcome.html" to response to the request at "/"
     }
 
+
     @PostMapping("/register")
     public String registerNewUser(@Valid @ModelAttribute("userRoleDto") UserRoleDTO userRoleDto, Errors errors, RedirectAttributes redirectAttributes) {
 
@@ -58,15 +59,25 @@ public class HomeController {
     }
 
     @PostMapping("/resume")
-    public void serveResume(HttpServletResponse response, RedirectAttributes redirectAttributes) throws IOException {
+    public void serveResume(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition","attachment; filename=Khiemnd9112_Resume.pdf");
         response.setCharacterEncoding("UTF-8");
 
-        OutputStream outputStream = response.getOutputStream();
-        portfolioService.serveResume(outputStream);
+        try {
+            OutputStream outputStream = response.getOutputStream();
+            portfolioService.serveResume(outputStream);
+            response.flushBuffer();
+        }
+        catch (Exception exception) {
+            resolveError(exception, redirectAttributes);
+        }
+    }
 
-        response.flushBuffer();
+    public String resolveError(Exception ex, RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("errors", ex.getMessage());
+        return "redirect:/home";
     }
 }

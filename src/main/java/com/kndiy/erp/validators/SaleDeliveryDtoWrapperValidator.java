@@ -35,16 +35,22 @@ public class SaleDeliveryDtoWrapperValidator implements ConstraintValidator<Sale
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate toPrintDate = saleDeliveryDtoWrapper.getDeliveryDate();
         Integer toPrintTurn = saleDeliveryDtoWrapper.getDeliveryTurn();
+        String toPrintSaleSource = saleDeliveryDtoWrapper.getSaleSource();
 
         for (SaleDeliveryDto saleDeliveryDto : saleDeliveryDtoWrapper.getSaleDeliveryDtoList()) {
 
-            if (!toPrintDate.equals(saleDeliveryDto.getDeliveryDate()) || !toPrintTurn.equals(saleDeliveryDto.getDeliveryTurn())) {
+            if (!toPrintDate.equals(saleDeliveryDto.getDeliveryDate()) ||
+                    !toPrintTurn.equals(saleDeliveryDto.getDeliveryTurn()) ||
+                    !toPrintSaleSource.equals(saleDeliveryDto.getSaleSource())) {
+
                 continue;
             }
 
+            String saleSource = saleDeliveryDto.getSaleSource();
+            String customer = saleDeliveryDto.getCustomer();
             String deliveryDate = dtf.format(saleDeliveryDto.getDeliveryDate());
             String deliveryTurn = saleDeliveryDto.getDeliveryTurn().toString();
-            List<String> key = List.of(deliveryDate, deliveryTurn);
+            List<String> key = List.of(saleSource, customer, deliveryDate, deliveryTurn);
 
             String from = saleDeliveryDto.getDepartFrom();
             String to = saleDeliveryDto.getDeliverTo();
@@ -57,7 +63,7 @@ public class SaleDeliveryDtoWrapperValidator implements ConstraintValidator<Sale
             else if (!valueInMap.equals(value)) {
 
                 constraintValidatorContext.buildConstraintViolationWithTemplate(
-                        "Departing location and Destination cannot differ in the same Delivery Turn! Please check accordingly!"
+                        "SaleSource, Customer, Departing location and Destination cannot differ in the same Delivery Turn! Please check and modify turn numbers accordingly!"
                 ).addConstraintViolation();
 
                 return false;

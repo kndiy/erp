@@ -4,18 +4,23 @@ import com.kndiy.erp.dto.deliveryDto.SaleDeliverySummaryDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.TreeSet;
 
 @Setter
 @Getter
-public class SaleDeliverySummaryDtoWrapper {
+public class SaleDeliveryDtoItemTypeWrapper {
 
-    private String deliveryQuantity;
+    private String itemTypeQuantity;
 
-    private String deliveryEquivalent;
+    private String itemTypeEquivalent;
 
-    private Integer deliveryRolls;
+    private String itemTypeEquivalentAdjusted;
+
+    private Integer itemTypeRolls;
+
+    private String itemTypeAmount;
+
+    private String itemTypeOrder;
 
     private TreeSet<SaleDeliverySummaryDto> saleDeliverySummaryDtoTreeSet;
 }

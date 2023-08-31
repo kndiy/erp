@@ -77,6 +77,7 @@ public class InventoryService {
     }
 
     public List<String> addNewInventories(InventoryDtoWrapperDto inventoryDtoWrapperDto) {
+
         List<String> res = new ArrayList<>();
 
         List<InventoryDto> inventoryDtoList = inventoryDtoWrapperDto.getInventoryDtoList();
@@ -104,10 +105,10 @@ public class InventoryService {
 
     public Inventory addNewInventory(List<String> results, InventoryDto inventoryDto) {
 
-        Inventory inventory = inventoryRepository.findByProductionCodeAndNumberInBatch(inventoryDto.getSupplierProductionCode(), inventoryDto.getNumberInBatch());
+        Inventory inventory = inventoryRepository.findByIdInventoryInAndProductionCodeAndNumberInBatch(inventoryDto.getIdInventoryIn(), inventoryDto.getSupplierProductionCode(), inventoryDto.getNumberInBatch());
 
         if (inventory != null) {
-            results.add("Inventory with productionCode: " + inventoryDto.getSupplierProductionCode() + " AND numberInBatch: " + inventoryDto.getNumberInBatch() + " already exists!");
+            results.add("Inventory with productionCode: " + inventoryDto.getSupplierProductionCode() + " AND numberInBatch: " + inventoryDto.getNumberInBatch() + " already exists in the same InventoryIn!");
             return null;
         }
         inventory = new Inventory();
@@ -232,14 +233,14 @@ public class InventoryService {
 
             if (inventoryDto.getIdInventory() != null) {
                 inventory = inventoryRepository.findById(inventoryDto.getIdInventory()).orElse(null);
+
+                if (inventory != null && !inventory.getInitQuantity().equals(inventory.getRemainingQuantity())) {
+                    results.add("Could not edit Inventory with Id: " + inventory.getIdInventory() + " because it has been used!");
+                    continue;
+                }
             }
             else {
                 inventory = new Inventory();
-            }
-
-            if (inventory != null && !inventory.getInitQuantity().equals(inventory.getRemainingQuantity())) {
-                results.add("Could not edit Inventory with Id: " + inventory.getIdInventory() + " because it has been used!");
-                continue;
             }
 
             if (inventory == null) {

@@ -8,18 +8,28 @@ import com.kndiy.erp.entities.companyCluster.Address;
 import com.kndiy.erp.entities.companyCluster.Company;
 import com.kndiy.erp.entities.companyCluster.Contact;
 import com.kndiy.erp.entities.inventoryCluster.InventoryOut;
+import com.kndiy.erp.entities.itemCodeCluster.ItemCode;
+import com.kndiy.erp.entities.itemCodeCluster.ItemCodeSupplier;
+import com.kndiy.erp.entities.itemCodeCluster.ItemSellPrice;
+import com.kndiy.erp.entities.salesCluster.SaleContainer;
 import com.kndiy.erp.entities.salesCluster.SaleLot;
 import com.kndiy.erp.others.MismatchedUnitException;
 import com.kndiy.erp.others.Quantity;
+import com.kndiy.erp.pdfExpoter.AccountSettlingNotePdfExporter;
 import com.kndiy.erp.pdfExpoter.DeliveryNotePDFExporter;
+import com.kndiy.erp.services.item.ItemCodeSupplierService;
+import com.kndiy.erp.services.sales.SaleContainerService;
 import com.kndiy.erp.services.sales.SaleLotService;
+import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliveryDtoContainerWrapper;
 import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliveryDtoWrapper;
-import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliverySummaryDtoWrapper;
+import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliveryDtoItemTypeWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -31,6 +41,10 @@ public class SalesReportPrintingService {
     private SaleLotService saleLotService;
     @Autowired
     private CompanyClusterService companyClusterService;
+    @Autowired
+    private SaleContainerService saleContainerService;
+    @Autowired
+    private ItemCodeSupplierService itemCodeSupplierService;
 
     public SaleDeliveryDtoWrapper makeSaleDeliveryDtoWrapperFromDateToDate(LocalDate fromDate, LocalDate toDate) {
 
@@ -95,6 +109,7 @@ public class SalesReportPrintingService {
         saleDeliveryDto.setDeliverTo(lot.getToAddress().getAddressName());
         saleDeliveryDto.setIdSale(lot.getSaleContainer().getSaleArticle().getSale().getIdSale());
         saleDeliveryDto.setOrderName(lot.getSaleContainer().getSaleArticle().getSale().getOrderName());
+        saleDeliveryDto.setOrderBatch(lot.getSaleContainer().getSaleArticle().getSale().getOrderBatch());
         saleDeliveryDto.setIdSaleArticle(lot.getSaleContainer().getSaleArticle().getIdSaleArticle());
         saleDeliveryDto.setItemType(lot.getSaleContainer().getSaleArticle().getItemCode().getItemType().getItemTypeString());
         saleDeliveryDto.setItemCode(lot.getSaleContainer().getSaleArticle().getItemCode().getItemCodeString());
@@ -108,22 +123,52 @@ public class SalesReportPrintingService {
         return saleDeliveryDto;
     }
 
-    public void serveDeliveryNote(OutputStream outputStream, SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws MismatchedUnitException, IOException {
+    public void serveNote(OutputStream outputStream, SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws MismatchedUnitException, IOException {
 
-        TreeMap<List<String>, SaleDeliveryDtoWrapper> detailMap = mapDetailDeliveryData(saleDeliveryDtoWrapper);
-        TreeMap<String, SaleDeliverySummaryDtoWrapper> summaryMap = mapSummaryData(detailMap);
+        TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap = mapSaleContainerData(saleDeliveryDtoWrapper);
+        TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap = mapItemTypeData(containerMap);
+
+        SaleDeliveryHeaderDto saleDeliveryHeaderDto = makeSaleDeliveryHeaderDto(saleDeliveryDtoWrapper, itemTypeMap);
+
+        String reportName = saleDeliveryDtoWrapper.getReportName();
+
+        switch (reportName) {
+            case "delivery-note" -> {
+                DeliveryNotePDFExporter deliveryNotePDFExporter = new DeliveryNotePDFExporter(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+                deliveryNotePDFExporter.export(outputStream);
+            }
+            default -> {
+                AccountSettlingNotePdfExporter accountSettlingNotePdfExporter = new AccountSettlingNotePdfExporter(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+                accountSettlingNotePdfExporter.export(outputStream);
+            }
+        }
+
+    }
+
+    private SaleDeliveryHeaderDto makeSaleDeliveryHeaderDto(SaleDeliveryDtoWrapper saleDeliveryDtoWrapper, TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap) throws MismatchedUnitException {
 
         SaleDeliveryHeaderDto saleDeliveryHeaderDto = new SaleDeliveryHeaderDto();
+
         saleDeliveryHeaderDto.setIdSaleLot(saleDeliveryDtoWrapper.getIdSaleLot());
         saleDeliveryHeaderDto.setDeliveryDate(saleDeliveryDtoWrapper.getDeliveryDate());
         saleDeliveryHeaderDto.setDeliveryTurn(saleDeliveryDtoWrapper.getDeliveryTurn());
-        fillInHeaderData(saleDeliveryHeaderDto);
 
-        DeliveryNotePDFExporter deliveryNotePDFExporter = new DeliveryNotePDFExporter();
-        deliveryNotePDFExporter.export(outputStream, detailMap, summaryMap, saleDeliveryHeaderDto);
-    }
+        Quantity deliveryAmount = new Quantity("0.00 VND");
+        float vatRate = saleDeliveryDtoWrapper.getVatRate();
 
-    private void fillInHeaderData(SaleDeliveryHeaderDto saleDeliveryHeaderDto) {
+        for (Map.Entry<String, SaleDeliveryDtoItemTypeWrapper> entry : itemTypeMap.entrySet()) {
+
+            SaleDeliveryDtoItemTypeWrapper wrapper = entry.getValue();
+            deliveryAmount = deliveryAmount.plus(new Quantity(wrapper.getItemTypeAmount()));
+        }
+
+        Quantity vat = deliveryAmount.times(vatRate);
+        Quantity deliveryAmountWithVat = deliveryAmount.plus(vat);
+
+        saleDeliveryHeaderDto.setDeliveryAmount(deliveryAmount.toString());
+        saleDeliveryHeaderDto.setVat(vat.toString());
+        saleDeliveryHeaderDto.setDeliveryAmountWithVat(deliveryAmountWithVat.toString());
+        saleDeliveryHeaderDto.setVatRate(String.valueOf(vatRate));
 
         SaleLot saleLot = saleLotService.findByIdSaleLot(saleDeliveryHeaderDto.getIdSaleLot());
 
@@ -146,90 +191,166 @@ public class SalesReportPrintingService {
         saleDeliveryHeaderDto.setReceiverName(receiver.getContactName());
         saleDeliveryHeaderDto.setReceiverPhone(receiver.getPhone1());
 
+        return saleDeliveryHeaderDto;
     }
 
-    private TreeMap<String, SaleDeliverySummaryDtoWrapper> mapSummaryData(TreeMap<List<String>, SaleDeliveryDtoWrapper> detailMap) throws MismatchedUnitException {
+    private TreeMap<String, SaleDeliveryDtoItemTypeWrapper> mapItemTypeData(TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> lotMap) throws MismatchedUnitException {
 
-        TreeMap<String, SaleDeliverySummaryDtoWrapper> summaryMap = new TreeMap<>();
+        TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap = new TreeMap<>();
 
-        for (Map.Entry<List<String>, SaleDeliveryDtoWrapper> entry : detailMap.entrySet()) {
+        for (Map.Entry<List<String>, SaleDeliveryDtoContainerWrapper> entry : lotMap.entrySet()) {
 
-            SaleDeliveryDtoWrapper saleDeliveryDtoWrapper = entry.getValue();
+            SaleDeliveryDtoContainerWrapper saleDeliveryDtoContainerWrapper = entry.getValue();
 
             List<String> key = entry.getKey();
-            String orderName = key.get(1);
-            String itemCodeString = key.get(2);
-            String container = key.get(3);
             String itemTypeString = key.get(0);
+            String orderName = key.get(1);
+            String orderBatch = key.get(2);
+            String itemCodeString = key.get(3);
+            String container = key.get(4);
 
-            String containerQuantity = saleDeliveryDtoWrapper.getContainerQuantity();
-            String containerEquivalent = saleDeliveryDtoWrapper.getContainerEquivalent();
-            Integer containerRolls = saleDeliveryDtoWrapper.getContainerRolls();
+            Quantity containerQuantity = new Quantity(saleDeliveryDtoContainerWrapper.getContainerQuantity(), RoundingMode.DOWN, 2);
+            Quantity containerEquivalent = new Quantity(saleDeliveryDtoContainerWrapper.getContainerEquivalent(), RoundingMode.DOWN, 2);
+            Integer containerRolls = saleDeliveryDtoContainerWrapper.getContainerRolls();
+            Quantity containerEquivalentAdjusted = new Quantity(saleDeliveryDtoContainerWrapper.getContainerEquivalentAdjusted(), RoundingMode.DOWN, 2);
+            Quantity containerAmount = new Quantity(saleDeliveryDtoContainerWrapper.getContainerAmount(), RoundingMode.DOWN, 2);
 
             SaleDeliverySummaryDto saleDeliverySummaryDto = new SaleDeliverySummaryDto();
             saleDeliverySummaryDto.setOrderName(orderName);
+            saleDeliverySummaryDto.setOrderBatch(orderBatch);
             saleDeliverySummaryDto.setItemCodeString(itemCodeString);
             saleDeliverySummaryDto.setContainer(container);
-            saleDeliverySummaryDto.setContainerQuantity(containerQuantity);
-            saleDeliverySummaryDto.setContainerEquivalent(containerEquivalent);
+            saleDeliverySummaryDto.setContainerQuantity(containerQuantity.toString());
+            saleDeliverySummaryDto.setContainerEquivalent(containerEquivalent.toString());
             saleDeliverySummaryDto.setContainerRolls(containerRolls);
+            saleDeliverySummaryDto.setContainerAmount(containerAmount.toString());
+            saleDeliverySummaryDto.setContainerEquivalentAdjusted(containerEquivalentAdjusted.toString());
 
-            SaleDeliverySummaryDtoWrapper saleDeliverySummaryDtoWrapper = summaryMap.get(itemTypeString);
-            if (saleDeliverySummaryDtoWrapper == null) {
-                saleDeliverySummaryDtoWrapper = new SaleDeliverySummaryDtoWrapper();
-                saleDeliverySummaryDtoWrapper.setSaleDeliverySummaryDtoTreeSet(new TreeSet<>(List.of(saleDeliverySummaryDto)));
-                summaryMap.put(itemTypeString, saleDeliverySummaryDtoWrapper);
+            SaleDeliveryDtoItemTypeWrapper saleDeliveryDtoItemTypeWrapper = itemTypeMap.get(itemTypeString);
+            if (saleDeliveryDtoItemTypeWrapper == null) {
+                saleDeliveryDtoItemTypeWrapper = new SaleDeliveryDtoItemTypeWrapper();
+                saleDeliveryDtoItemTypeWrapper.setSaleDeliverySummaryDtoTreeSet(new TreeSet<>(List.of(saleDeliverySummaryDto)));
+                itemTypeMap.put(itemTypeString, saleDeliveryDtoItemTypeWrapper);
             }
             else {
-                saleDeliverySummaryDtoWrapper.getSaleDeliverySummaryDtoTreeSet().add(saleDeliverySummaryDto);
+                saleDeliveryDtoItemTypeWrapper.getSaleDeliverySummaryDtoTreeSet().add(saleDeliverySummaryDto);
             }
 
-            if (saleDeliverySummaryDtoWrapper.getDeliveryQuantity() == null) {
-                saleDeliverySummaryDtoWrapper.setDeliveryQuantity(containerQuantity);
+            if (saleDeliveryDtoItemTypeWrapper.getItemTypeQuantity() == null) {
+                saleDeliveryDtoItemTypeWrapper.setItemTypeQuantity(containerQuantity.toString());
             }
             else {
-                saleDeliverySummaryDtoWrapper.setDeliveryQuantity(new Quantity(saleDeliverySummaryDtoWrapper.getDeliveryQuantity()).plus(new Quantity(containerQuantity)).toString());
+                saleDeliveryDtoItemTypeWrapper.setItemTypeQuantity(new Quantity(saleDeliveryDtoItemTypeWrapper.getItemTypeQuantity()).plus(containerQuantity).toString());
             }
 
-            if (saleDeliverySummaryDtoWrapper.getDeliveryEquivalent() == null) {
-                saleDeliverySummaryDtoWrapper.setDeliveryEquivalent(containerEquivalent);
+            if (saleDeliveryDtoItemTypeWrapper.getItemTypeEquivalent() == null) {
+                saleDeliveryDtoItemTypeWrapper.setItemTypeEquivalent(containerEquivalent.toString());
             }
             else {
-                saleDeliverySummaryDtoWrapper.setDeliveryEquivalent(new Quantity(saleDeliverySummaryDtoWrapper.getDeliveryEquivalent()).plus(new Quantity(containerEquivalent)).toString());
+                saleDeliveryDtoItemTypeWrapper.setItemTypeEquivalent(new Quantity(saleDeliveryDtoItemTypeWrapper.getItemTypeEquivalent()).plus(containerEquivalent).toString());
             }
 
-            if (saleDeliverySummaryDtoWrapper.getDeliveryRolls() == null) {
-                saleDeliverySummaryDtoWrapper.setDeliveryRolls(containerRolls);
+            if (saleDeliveryDtoItemTypeWrapper.getItemTypeRolls() == null) {
+                saleDeliveryDtoItemTypeWrapper.setItemTypeRolls(containerRolls);
             }
             else {
-                saleDeliverySummaryDtoWrapper.setDeliveryRolls(saleDeliverySummaryDtoWrapper.getDeliveryRolls() + containerRolls);
+                saleDeliveryDtoItemTypeWrapper.setItemTypeRolls(saleDeliveryDtoItemTypeWrapper.getItemTypeRolls() + containerRolls);
             }
+
+            if (saleDeliveryDtoItemTypeWrapper.getItemTypeAmount() == null) {
+                saleDeliveryDtoItemTypeWrapper.setItemTypeAmount(containerAmount.toString());
+            }
+            else {
+                saleDeliveryDtoItemTypeWrapper.setItemTypeAmount(new Quantity(saleDeliveryDtoItemTypeWrapper.getItemTypeAmount()).plus(containerAmount).toString());
+            }
+
+            if (saleDeliveryDtoItemTypeWrapper.getItemTypeEquivalentAdjusted() == null) {
+                saleDeliveryDtoItemTypeWrapper.setItemTypeEquivalentAdjusted(containerEquivalentAdjusted.toString());
+            }
+            else {
+                saleDeliveryDtoItemTypeWrapper.setItemTypeEquivalentAdjusted(new Quantity(saleDeliveryDtoItemTypeWrapper.getItemTypeEquivalentAdjusted()).plus(containerEquivalentAdjusted).toString());
+            }
+
         }
 
-        return summaryMap;
+        return itemTypeMap;
     }
 
-    private TreeMap<List<String>, SaleDeliveryDtoWrapper> mapDetailDeliveryData(SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws MismatchedUnitException {
+    private static ItemSellPrice getItemSellPrice(SaleLot saleLot) throws IllegalArgumentException {
+        ItemCode itemCode = saleLot.getSaleContainer().getSaleArticle().getItemCode();
+        TreeSet<ItemSellPrice> itemSellPriceSet = new TreeSet<>(itemCode.getItemSellPriceList());
 
-        TreeMap<List<String>, SaleDeliveryDtoWrapper> detailMap = setupDetailDeliveryTreeMap();
+        //check if itemSellPrice Contract is up-to-date or outdated
+        if (itemSellPriceSet.isEmpty()) {
+            throw new IllegalArgumentException("Please check ItemSellPrice of " + itemCode.getItemCodeString() + " as no contract was linked with it!");
+        }
 
-        LocalDate deliveryDate = saleDeliveryDtoWrapper.getDeliveryDate();
-        Integer deliveryTurn = saleDeliveryDtoWrapper.getDeliveryTurn();
+        ItemSellPrice itemSellPrice = itemSellPriceSet.first();
+        LocalDate expiredDate = itemSellPrice.getToDate();
+
+        if (expiredDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Contract: " + itemSellPrice.getItemSellPriceContract() + " of ItemCode: " +itemCode.getItemCodeString() + " has expired, please check!");
+        }
+
+        return itemSellPrice;
+    }
+
+    private static TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> setupSaleContainerMap() {
+        Comparator<List<String>> comparator = (l1, l2) -> {
+            //item type
+            if (!l1.get(0).equals(l2.get(0))) {
+                return l1.get(0).compareTo(l2.get(0));
+            }
+            //order name
+            else if (!l1.get(1).equals(l2.get(1))) {
+                return l1.get(1).compareTo(l2.get(1));
+            }
+            //item code
+            else if (!l1.get(3).equals(l2.get(3))) {
+                return l1.get(3).compareTo(l2.get(3));
+            }
+            //container
+            return l1.get(4).compareTo(l2.get(4));
+        };
+
+        return new TreeMap<>(comparator);
+    }
+
+
+
+
+    private TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> mapSaleContainerData(SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws MismatchedUnitException {
+
+        TreeSet<Integer> idSaleContainerSet = makeIdContainerSet(saleDeliveryDtoWrapper);
+        TreeMap<Integer, List<String>> containerAdjustmentDataMap = mapContainerAdjustmentData(idSaleContainerSet);
+
+        TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap = setupSaleContainerMap();
+        fillSaleContainerMap(containerMap, saleDeliveryDtoWrapper, containerAdjustmentDataMap);
+
+        return containerMap;
+    }
+
+    private void fillSaleContainerMap(TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap, SaleDeliveryDtoWrapper saleDeliveryDtoWrapper, TreeMap<Integer, List<String>> containerAdjustmentDataMap) throws MismatchedUnitException {
 
         for (SaleDeliveryDto saleDeliveryDto : saleDeliveryDtoWrapper.getSaleDeliveryDtoList()) {
 
-            if (!saleDeliveryDto.getDeliveryTurn().equals(deliveryTurn) && !saleDeliveryDto.getDeliveryDate().equals(deliveryDate)) {
+            //Created key
+            String itemTypeString = saleDeliveryDto.getItemType();
+            String orderName = saleDeliveryDto.getOrderName();
+            String orderBatch = saleDeliveryDto.getOrderBatch();
+            String itemCodeString = saleDeliveryDto.getItemCode();
+            String container = saleDeliveryDto.getContainer();
+            List<String> key = new ArrayList<>(List.of(itemTypeString, orderName, orderBatch, itemCodeString, container));
+
+            //if lot was deleted by other user, skip
+            SaleLot saleLot = saleLotService.findByIdSaleLot(saleDeliveryDto.getIdSaleLot());
+            if (saleLot == null) {
                 continue;
             }
 
-            String orderName = saleDeliveryDto.getOrderName();
-            String itemCodeString = saleDeliveryDto.getItemCode();
-            String container = saleDeliveryDto.getContainer();
-            String itemTypeString = saleDeliveryDto.getItemType();
-            List<String> key = new ArrayList<>(List.of(itemTypeString, orderName, itemCodeString, container));
-
-            SaleLot saleLot = saleLotService.findByIdSaleLot(saleDeliveryDto.getIdSaleLot());
-            if (saleLot == null) {
+            //if Lot was created but is currently containing no inventory Out data, skip it
+            List<String> containerAdjustmentData = containerAdjustmentDataMap.get(saleLot.getSaleContainer().getIdSaleContainer());
+            if (containerAdjustmentData == null) {
                 continue;
             }
 
@@ -238,6 +359,13 @@ public class SalesReportPrintingService {
                 continue;
             }
 
+            //find corresponding itemCodeSupplierString
+            String supplierNameEn = saleLot.getSupplier().getNameEn();
+            ItemCodeSupplier itemCodeSupplier = itemCodeSupplierService.findByItemCodeStringAndSupplierNameEn(itemCodeString, supplierNameEn);
+            saleDeliveryDto.setLotItemCodeSupplierString(itemCodeSupplier.getItemCodeSupplierString());
+            saleDeliveryDto.setSupplierAbbreviation(saleLot.getSupplier().getAbbreviation());
+
+            //start by calculating lot Quantity by iterating inventoriesOut
             Quantity lotQuantity = null;
             Quantity lotEquivalent = null;
             Integer lotRolls = inventoryOutList.size();
@@ -245,18 +373,22 @@ public class SalesReportPrintingService {
             List<InventoryOutDto> inventoryOutDtoList = new ArrayList<>();
             for (InventoryOut inventoryOut : inventoryOutList) {
                 InventoryOutDto inventoryOutDto = new InventoryOutDto();
-                inventoryOutDto.setQuantity(inventoryOut.getQuantity());
-                inventoryOutDto.setEquivalent(inventoryOut.getEquivalent());
+                inventoryOutDto.setQuantity(new Quantity(inventoryOut.getQuantity(), RoundingMode.DOWN, 2).toString());
+                inventoryOutDto.setEquivalent(new Quantity(inventoryOut.getEquivalent(), RoundingMode.DOWN, 2).toString());
                 inventoryOutDto.setIdInventoryOut(inventoryOut.getIdInventoryOut());
 
-                if (lotQuantity == null) lotQuantity = new Quantity(inventoryOutDto.getQuantity());
+                if (lotQuantity == null) lotQuantity = new Quantity(inventoryOutDto.getQuantity(), RoundingMode.DOWN, 2);
                 else lotQuantity = lotQuantity.plus(new Quantity(inventoryOutDto.getQuantity()));
 
-                if (lotEquivalent == null) lotEquivalent = new Quantity(inventoryOutDto.getEquivalent());
+                if (lotEquivalent == null) lotEquivalent = new Quantity(inventoryOutDto.getEquivalent(), RoundingMode.DOWN, 2);
                 else lotEquivalent = lotEquivalent.plus(new Quantity(inventoryOutDto.getEquivalent()));
 
                 inventoryOutDtoList.add(inventoryOutDto);
             }
+
+            //after having lot equivalent (quantity in units that customer ordered), look for selling contract and take corresponding sell price
+            ItemSellPrice itemSellPrice = getItemSellPrice(saleLot);
+            Quantity sellRate = new Quantity(itemSellPrice.getItemSellPriceAmount(), itemSellPrice.getItemSellPriceUnit(), RoundingMode.DOWN, 2);
 
             saleDeliveryDto.setInventoryOutDtoTreeSet(new TreeSet<>(inventoryOutDtoList));
             saleDeliveryDto.setLotQuantity(lotQuantity.toString());
@@ -265,57 +397,218 @@ public class SalesReportPrintingService {
             saleDeliveryDto.setLotColor(saleLot.getOrderColor());
             saleDeliveryDto.setLotStyle(saleLot.getOrderStyle());
             saleDeliveryDto.setLotName(saleLot.getLotName());
+            saleDeliveryDto.setItemSellPrice(sellRate.toString());
+            saleDeliveryDto.setLotNote(saleLot.getNote());
+            saleDeliveryDto.setOrderBatch(saleLot.getSaleContainer().getSaleArticle().getSale().getOrderBatch());
 
-            SaleDeliveryDtoWrapper outputDeliveryDtoWrapper = detailMap.get(key);
-            if (outputDeliveryDtoWrapper == null) {
-                outputDeliveryDtoWrapper = new SaleDeliveryDtoWrapper();
-                outputDeliveryDtoWrapper.setSaleDeliveryDtoList(List.of(saleDeliveryDto));
-                detailMap.put(key, outputDeliveryDtoWrapper);
+            //calculate lotEquivalentAdjusted
+            Quantity lotEquivalentAdjusted = calculateLotEquivalentAdjusted(lotEquivalent, containerAdjustmentDataMap, saleLot.getSaleContainer().getIdSaleContainer());
+            saleDeliveryDto.setLotEquivalentAdjusted(lotEquivalentAdjusted.toString());
+            Quantity lotAmount = lotEquivalentAdjusted.times(sellRate);
+            saleDeliveryDto.setLotAmount(lotAmount.toString());
+
+            //Calculate container values
+            //Calculate container values
+            //Calculate container values
+            SaleDeliveryDtoContainerWrapper saleDeliveryDtoContainerWrapper = containerMap.get(key);
+            if (saleDeliveryDtoContainerWrapper == null) {
+                saleDeliveryDtoContainerWrapper = new SaleDeliveryDtoContainerWrapper();
+                saleDeliveryDtoContainerWrapper.setSaleDeliveryDtoList(new LinkedList<>(List.of(saleDeliveryDto)));
+                containerMap.put(key, saleDeliveryDtoContainerWrapper);
             }
             else {
-                outputDeliveryDtoWrapper.getSaleDeliveryDtoList().add(saleDeliveryDto);
+                saleDeliveryDtoContainerWrapper.getSaleDeliveryDtoList().add(saleDeliveryDto);
             }
 
-            if (outputDeliveryDtoWrapper.getContainerQuantity() == null) {
-                outputDeliveryDtoWrapper.setContainerQuantity(lotQuantity.toString());
+            if (saleDeliveryDtoContainerWrapper.getContainerQuantity() == null) {
+                saleDeliveryDtoContainerWrapper.setContainerQuantity(lotQuantity.toString());
             }
             else {
-                outputDeliveryDtoWrapper.setContainerQuantity(new Quantity(saleDeliveryDtoWrapper.getContainerQuantity()).plus(lotQuantity).toString());
+                saleDeliveryDtoContainerWrapper.setContainerQuantity(new Quantity(saleDeliveryDtoContainerWrapper.getContainerQuantity()).plus(lotQuantity).toString());
             }
 
-            if (outputDeliveryDtoWrapper.getContainerEquivalent() == null) {
-                outputDeliveryDtoWrapper.setContainerEquivalent(lotEquivalent.toString());
+            if (saleDeliveryDtoContainerWrapper.getContainerEquivalent() == null) {
+                saleDeliveryDtoContainerWrapper.setContainerEquivalent(lotEquivalent.toString());
             }
             else {
-                outputDeliveryDtoWrapper.setContainerEquivalent(new Quantity(saleDeliveryDtoWrapper.getContainerQuantity()).plus(lotEquivalent).toString());
+                saleDeliveryDtoContainerWrapper.setContainerEquivalent(new Quantity(saleDeliveryDtoContainerWrapper.getContainerEquivalent()).plus(lotEquivalent).toString());
             }
 
-            if (outputDeliveryDtoWrapper.getContainerRolls() == null) {
-                outputDeliveryDtoWrapper.setContainerRolls(lotRolls);
+            if (saleDeliveryDtoContainerWrapper.getContainerRolls() == null) {
+                saleDeliveryDtoContainerWrapper.setContainerRolls(lotRolls);
             }
             else {
-                outputDeliveryDtoWrapper.setContainerRolls(outputDeliveryDtoWrapper.getContainerRolls() + lotRolls);
+                saleDeliveryDtoContainerWrapper.setContainerRolls(saleDeliveryDtoContainerWrapper.getContainerRolls() + lotRolls);
             }
 
+            if (saleDeliveryDtoContainerWrapper.getContainerEquivalentAdjusted() == null) {
+                saleDeliveryDtoContainerWrapper.setContainerEquivalentAdjusted(lotEquivalentAdjusted.toString());
+            }
+            else {
+                saleDeliveryDtoContainerWrapper.setContainerEquivalentAdjusted(new Quantity(saleDeliveryDtoContainerWrapper.getContainerEquivalentAdjusted()).plus(lotEquivalentAdjusted).toString());
+            }
+
+            if (saleDeliveryDtoContainerWrapper.getContainerAmount() == null) {
+                saleDeliveryDtoContainerWrapper.setContainerAmount(lotAmount.toString());
+            }
+            else {
+                saleDeliveryDtoContainerWrapper.setContainerAmount(new Quantity(saleDeliveryDtoContainerWrapper.getContainerAmount()).plus(lotAmount).toString());
+            }
         }
-        return detailMap;
     }
 
-    private static TreeMap<List<String>, SaleDeliveryDtoWrapper> setupDetailDeliveryTreeMap() {
-        Comparator<List<String>> comparator = (l1, l2) -> {
-            if (!l1.get(0).equals(l2.get(0))) {
-                return l1.get(0).compareTo(l2.get(0));
-            }
-            else if (!l1.get(1).equals(l2.get(1))) {
-                return l1.get(1).compareTo(l2.get(1));
-            }
-            else if (!l1.get(2).equals(l2.get(2))) {
-                return l1.get(2).compareTo(l2.get(2));
-            }
-            return l1.get(3).compareTo(l2.get(3));
-        };
+    private Quantity calculateLotEquivalentAdjusted(Quantity lotEquivalent, Map<Integer, List<String>> containerAdjustmentDataMap, Integer idSaleContainer) {
 
-        return new TreeMap<>(comparator);
+        List<String> containerAdjustmentData = containerAdjustmentDataMap.get(idSaleContainer);
+
+        try {
+
+            Quantity containerAllow = new Quantity(containerAdjustmentData.get(0), RoundingMode.DOWN, 2);
+            Quantity containerEquivalent = new Quantity(containerAdjustmentData.get(1), RoundingMode.DOWN, 2);
+            Quantity differential = containerEquivalent.minus(containerAllow);
+
+            if (differential.getQuantityValue().compareTo(BigDecimal.ZERO) <= 0) {
+                return lotEquivalent;
+            }
+
+            if (lotEquivalent.compareTo(differential) < 0) {
+                containerEquivalent = containerEquivalent.minus(lotEquivalent);
+                containerAdjustmentDataMap.put(idSaleContainer, List.of(containerAllow.toString(), containerEquivalent.toString()));
+                return lotEquivalent.minus(lotEquivalent);
+            }
+
+            containerEquivalent = containerEquivalent.minus(differential);
+            containerAdjustmentDataMap.put(idSaleContainer, List.of(containerAllow.toString(), containerEquivalent.toString()));
+
+            return lotEquivalent.minus(differential);
+        }
+        catch (Exception ex) {
+            throw new IllegalArgumentException("Mismatched units when trying to calculate differential between ContainerAllow and ContainerEquivalent!");
+        }
     }
 
+    private TreeMap<Integer, List<String>> mapContainerAdjustmentData(TreeSet<Integer> idContainerSet) throws MismatchedUnitException {
+
+        TreeMap<Integer, List<String>> saleContainerAdjustmentMap = new TreeMap<>();
+
+        for (Integer i : idContainerSet) {
+
+            SaleContainer saleContainer = saleContainerService.findByIdSaleContainer(i);
+            if (saleContainer == null) {
+                continue;
+            }
+
+            Quantity containerOrder = null;
+            Quantity containerEquivalent = null;
+
+            List<SaleLot> saleLotList = saleContainer.getSaleLotList();
+            if (saleLotList == null || saleLotList.isEmpty()) {
+                continue;
+            }
+
+            for (SaleLot saleLot : saleLotList) {
+
+                Quantity lotOrder = new Quantity(saleLot.getOrderQuantity(), RoundingMode.DOWN, 2);
+                Quantity lotEquivalent = null;
+
+                List<InventoryOut> inventoryOutList = saleLot.getInventoryOutList();
+                if (inventoryOutList == null || inventoryOutList.isEmpty()) {
+                    continue;
+                }
+
+                for (InventoryOut inventoryOut : inventoryOutList) {
+
+                    Quantity equivalent = new Quantity(inventoryOut.getEquivalent(), RoundingMode.DOWN, 2);
+                    if (lotEquivalent == null) {
+                        lotEquivalent = equivalent;
+                    }
+                    else {
+                        lotEquivalent = lotEquivalent.plus(equivalent);
+                    }
+                }
+
+                if (containerOrder == null) {
+                    containerOrder = lotOrder;
+                }
+                else {
+                    containerOrder = containerOrder.plus(lotOrder);
+                }
+
+                if (containerEquivalent == null) {
+                    containerEquivalent = lotEquivalent;
+                }
+                else {
+                    containerEquivalent = containerEquivalent.plus(lotEquivalent);
+                }
+            }
+
+            if (containerOrder != null && containerEquivalent != null) {
+
+                float allowedSurplus = getAllowedSurplus(saleContainer) + 1;
+                Quantity containerAllow = containerOrder.times(allowedSurplus);
+
+                List<String> adjustmentData = List.of(containerAllow.toString(), containerEquivalent.toString());
+                saleContainerAdjustmentMap.put(i, adjustmentData);
+            }
+        }
+
+        return saleContainerAdjustmentMap;
+    }
+
+    private float getAllowedSurplus(SaleContainer saleContainer) {
+        float allowedSurplus;
+        try {
+            allowedSurplus = saleContainer.getSaleArticle().getAllowedSurplus();
+        }
+        catch (Exception ex) {
+            throw new IllegalArgumentException("AllowSurplus field of Order: "
+                    + saleContainer.getSaleArticle().getSale().getOrderName() + " at Article itemCode: "
+                    + saleContainer.getSaleArticle().getItemCode().getItemCodeString() + " was not filled! Please check!");
+        }
+        return allowedSurplus;
+    }
+
+    private TreeSet<Integer> makeIdContainerSet(SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) {
+
+        String reportName = saleDeliveryDtoWrapper.getReportName();
+
+        TreeSet<Integer> set = new TreeSet<>();
+
+        LocalDate deliveryDate = saleDeliveryDtoWrapper.getDeliveryDate();
+        Integer deliveryTurn = saleDeliveryDtoWrapper.getDeliveryTurn();
+        String saleSource = saleDeliveryDtoWrapper.getSaleSource();
+        String customer = saleDeliveryDtoWrapper.getCustomer();
+
+        ListIterator<SaleDeliveryDto> iterator = saleDeliveryDtoWrapper.getSaleDeliveryDtoList().listIterator();
+
+        while (iterator.hasNext()) {
+
+            SaleDeliveryDto saleDeliveryDto = iterator.next();
+
+            if (reportName.equals("delivery-note") &&
+                    (!saleDeliveryDto.getSaleSource().equals(saleSource) ||
+                    !saleDeliveryDto.getCustomer().equals(customer) ||
+                    !saleDeliveryDto.getDeliveryDate().equals(deliveryDate) ||
+                    !saleDeliveryDto.getDeliveryTurn().equals(deliveryTurn))) {
+
+                    iterator.remove();
+                    continue;
+            }
+            else if (reportName.equals("account-settling-note") &&
+                    (!saleDeliveryDto.getCustomer().equals(customer) ||
+                    !saleDeliveryDto.getDeliveryDate().equals(deliveryDate) ||
+                    !saleDeliveryDto.getSaleSource().equals(saleSource))) {
+
+                    iterator.remove();
+                    continue;
+            }
+
+            Integer idSaleContainer = saleDeliveryDto.getIdSaleContainer();
+            if (idSaleContainer != null) {
+                set.add(idSaleContainer);
+            }
+        }
+
+        return set;
+    }
 }

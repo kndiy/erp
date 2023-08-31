@@ -9,6 +9,8 @@ public class SaleDeliverySummaryDto implements Comparable<SaleDeliverySummaryDto
 
     private String orderName;
 
+    private String orderBatch;
+
     private String itemCodeString;
 
     private String container;
@@ -18,6 +20,10 @@ public class SaleDeliverySummaryDto implements Comparable<SaleDeliverySummaryDto
     private String containerQuantity;
 
     private String containerEquivalent;
+
+    private String containerAmount;
+
+    private String containerEquivalentAdjusted;
 
     @Override
     public int compareTo(SaleDeliverySummaryDto o) {

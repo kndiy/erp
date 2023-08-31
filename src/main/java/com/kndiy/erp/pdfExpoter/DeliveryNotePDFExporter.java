@@ -23,13 +23,12 @@ import com.kndiy.erp.dto.InventoryOutDto;
 import com.kndiy.erp.dto.deliveryDto.SaleDeliveryDto;
 import com.kndiy.erp.dto.deliveryDto.SaleDeliveryHeaderDto;
 import com.kndiy.erp.dto.deliveryDto.SaleDeliverySummaryDto;
-import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliveryDtoWrapper;
-import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliverySummaryDtoWrapper;
+import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliveryDtoContainerWrapper;
+import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliveryDtoItemTypeWrapper;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.*;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -37,17 +36,19 @@ import java.util.TreeSet;
 
 public class DeliveryNotePDFExporter {
 
-    private TreeMap<List<String>, SaleDeliveryDtoWrapper> detailMap;
-    private TreeMap<String, SaleDeliverySummaryDtoWrapper> summaryMap;
-    private SaleDeliveryHeaderDto saleDeliveryHeaderDto;
-
+    private final TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap;
+    private final TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap;
+    private final SaleDeliveryHeaderDto saleDeliveryHeaderDto;
     private final Color lightGrey;
     private final PdfFont regular;
     private final PdfFont bold;
     private final PdfFont italic;
     private final PdfFont boldItalic;
+    private final String reportName;
 
-    public DeliveryNotePDFExporter() throws IOException {
+    public DeliveryNotePDFExporter(TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap,
+                                   TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap,
+                                   SaleDeliveryHeaderDto saleDeliveryHeaderDto) throws IOException {
 
         final int FONT_TYPES = 4;
 
@@ -67,17 +68,15 @@ public class DeliveryNotePDFExporter {
         this.italic = cambriaFonts[2];
         this.boldItalic = cambriaFonts[3];
 
-        lightGrey = new DeviceRgb(235, 235, 235);
+        lightGrey = ItextStaticConstructors.lightGrey;
+        reportName = "Phiếu Xuất Kho " + saleDeliveryHeaderDto.getDeliveryDate() + " - Đợt giao thứ: " + saleDeliveryHeaderDto.getDeliveryTurn();
+
+        this.containerMap = containerMap;
+        this.itemTypeMap = itemTypeMap;
+        this.saleDeliveryHeaderDto = saleDeliveryHeaderDto;
     }
 
-    public void export(OutputStream responseOutputStream,
-                       TreeMap<List<String>, SaleDeliveryDtoWrapper> detailMap,
-                       TreeMap<String, SaleDeliverySummaryDtoWrapper> summaryMap,
-                       SaleDeliveryHeaderDto saleDeliveryHeaderDto) throws IOException {
-
-        this.detailMap = detailMap;
-        this.summaryMap = summaryMap;
-        this.saleDeliveryHeaderDto = saleDeliveryHeaderDto;
+    public void export(OutputStream responseOutputStream) throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
@@ -89,7 +88,7 @@ public class DeliveryNotePDFExporter {
         makePdf(document, pdfDocument);
         document.flush();
 
-        new StampXOfYPageNumberFooter(document, pdfDocument, boldItalic).stamp();
+        new StampXOfYPageNumberFooter(document, pdfDocument, boldItalic, reportName).stamp();
         document.flush();
 
         document.close();
@@ -111,11 +110,7 @@ public class DeliveryNotePDFExporter {
         TableHeaderEventHandler headerEventHandler = new TableHeaderEventHandler(document, headerTable);
         pdfDocument.addEventHandler(PdfDocumentEvent.END_PAGE, headerEventHandler);
 
-        Table footerTable = makeFooterTable();
-        TableFooterEventHandler footerEventHandler = new TableFooterEventHandler(document, footerTable);
-        pdfDocument.addEventHandler(PdfDocumentEvent.END_PAGE, footerEventHandler);
-
-        document.setMargins(10f + headerEventHandler.getTableHeight(), 10f, 5f + footerEventHandler.getTableHeight(), 10f);
+        document.setMargins(10f + headerEventHandler.getTableHeight(), 10f, 15, 10f);
 
         writeSummaryPages(document);
 
@@ -125,7 +120,7 @@ public class DeliveryNotePDFExporter {
 
     private void writeSummaryPages(Document document) {
 
-        for (Map.Entry<String, SaleDeliverySummaryDtoWrapper> entry : summaryMap.entrySet()) {
+        for (Map.Entry<String, SaleDeliveryDtoItemTypeWrapper> entry : itemTypeMap.entrySet()) {
 
             //Leave some space after each table
             document.add(new Paragraph());
@@ -137,7 +132,7 @@ public class DeliveryNotePDFExporter {
 
     private void writeLotPages(Document document) {
 
-        for (Map.Entry<List<String>, SaleDeliveryDtoWrapper> entry : detailMap.entrySet()) {
+        for (Map.Entry<List<String>, SaleDeliveryDtoContainerWrapper> entry : containerMap.entrySet()) {
 
             document.add(new AreaBreak());
 
@@ -149,7 +144,7 @@ public class DeliveryNotePDFExporter {
         }
     }
 
-    private Table makeLotTableHeader(Map.Entry<List<String>, SaleDeliveryDtoWrapper> entry) {
+    private Table makeLotTableHeader(Map.Entry<List<String>, SaleDeliveryDtoContainerWrapper> entry) {
 
         Table lotTableHeader = new Table(new float[] {0.8f, 1.5f, 0.8f, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.8f})
                 .useAllAvailableWidth()
@@ -164,7 +159,7 @@ public class DeliveryNotePDFExporter {
         return lotTableHeader;
     }
 
-    private void fillLotTableHeaderSummaryPart(Table summaryTable, Map.Entry<List<String>, SaleDeliveryDtoWrapper> entry) {
+    private void fillLotTableHeaderSummaryPart(Table summaryTable, Map.Entry<List<String>, SaleDeliveryDtoContainerWrapper> entry) {
 
         Cell cell;
         Paragraph paragraph;
@@ -262,6 +257,22 @@ public class DeliveryNotePDFExporter {
         Cell cell;
         Paragraph paragraph;
 
+        //WRITE ITEM CODE Supplier String
+        paragraph = ItextStaticConstructors.createParagraphMediumLeading()
+                .setFontSize(8);
+        cell = new Cell(1,3).setBorder(Border.NO_BORDER).add(paragraph);
+        lotTable.addCell(cell);
+
+        paragraph = ItextStaticConstructors.createParagraphMediumLeading()
+                .setFontSize(8)
+                .setFont(italic)
+                .add("(" + dto.getSupplierAbbreviation() + " - " + dto.getLotItemCodeSupplierString() + ")");
+        cell = new Cell(1,2)
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.LEFT)
+                .add(paragraph);
+        lotTable.addCell(cell);
+
         paragraph = ItextStaticConstructors.createParagraphMediumLeading().add(dto.getLotName());
         cell = new Cell().setBorder(Border.NO_BORDER).setFont(bold).setVerticalAlignment(VerticalAlignment.TOP).setHorizontalAlignment(HorizontalAlignment.LEFT).add(paragraph);
         lotTable.addCell(cell);
@@ -348,7 +359,7 @@ public class DeliveryNotePDFExporter {
         return inventoryOutTable;
     }
 
-    private Table makeSummaryTable(Map.Entry<String, SaleDeliverySummaryDtoWrapper> entry) {
+    private Table makeSummaryTable(Map.Entry<String, SaleDeliveryDtoItemTypeWrapper> entry) {
 
         Table table = new Table(new float[] {4, 4, 2, 1, 2, 2})
                 .setFixedLayout()
@@ -363,13 +374,13 @@ public class DeliveryNotePDFExporter {
 
         return table;
     }
-    private void fillSummaryTableSUMLine(Table table, Map.Entry<String, SaleDeliverySummaryDtoWrapper> entry) {
+    private void fillSummaryTableSUMLine(Table table, Map.Entry<String, SaleDeliveryDtoItemTypeWrapper> entry) {
 
         String itemTypeString = entry.getKey();
-        SaleDeliverySummaryDtoWrapper itemTypeSummary = entry.getValue();
-        String deliveryQuantity = itemTypeSummary.getDeliveryQuantity();
-        String deliveryEquivalent = itemTypeSummary.getDeliveryEquivalent();
-        Integer deliveryRoll = itemTypeSummary.getDeliveryRolls();
+        SaleDeliveryDtoItemTypeWrapper itemTypeSummary = entry.getValue();
+        String deliveryQuantity = itemTypeSummary.getItemTypeQuantity();
+        String deliveryEquivalent = itemTypeSummary.getItemTypeEquivalent();
+        Integer deliveryRoll = itemTypeSummary.getItemTypeRolls();
 
         Cell cell;
         Paragraph paragraph;
@@ -510,36 +521,16 @@ public class DeliveryNotePDFExporter {
         table.addCell(cell.add(new Paragraph(": " + saleDeliveryHeaderDto.getDeliverToAddressVn()).setFont(bold).setMultipliedLeading(smallLeading)));
 
         //Title of DeliveryNote
-        Text title = new Text("PHIẾU XUẤT KHO ");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-        String date = dtf.format(saleDeliveryHeaderDto.getDeliveryDate());
-        String turn = " - Đợt " + saleDeliveryHeaderDto.getDeliveryTurn();
-
-        Paragraph paragraph = new Paragraph().setFont(bold).setFontSize(14).setTextAlignment(TextAlignment.CENTER);
-        paragraph.add(title).add(date).add(turn);
-
+        Paragraph paragraph = ItextStaticConstructors.createParagraphSmallLeading()
+                .setFont(bold)
+                .setFontSize(13)
+                .setTextAlignment(TextAlignment.CENTER)
+                .add(reportName.toUpperCase());
 
         cell = new Cell(1,7).setTextAlignment(TextAlignment.CENTER);
         table.addCell(cell.add(paragraph));
 
         return table;
-    }
-
-    private Table makeFooterTable() {
-
-        Paragraph paragraph = ItextStaticConstructors.createParagraphSmallLeading()
-                .setFont(boldItalic)
-                .setFontSize(10)
-                .add("Phiếu Xuất Kho " + saleDeliveryHeaderDto.getDeliveryDate() + " - Đợt giao thứ: " + saleDeliveryHeaderDto.getDeliveryTurn());
-
-        Cell cell = new Cell()
-                .setBorder(Border.NO_BORDER)
-                .add(paragraph);
-
-        return new Table(new float[] {1})
-                .setFixedLayout()
-                .useAllAvailableWidth()
-                .addCell(cell);
     }
 
 }

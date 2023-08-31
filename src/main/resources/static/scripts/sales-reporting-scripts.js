@@ -22,6 +22,8 @@ function onclickSummaryGrid(curGrid) {
     let dateInput = document.getElementById('date-input');
     let turnInput = document.getElementById('turn-input');
     let idSaleLotInput = document.getElementById('id-sale-lot');
+    let saleSourceInput = document.getElementById('sale-source');
+    let customerInput = document.getElementById('customer');
 
     turnInput.value = curGrid.getElementsByClassName('summary-turn')[0].textContent;
     let dateArr = curGrid.getElementsByClassName('summary-date')[0].textContent.split('-');
@@ -30,15 +32,19 @@ function onclickSummaryGrid(curGrid) {
     dateInput.value = dateArr.join('-');
 
     idSaleLotInput.value = curGrid.getElementsByClassName('id-sale-lot')[0].value;
+    saleSourceInput.value = curGrid.getElementsByClassName('sale-source')[0].value;
+    customerInput.value = curGrid.getElementsByClassName('customer')[0].value;
 }
 
 function checkBeforePrint(reportName) {
 
     let dateInput = document.getElementById('date-input');
     let turnInput = document.getElementById('turn-input');
+
     let form = document.getElementById('print-form');
 
     document.getElementById('report-name').value = reportName;
+
     form.submit();
 }
 

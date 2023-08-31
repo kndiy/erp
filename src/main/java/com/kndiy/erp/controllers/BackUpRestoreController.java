@@ -25,6 +25,7 @@ public class BackUpRestoreController {
     private BackupService backupService;
     @Autowired
     private RestoreService restoreService;
+
     @PostMapping("/backup")
     public void backup(HttpServletResponse response, RedirectAttributes redirectAttributes) throws IOException, IllegalAccessException {
 
@@ -33,8 +34,9 @@ public class BackUpRestoreController {
         String timeString = dtf.format(time);
 
         response.setContentType("multipart/form-data");
-        response.setHeader("Content-disposition","attachment; filename=backup_" + timeString + ".txt");
+        response.setHeader("Content-disposition", "attachment; filename=backup_" + timeString + ".txt");
         response.setCharacterEncoding("UTF-8");
+
         OutputStream outputStream = response.getOutputStream();
         BufferedWriter writer = new BufferedWriter(new PrintWriter(outputStream));
 

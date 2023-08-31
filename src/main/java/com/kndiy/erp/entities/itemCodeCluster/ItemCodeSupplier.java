@@ -18,18 +18,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemCodeSupplier implements Serializable {
+
     @EmbeddedId
     private ItemCodeSupplierKey idItemCodeSupplier;
+
     @ManyToOne
     @MapsId("idItemCode")
     @JoinColumn(name = "id_item_code")
     private ItemCode itemCode;
+
     @ManyToOne
     @MapsId("idCompany")
     @JoinColumn(name = "id_company")
     private Company supplier;
+
     @Column(name = "item_code_supplier")
     private String itemCodeSupplierString;
+
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "itemCodeSupplier")
     private List<ItemCodeSupplierEquivalent> itemCodeSupplierEquivalentList;
