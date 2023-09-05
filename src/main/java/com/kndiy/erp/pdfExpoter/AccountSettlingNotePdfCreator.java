@@ -4,7 +4,6 @@ import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
-import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -27,13 +26,12 @@ import org.springframework.core.io.Resource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class AccountSettlingNotePdfExporter {
+public class AccountSettlingNotePdfCreator {
     private final TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap;
     private final TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap;
     private final SaleDeliveryHeaderDto saleDeliveryHeaderDto;
@@ -48,9 +46,9 @@ public class AccountSettlingNotePdfExporter {
     private final float[] defaultColumnWidths;
     private final float[] nestedLotTableColumnWidths;
 
-    public AccountSettlingNotePdfExporter(TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap,
-                                          TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap,
-                                          SaleDeliveryHeaderDto saleDeliveryHeaderDto) throws IOException {
+    public AccountSettlingNotePdfCreator(TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap,
+                                         TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap,
+                                         SaleDeliveryHeaderDto saleDeliveryHeaderDto) throws IOException {
 
         final int FONT_TYPES = 4;
 
@@ -83,7 +81,7 @@ public class AccountSettlingNotePdfExporter {
         nestedLotTableColumnWidths = new float[] {1.5f, 2, 1.5f, 0.8f, 2, 2, 2.5f};
     }
 
-    public void export(OutputStream responseOutputStream) throws IOException {
+    public byte[] create() throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
@@ -100,15 +98,7 @@ public class AccountSettlingNotePdfExporter {
 
         document.close();
 
-        printFinalPdf(byteArrayOutputStream, responseOutputStream);
-    }
-
-    private void printFinalPdf(ByteArrayOutputStream byteArrayOutputStream, OutputStream responseOutputStream) throws IOException {
-
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        for (byte aByte : bytes) {
-            responseOutputStream.write(aByte);
-        }
+        return byteArrayOutputStream.toByteArray();
     }
 
     private void makePdf(Document document, PdfDocument pdfDocument) throws IOException {

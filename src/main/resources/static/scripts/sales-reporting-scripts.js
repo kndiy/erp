@@ -57,7 +57,12 @@ window.addEventListener('load', function() {
         let originalAction = form.action;
         let actionArr = form.action.split('/');
 
-        actionArr[actionArr.length - 1] = 'print-' + reportName;
+        if (reportName == 'both') {
+            actionArr[actionArr.length - 1] = 'print-both';
+        }
+        else {
+            actionArr[actionArr.length - 1] = 'print-note';
+        }
 
         form.action = actionArr.join('/');
         form.submit();

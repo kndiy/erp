@@ -15,8 +15,9 @@ import com.kndiy.erp.entities.salesCluster.SaleContainer;
 import com.kndiy.erp.entities.salesCluster.SaleLot;
 import com.kndiy.erp.others.MismatchedUnitException;
 import com.kndiy.erp.others.Quantity;
-import com.kndiy.erp.pdfExpoter.AccountSettlingNotePdfExporter;
-import com.kndiy.erp.pdfExpoter.DeliveryNotePDFExporter;
+import com.kndiy.erp.pdfExpoter.AccountSettlingNotePdfCreator;
+import com.kndiy.erp.pdfExpoter.DeliveryLabelPdfCreator;
+import com.kndiy.erp.pdfExpoter.DeliveryNotePdfCreator;
 import com.kndiy.erp.services.item.ItemCodeSupplierService;
 import com.kndiy.erp.services.sales.SaleContainerService;
 import com.kndiy.erp.services.sales.SaleLotService;
@@ -26,6 +27,7 @@ import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliveryDtoItemTypeWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -132,17 +134,36 @@ public class SalesReportPrintingService {
 
         String reportName = saleDeliveryDtoWrapper.getReportName();
 
+        byte[] fileBytes = null;
+
         switch (reportName) {
             case "delivery-note" -> {
-                DeliveryNotePDFExporter deliveryNotePDFExporter = new DeliveryNotePDFExporter(containerMap, itemTypeMap, saleDeliveryHeaderDto);
-                deliveryNotePDFExporter.export(outputStream);
+                DeliveryNotePdfCreator deliveryNotePdfCreator = new DeliveryNotePdfCreator(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+                fileBytes = deliveryNotePdfCreator.create();
+            }
+            case "delivery-label" -> {
+                DeliveryLabelPdfCreator deliveryLabelPdfCreator = new DeliveryLabelPdfCreator(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+                fileBytes = deliveryLabelPdfCreator.create();
+            }
+            case "account-settling-note" -> {
+                AccountSettlingNotePdfCreator accountSettlingNotePdfCreator = new AccountSettlingNotePdfCreator(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+                fileBytes = accountSettlingNotePdfCreator.create();
             }
             default -> {
-                AccountSettlingNotePdfExporter accountSettlingNotePdfExporter = new AccountSettlingNotePdfExporter(containerMap, itemTypeMap, saleDeliveryHeaderDto);
-                accountSettlingNotePdfExporter.export(outputStream);
+
             }
         }
 
+        if (fileBytes != null) {
+            printFinalPdf(fileBytes, outputStream);
+        }
+    }
+
+    private void printFinalPdf(byte[] fileBytes, OutputStream responseOutputStream) throws IOException {
+
+        for (byte aByte : fileBytes) {
+            responseOutputStream.write(aByte);
+        }
     }
 
     private SaleDeliveryHeaderDto makeSaleDeliveryHeaderDto(SaleDeliveryDtoWrapper saleDeliveryDtoWrapper, TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap) throws MismatchedUnitException {
@@ -376,6 +397,7 @@ public class SalesReportPrintingService {
                 inventoryOutDto.setQuantity(new Quantity(inventoryOut.getQuantity(), RoundingMode.DOWN, 2).toString());
                 inventoryOutDto.setEquivalent(new Quantity(inventoryOut.getEquivalent(), RoundingMode.DOWN, 2).toString());
                 inventoryOutDto.setIdInventoryOut(inventoryOut.getIdInventoryOut());
+                inventoryOutDto.setProductionCode(inventoryOut.getInventory().getProductionCode());
 
                 if (lotQuantity == null) lotQuantity = new Quantity(inventoryOutDto.getQuantity(), RoundingMode.DOWN, 2);
                 else lotQuantity = lotQuantity.plus(new Quantity(inventoryOutDto.getQuantity()));

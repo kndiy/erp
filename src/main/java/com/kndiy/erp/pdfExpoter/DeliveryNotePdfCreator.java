@@ -4,7 +4,6 @@ import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
-import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -34,7 +33,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class DeliveryNotePDFExporter {
+public class DeliveryNotePdfCreator {
 
     private final TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap;
     private final TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap;
@@ -46,9 +45,9 @@ public class DeliveryNotePDFExporter {
     private final PdfFont boldItalic;
     private final String reportName;
 
-    public DeliveryNotePDFExporter(TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap,
-                                   TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap,
-                                   SaleDeliveryHeaderDto saleDeliveryHeaderDto) throws IOException {
+    public DeliveryNotePdfCreator(TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap,
+                                  TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap,
+                                  SaleDeliveryHeaderDto saleDeliveryHeaderDto) throws IOException {
 
         final int FONT_TYPES = 4;
 
@@ -76,7 +75,7 @@ public class DeliveryNotePDFExporter {
         this.saleDeliveryHeaderDto = saleDeliveryHeaderDto;
     }
 
-    public void export(OutputStream responseOutputStream) throws IOException {
+    public byte[] create() throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
@@ -93,16 +92,10 @@ public class DeliveryNotePDFExporter {
 
         document.close();
 
-        printFinalPdf(byteArrayOutputStream, responseOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 
-    private void printFinalPdf(ByteArrayOutputStream byteArrayOutputStream, OutputStream responseOutputStream) throws IOException {
 
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        for (byte aByte : bytes) {
-            responseOutputStream.write(aByte);
-        }
-    }
 
     private void makePdf(Document document, PdfDocument pdfDocument) throws IOException {
 

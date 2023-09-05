@@ -76,21 +76,29 @@
                 <form th:action="@{check-wrapper}" method="post" th:object="${saleDeliveryDtoWrapper}" id="print-form">
 
                     <div class="grid date-turn-grid">
-                        <div class="square flex black date-turn-square">
-                            <h4>Date</h4>
+                        <div class="square flex direction-column black date-turn-square"></div>
+                        <div class="square flex direction-column black date-turn-square"></div>
+                        <div class="square flex black date-turn-square both">
+                            <input type="button" value="Print DlvNote & Labels" onclick="checkBeforePrint('both')">
                         </div>
-                        <div class="square flex black date-turn-square">
-                            <h4>Turn</h4>
+                        <div class="square flex direction-column black date-turn-square"></div>
+                        <div class="square flex direction-column black date-turn-square"></div>
+                        <div class="square flex direction-column black date-turn-square"></div>
+                        <div class="square flex direction-column black date-turn-square"></div>
+                        <div class="square flex direction-column black date-turn-square">
+                            <h4 class="align-bottom">Date</h4>
                         </div>
-                        <div class="square flex black date-turn-square"></div>
-                        <div class="square flex black date-turn-square">
-                            <h4>VAT Rate</h4>
+                        <div class="square flex direction-column black date-turn-square">
+                            <h4 class="align-bottom">Turn</h4>
                         </div>
-                        <div class="square flex black date-turn-square">
-                            <h4>Source</h4>
+                        <div class="square flex direction-column black date-turn-square">
+                            <h4 class="align-bottom">VAT Rate</h4>
                         </div>
-                        <div class="square flex black date-turn-square">
-                            <h4>Customer</h4>
+                        <div class="square flex direction-column black date-turn-square">
+                            <h4 class="align-bottom">Source</h4>
+                        </div>
+                        <div class="square flex direction-column black date-turn-square">
+                            <h4 class="align-bottom">Customer</h4>
                         </div>
                         <div class="square flex black date-turn-square"></div>
 
@@ -103,7 +111,10 @@
                             <input type="hidden" th:field="*{idSaleLot}" id="id-sale-lot">
                         </div>
                         <div class="square flex black date-turn-square">
-                            <input type="button" value="Print Delivery Note" onclick="checkBeforePrint('delivery-note')">
+                            <input type="button" value="Note Only" onclick="checkBeforePrint('delivery-note')">
+                        </div>
+                        <div class="square flex black date-turn-square">
+                            <input type="button" value="Labels Only" onclick="checkBeforePrint('delivery-label')">
                         </div>
                         <div class="square flex black date-turn-square">
                             <input type="text" th:field="*{vatRate}">

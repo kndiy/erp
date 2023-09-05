@@ -18,20 +18,23 @@ import com.itextpdf.layout.layout.LayoutResult;
 import com.itextpdf.layout.renderer.DocumentRenderer;
 import com.itextpdf.layout.renderer.TableRenderer;
 import lombok.Getter;
+import lombok.Setter;
 
 public class TableHeaderEventHandler implements IEventHandler {
 
-    private final Table table;
+    @Setter
+    @Getter
+    private Table headerTable;
     @Getter
     private final float tableHeight;
     private final Document document;
 
-    public TableHeaderEventHandler(Document document, Table table) {
+    public TableHeaderEventHandler(Document document, Table headerTable) {
 
         this.document = document;
-        this.table = table;
+        this.headerTable = headerTable;
 
-        TableRenderer renderer = (TableRenderer) table.createRendererSubTree();
+        TableRenderer renderer = (TableRenderer) headerTable.createRendererSubTree();
         renderer.setParent(new DocumentRenderer(document));
 
         LayoutResult result = renderer.layout((new LayoutContext(new LayoutArea(0, PageSize.A4))));
@@ -57,7 +60,7 @@ public class TableHeaderEventHandler implements IEventHandler {
         pdfCanvas.stroke();
 
         Canvas canvas = new Canvas(pdfCanvas, pdfDocument, rectangle);
-        canvas.add(table);
+        canvas.add(headerTable);
         canvas.flush();
         canvas.close();
     }

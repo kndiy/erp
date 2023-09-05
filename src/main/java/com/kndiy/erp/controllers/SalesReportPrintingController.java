@@ -73,14 +73,21 @@ public class SalesReportPrintingController {
     }
 
 
-    @PostMapping("/sales-reporting/{dateRestriction}/print-delivery-note")
+    @PostMapping("/sales-reporting/{dateRestriction}/print-note")
     public void printDeliveryNote(HttpServletResponse response, @ModelAttribute SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws IOException, MismatchedUnitException {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd");
         LocalDate deliveryDate = saleDeliveryDtoWrapper.getDeliveryDate();
         Integer deliveryTurn = saleDeliveryDtoWrapper.getDeliveryTurn();
 
-        String fileName = dtf.format(deliveryDate) + "_Turn" + deliveryTurn + "_DeliveryNote.pdf";
+        String reportName = saleDeliveryDtoWrapper.getReportName();
+        StringBuilder fileName = new StringBuilder(dtf.format(deliveryDate));
+
+        switch (reportName) {
+            case "delivery-note" -> fileName.append("_Turn").append(deliveryTurn).append("_DeliveryNote.pdf");
+            case "delivery-label" -> fileName.append("_Turn").append(deliveryTurn).append("_DeliveryLabels.pdf");
+            case "account-settling-note" -> fileName.append("_SettlingNote.pdf");
+        }
 
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition","inline; filename=" + fileName);
@@ -92,15 +99,15 @@ public class SalesReportPrintingController {
         response.flushBuffer();
     }
 
-    @PostMapping("/sales-reporting/{dateRestriction}/print-account-settling-note")
+    @PostMapping("/sales-reporting/{dateRestriction}/print-both")
     public void printAccountSettlingNote(HttpServletResponse response, @ModelAttribute SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws IOException, MismatchedUnitException {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd");
         LocalDate deliveryDate = saleDeliveryDtoWrapper.getDeliveryDate();
 
-        String fileName = dtf.format(deliveryDate) + "_AccountSettlingNote.pdf";
+        String fileName = dtf.format(deliveryDate) + "_DeliveryNoteAndLabels.zip";
 
-        response.setContentType("application/pdf");
+        response.setContentType("application/zip");
         response.setHeader("Content-disposition","inline; filename=" + fileName);
         response.setCharacterEncoding("UTF-8");
 
