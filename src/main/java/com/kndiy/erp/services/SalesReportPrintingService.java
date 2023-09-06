@@ -33,7 +33,11 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 
 @Service
@@ -149,8 +153,26 @@ public class SalesReportPrintingService {
                 AccountSettlingNotePdfCreator accountSettlingNotePdfCreator = new AccountSettlingNotePdfCreator(containerMap, itemTypeMap, saleDeliveryHeaderDto);
                 fileBytes = accountSettlingNotePdfCreator.create();
             }
-            default -> {
+            case "both" -> {
 
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd");
+                String pdfName = dtf.format(saleDeliveryHeaderDto.getDeliveryDate()) + "_Turn" + saleDeliveryHeaderDto.getDeliveryTurn() + "_";
+
+                ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
+                DeliveryNotePdfCreator note = new DeliveryNotePdfCreator(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+                DeliveryLabelPdfCreator labels = new DeliveryLabelPdfCreator(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+
+                ZipEntry entry = new ZipEntry(pdfName + "DeliveryNote.pdf");
+                zipOutputStream.putNextEntry(entry);
+                zipOutputStream.write(note.create());
+                zipOutputStream.closeEntry();
+
+                entry = new ZipEntry(pdfName + "DeliveryLabels.pdf");
+                zipOutputStream.putNextEntry(entry);
+                zipOutputStream.write(labels.create());
+                zipOutputStream.closeEntry();
+
+                zipOutputStream.close();
             }
         }
 
