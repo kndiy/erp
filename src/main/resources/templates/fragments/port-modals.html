@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div th:fragment="image-modal">
+        <div class="modal image-modal" id="image-modal">
+            <img class="image" th:src="@{/images/msaccess01.jpg}">
+            <h2 class="modal-heading">MS Access Application Image</h2>
+            <span class="close-button" onclick="pressToClose()">&times;</span>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

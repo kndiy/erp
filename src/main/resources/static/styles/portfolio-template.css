@@ -20,3 +20,179 @@
     height: 0;
 }
 
+h1, h2, h3, h4 {
+    margin: 0;
+    margin-top: 20px;
+}
+
+.orange-text {
+    color: #FFA633;
+}
+
+p {
+    margin: 0;
+    margin-top: 15px;
+    font-size: 22px;
+    opacity: 0.8;
+}
+
+ul {
+    margin: 0;
+    opacity: 0.8;
+}
+
+li {
+    margin: 0;
+    margin-top: 5px;
+    font-size: 20px;
+}
+
+.ultra-square {
+    margin-top: 60vh;
+}
+
+.ultra-square:nth-child(1) {
+    margin-top: 25vh;
+}
+
+h1 {
+    color: '#FA633';
+}
+
+.transparent {
+    opacity: 0.7;
+}
+
+input {
+    margin-top: 15px;
+}
+
+.ms-access-image-grid, .spring-app-image-grid, .ms-excel-image-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 150px 40px;
+    grid-column-gap: 20px;
+
+    width: 100%;
+
+    margin-top: 15px;
+}
+
+.ms-access-image-square:nth-child(6), .spring-app-image-square:nth-child(6), .ms-excel-image-square:nth-child(6) {
+    grid-column: span 5;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+}
+
+.italic {
+    font-style: italic;
+    font-size: 22px;
+}
+
+.caption {
+    margin-top: 0px;
+}
+
+#image-modal {
+    display: 'none';
+    height: 100%;
+    width: 100%;
+}
+
+#image-modal img {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    max-height: 90%;
+    max-width: 80%;
+    width: auto;
+    height: auto;
+}
+
+#image-modal .close-button {
+    position: absolute;
+    top: 60px;
+    right: 10%;
+}
+
+.center {
+    justify-content: center;
+}
+
+.vertical-text {
+
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+
+    align-self: end;
+    bottom: 12%;
+}
+
+.vertical-square {
+    display: flex;
+}
+
+.vertical-grid {
+
+    position: sticky;
+    display: grid;
+
+    grid-template-columns: 50px 1fr 50px;
+
+    min-width: 1000px;
+    width: 90vw;
+    bottom: 0;
+
+    z-index: 0;
+
+}
+
+.right-vertical-grid {
+
+    display: grid;
+    grid-template-rows: 400px 200px;
+    grid-gap: 15px;
+    height: 615px;
+
+    align-self: end;
+}
+
+.left-vertical-grid {
+
+    display: grid;
+    grid-template-rows: 50px 50px 200px;
+    grid-gap: 15px;
+    height: 330px;
+
+    align-self: end;
+}
+
+.vertical-rule {
+
+    height: 100%;
+    width: 8px;
+    border-left: 1px solid white;
+}
+
+.vertical-rule-left {
+
+    height: 100%;
+    width: 1px;
+    border-right: 1px solid white;
+}
+
+.logo-anchor {
+    width: 50px;
+    height: 50px;
+}

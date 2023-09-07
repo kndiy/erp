@@ -33,6 +33,7 @@ body {
     color: white;
     position: relative;
     min-height: 100vh;
+
     overflow-x: hidden;
 }
 
@@ -138,6 +139,7 @@ h3 {
 
 .footer {
     position: absolute;
+    z-index: 1000;
 
     width: 104%;
     height: 70px;
@@ -275,7 +277,7 @@ h3 {
 
 .everything-container {
     display: flex;
-    min-height: 100%;
+    height: 100%;
     justify-content: center;
     flex-flow: wrap;
     width: 1fr;
@@ -312,6 +314,7 @@ h3 {
 }
 
 .flex-center {
+    display: flex;
     justify-content: center;
     padding: 0;
 }
@@ -410,3 +413,4 @@ h3 {
     text-transform: uppercase;
     font-weight: bold;
 }
+
