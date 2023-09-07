@@ -137,25 +137,30 @@ img {
 
     align-self: end;
     bottom: 12%;
+
 }
 
 .vertical-square {
     display: flex;
 }
 
-.vertical-grid {
+.everything-container {
+    z-index: 100;
+}
 
+.ultra-grid {
+    z-index: 10;
+}
+
+.vertical {
+
+    z-index: 0;
     position: sticky;
-    display: grid;
-
-    grid-template-columns: 50px 1fr 50px;
+    display: flex;
 
     min-width: 1000px;
     width: 90vw;
     bottom: 0;
-
-    z-index: 0;
-
 }
 
 .right-vertical-grid {
@@ -166,6 +171,8 @@ img {
     height: 615px;
 
     align-self: end;
+    margin-left: auto;
+    margin-right: 3%;
 }
 
 .left-vertical-grid {
@@ -176,6 +183,8 @@ img {
     height: 330px;
 
     align-self: end;
+    margin-left: 3%;
+    margin-right: auto;
 }
 
 .vertical-rule {
@@ -186,7 +195,6 @@ img {
 }
 
 .vertical-rule-left {
-
     height: 100%;
     width: 1px;
     border-right: 1px solid white;
@@ -195,4 +203,11 @@ img {
 .logo-anchor {
     width: 50px;
     height: 50px;
+    z-index: 0;
 }
+
+.logo-anchor:hover {
+    color: #FFA933;
+    box-shadow: 0px 0px 5px 5px #FFA933;
+}
+
