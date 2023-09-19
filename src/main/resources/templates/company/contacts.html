@@ -14,10 +14,10 @@
 <body>
 
     <div class="everything-container">
-        <div th:insert="~{/fragments/header-footer :: header}"></div>
-        <div th:insert="~{/fragments/contact-modals :: new-contact-modal}"></div>
-        <div th:insert="~{/fragments/contact-modals :: edit-contact-modal}"></div>
-        <div th:insert="~{/fragments/contact-modals :: delete-contact-modal}"></div>
+        <div th:insert="~{fragments/header-footer :: header}"></div>
+        <div th:insert="~{fragments/contact-modals :: new-contact-modal}"></div>
+        <div th:insert="~{fragments/contact-modals :: edit-contact-modal}"></div>
+        <div th:insert="~{fragments/contact-modals :: delete-contact-modal}"></div>
 
         <div th:if="${result != null}">
             <h4 th:text="${result}"></h4>

@@ -11,8 +11,8 @@
 </head>
 <body>
     <div class="everything-container">
-        <div th:insert="~{/fragments/header-footer :: header-port}"></div>
-        <div th:insert="~{/fragments/port-modals :: image-modal}"></div>
+        <div th:insert="~{fragments/header-footer :: header-port}"></div>
+        <div th:insert="~{fragments/port-modals :: password-reminder}"></div>
 
         <hr>
 
@@ -155,9 +155,7 @@
                     <div class="square project-square flex">
                         <input type="submit" value="GitHub" onclick="goToErpSourceCode()">
                         &nbsp&nbsp&nbsp&nbsp&nbsp
-                        <form th:action="@{/home}" method="get">
-                            <input type="submit" value="Deployment">
-                        </form>
+                        <input type="button" value="Deployment" onclick="openPasswordReminder()">
                     </div>
                 </div>
 
@@ -165,7 +163,7 @@
                     <div class="square project-square flex">
                         <h3 class="orange-text">2. WebNovel Content-Copying Project</h3>
                         <p>
-                            My hobby is to read web novel on my kindle which does not have much support for web browsing.
+                            My hobby is to read web novels on my kindle which does not have much support for web browsing.
                         </p>
                         <p>
                             In order to avoid manually copying the contents of free novels chapter-by-chapter,
@@ -228,10 +226,15 @@
                             I would love to receive your feedbacks, and of course, IT-related job opportunities.
                         </p>
                     </div>
+
+                    <form th:action="@{/resume}" method="post" id="bottom-resume-form"></form>
+
                     <div class="square contact-square center flex">
                         <a href="mailto:khiemnd9112@gmail.com">
                             <input type="button" value="Mail Me">
                         </a>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp
+                        <input type="submit" value="My Resume" form="bottom-resume-form">
                     </div>
                 </div>
             </div>
@@ -269,7 +272,7 @@
             </div>
         </div>
 
-        <div th:insert="~{/fragments/header-footer :: footer}" class="footer"></div>
+        <div th:insert="~{fragments/header-footer :: footer}" class="footer"></div>
 
     </div>
 </body>

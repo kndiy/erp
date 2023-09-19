@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="everything-container">
-        <div th:insert="~{/fragments/header-footer :: header}"></div>
+        <div th:insert="~{fragments/header-footer :: header}"></div>
 
         <div th:if="${results != null && !results.isEmpty()}">
             <div th:each="result : ${results}">
@@ -203,7 +203,7 @@
 
 
 
-        <div th:insert="~{/fragments/header-footer :: footer}" class="footer"></div>
+        <div th:insert="~{fragments/header-footer :: footer}" class="footer"></div>
     </div>
 
 </body>

@@ -4,13 +4,17 @@ import com.kndiy.erp.validators.ItemSellPriceDtoConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @ItemSellPriceDtoConstraint
+@Setter
+@Getter
 public class ItemSellPriceDto {
     @NotNull(message = "Please select a corresponding Customer")
     private Integer idCustomer;
@@ -24,75 +28,4 @@ public class ItemSellPriceDto {
     private LocalDate fromDate;
     private LocalDate toDate;
 
-    public Integer getIdCustomer() {
-        return idCustomer;
-    }
-
-    public void setIdCustomer(Integer idCustomer) {
-        this.idCustomer = idCustomer;
-    }
-
-    public Integer getIdItemCode() {
-        return idItemCode;
-    }
-
-    public void setIdItemCode(Integer idItemCode) {
-        this.idItemCode = idItemCode;
-    }
-
-    public Float getItemSellPriceAmount() {
-        return itemSellPriceAmount;
-    }
-
-    public void setItemSellPriceAmount(Float itemSellPriceAmount) {
-        this.itemSellPriceAmount = itemSellPriceAmount;
-    }
-
-    public String getItemSellPriceUnit() {
-        return itemSellPriceUnit;
-    }
-
-    public void setItemSellPriceUnit(String itemSellPriceUnit) {
-        this.itemSellPriceUnit = itemSellPriceUnit;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public LocalDate getFromDate() {
-        return fromDate;
-    }
-
-    public void setFromDate(LocalDate fromDate) {
-        this.fromDate = fromDate;
-    }
-
-    public LocalDate getToDate() {
-        return toDate;
-    }
-
-    public void setToDate(LocalDate toDate) {
-        this.toDate = toDate;
-    }
-
-    public String getItemSellPriceContract() {
-        return itemSellPriceContract;
-    }
-
-    public void setItemSellPriceContract(String itemSellPriceContract) {
-        this.itemSellPriceContract = itemSellPriceContract;
-    }
-
-    public Integer getIdItemSellPrice() {
-        return idItemSellPrice;
-    }
-
-    public void setIdItemSellPrice(Integer idItemSellPrice) {
-        this.idItemSellPrice = idItemSellPrice;
-    }
 }

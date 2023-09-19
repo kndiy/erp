@@ -14,6 +14,6 @@ import java.util.TreeSet;
 @Setter
 public class InventoryMapWrapper {
 
-    TreeSet<Inventory> inventorySet;
+    private TreeSet<Inventory> inventorySet;
 
 }

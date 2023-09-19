@@ -1,6 +1,6 @@
 package com.kndiy.erp.services;
 
-import com.kndiy.erp.dto.UserRoleDTO;
+import com.kndiy.erp.dto.UserRoleDto;
 import com.kndiy.erp.entities.userCluster.Role;
 import com.kndiy.erp.entities.userCluster.User;
 import com.kndiy.erp.repositories.RoleRepository;
@@ -24,11 +24,12 @@ public class UserAuthorityService  {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public String saveUser(UserRoleDTO userRoleDTO) {
+    public String saveUser(UserRoleDto userRoleDTO) {
+
         User check = userRepository.findByUsername(userRoleDTO.getUsername());
 
-        if (check != null) {
-            return "User: " + userRoleDTO.getUsername() + " is already exist!";
+        if (check != null && !userRoleDTO.isReplaceUser()) {
+            return "User: " + userRoleDTO.getUsername() + " already exists! If you want to edit User, please select \"Replace User\"";
         }
 
         check = new User();
@@ -44,8 +45,8 @@ public class UserAuthorityService  {
             Role roleObject = roleRepository.findByRole(role);
             if (roleObject == null) {
                 roleObject = createNewRole(role);
-                roleObjectList.add(roleObject);
             }
+            roleObjectList.add(roleObject);
         }
 
         check.setRoles(roleObjectList);
@@ -57,7 +58,7 @@ public class UserAuthorityService  {
     public ArrayList<String> getRegisterUserErrors(Errors bindingResult) {
         ArrayList<String> res = new ArrayList<>();
 
-        bindingResult.getFieldErrors().forEach(error -> {
+        bindingResult.getAllErrors().forEach(error -> {
             res.add(error.getDefaultMessage());
         });
 

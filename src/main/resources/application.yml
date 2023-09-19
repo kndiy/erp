@@ -7,24 +7,13 @@ spring:
     jpa:
         hibernate:
             ddl-auto: update
+        database:
+            platform: org.hibernate.dialect.MySQL5Dialect
         #show-sql: true
         #properties:
         #    hibernate:
         #       format_sql: true
 
-management:
-    endpoints:
-        web:
-            base-path: /management
-            exposure:
-                include: '*'
-                exclude:
-        health:
-            show-details: always
-
-info:
-    contact:
-        email: khiemnd9112@gmail.com
-        phone: 0084 979 388 201
-
-
+server:
+    port: 5000
+    forward-headers-strategy: NATIVE

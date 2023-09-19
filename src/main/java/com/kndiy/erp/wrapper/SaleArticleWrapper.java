@@ -2,21 +2,18 @@ package com.kndiy.erp.wrapper;
 
 import com.kndiy.erp.entities.salesCluster.SaleArticle;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class SaleArticleWrapper {
 
-    List<SaleArticle> articleList;
+    private List<SaleArticle> articleList;
 
-    public List<SaleArticle> getArticleList() {
-        return articleList;
-    }
-
-    public void setArticleList(List<SaleArticle> articleList) {
-        this.articleList = articleList;
-    }
 }

@@ -10,12 +10,24 @@
 </head>
 <body>
     <div class="everything-container">
-        <div th:insert="~{/fragments/header-footer :: header}"></div>
+        <div th:insert="~{fragments/header-footer :: header}"></div>
 
         <h3>Error Message</h3>
         <hr>
         <h4 th:text="${message}"></h4>
+        <hr>
+        <h3>Error</h3>
+        <hr>
+        <h4 th:text="${error}"></h4>
+        <hr>
+        <h3>Status</h3>
+        <hr>
+        <h4 th:text="${status}"></h4>
+        <hr>
+        <h3>Path</h3>
+        <hr>
+        <h4 th:text="${path}"></h4>
     </div>
-
+    <div class="footer" th:insert="~{fragments/header-footer :: footer}"></div>
 </body>
 </html>

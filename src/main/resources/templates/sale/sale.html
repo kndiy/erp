@@ -16,20 +16,20 @@
 
 </head>
 <body>
-    <div th:insert="~{/fragments/header-footer :: header}"></div>
-    <div th:insert="~{/fragments/sale-modals :: new-sale}"></div>
-    <div th:insert="~{/fragments/sale-modals :: edit-sale}"></div>
-    <div th:insert="~{/fragments/sale-modals :: delete-sale}"></div>
-    <div th:insert="~{/fragments/sale-article-modals :: new-article}"></div>
-    <div th:insert="~{/fragments/sale-article-modals :: edit-article}"></div>
-    <div th:insert="~{/fragments/sale-article-modals :: delete-article}"></div>
-    <div th:insert="~{/fragments/sale-container-modals :: new-container}"></div>
-    <div th:insert="~{/fragments/sale-container-modals :: edit-container}"></div>
-    <div th:insert="~{/fragments/sale-container-modals :: delete-container}"></div>
-    <div th:insert="~{/fragments/sale-lot-modals :: new-lot}"></div>
-    <div th:insert="~{/fragments/sale-lot-modals :: edit-lot}"></div>
-    <div th:insert="~{/fragments/sale-lot-modals :: delete-lot}"></div>
-    <div th:insert="~{/fragments/sale-inventory-out-modals :: delete-inventory-out}"></div>
+    <div th:insert="~{fragments/header-footer :: header}"></div>
+    <div th:insert="~{fragments/sale-modals :: new-sale}"></div>
+    <div th:insert="~{fragments/sale-modals :: edit-sale}"></div>
+    <div th:insert="~{fragments/sale-modals :: delete-sale}"></div>
+    <div th:insert="~{fragments/sale-article-modals :: new-article}"></div>
+    <div th:insert="~{fragments/sale-article-modals :: edit-article}"></div>
+    <div th:insert="~{fragments/sale-article-modals :: delete-article}"></div>
+    <div th:insert="~{fragments/sale-container-modals :: new-container}"></div>
+    <div th:insert="~{fragments/sale-container-modals :: edit-container}"></div>
+    <div th:insert="~{fragments/sale-container-modals :: delete-container}"></div>
+    <div th:insert="~{fragments/sale-lot-modals :: new-lot}"></div>
+    <div th:insert="~{fragments/sale-lot-modals :: edit-lot}"></div>
+    <div th:insert="~{fragments/sale-lot-modals :: delete-lot}"></div>
+    <div th:insert="~{fragments/sale-inventory-out-modals :: delete-inventory-out}"></div>
 
     <div class="everything-container">
         <div th:if="${results != null && !results.isEmpty()}">
@@ -400,7 +400,7 @@
         <span id="temp-id-container" style="display: none;"></span>
         <span id="temp-id-lot" style="display: none;"></span>
 
-        <div class="footer" th:insert="~{/fragments/header-footer :: footer}"></div>
+        <div class="footer" th:insert="~{fragments/header-footer :: footer}"></div>
 
     </div>
 

@@ -1,6 +1,5 @@
 package com.kndiy.erp.dto;
 
-import com.kndiy.erp.entities.salesCluster.Sale;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;

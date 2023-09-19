@@ -13,10 +13,11 @@
 </head>
 <body>
     <div class="everything-container">
-        <div th:insert="~{/fragments/header-footer :: header}"></div>
-        <div th:insert="~{/fragments/address-modals :: address-edit-modal}"></div>
-        <div th:insert="~{/fragments/address-modals :: address-new-modal}"></div>
-        <div th:insert="~{/fragments/address-modals :: delete-address-modal}"></div>
+        <div th:insert="~{fragments/header-footer :: header}"></div>
+
+        <div th:insert="~{fragments/address-modals :: address-edit-modal}"></div>
+        <div th:insert="~{fragments/address-modals :: address-new-modal}"></div>
+        <div th:insert="~{fragments/address-modals :: delete-address-modal}"></div>
 
         <div th:if="${result != null}">
             <h4 th:text="${result}"></h4>

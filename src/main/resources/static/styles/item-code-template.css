@@ -160,8 +160,11 @@ label {
     position: absolute;
     background: black;
     padding: 50px;
+
     top: 60px;
-    left: 20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
     grid-template-columns: 500px;
     grid-row-gap: 20px;
 
@@ -204,8 +207,11 @@ input.new-item-code-input[type="text"] {
 .grid-modal-delete {
     display: grid;
     position: fixed;
-    top: 200px;
-    left: 20%;
+
+    top: 60px;
+    left: 50%;
+    transform: translate(-50%, 0);
+
     grid-template-columns: 500px;
     background-color: black;
     padding: 50px;
@@ -242,8 +248,11 @@ input.square-modal-delete label[type="text"] {
     display: grid;
     background-color: black;
     position: fixed;
+
     top: 60px;
-    left: 20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
     grid-template-columns: 500px;
     grid-row-gap: 20px;
     padding: 50px;
@@ -253,6 +262,7 @@ input.square-modal-delete label[type="text"] {
     display: flex;
     align-items: center;
     flex-flow: wrap;
+    background-color: black;
 }
 
 .square-new-supplier hr {
@@ -268,13 +278,19 @@ input.square-modal-delete label[type="text"] {
     grid-column-gap: 10px;
 
     position: fixed;
-    left: 20%;
+
     top: 60px;
+    left: 50%;
+    transform: translate(-50%, 0);
 
     background-color: black;
     padding: 50px;
 
     grid-template-columns: 300px 300px;
+}
+
+.square-new-sell-price {
+    background-color: black;
 }
 
 .square-new-sell-price input[type="date"] {

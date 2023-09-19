@@ -2,7 +2,7 @@
 .grid-company {
     display: grid;
     grid-template-columns: 60px 600px 200px 60px;
-    width: 960px;
+    width: 1fr;
     grid-auto-rows: 50px;
     grid-column-gap: 1px;
     grid-row-gap: 1px;
@@ -59,8 +59,11 @@
 .grid-modal-company {
     display: grid;
     position: fixed;
+
     top: 60px;
-    left: 20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
     padding: 50px;
     background-color: black;
     grid-template-columns: 400px 400px;
@@ -89,8 +92,11 @@
 .grid-modal-delete {
     display: grid;
     position: fixed;
-    top: 200px;
-    left: 20%;
+
+    top: 60px;
+    left: 50%;
+    transform: translate(-50%, 0);
+
     grid-template-columns: 500px;
     background-color: black;
     padding: 50px;

@@ -7,116 +7,84 @@
     <link th:href="@{/styles/template.css}" rel="stylesheet"/>
     <link th:href="@{/styles/welcome-login.css}" rel="stylesheet"/>
 
-    <script type="text/javascript">
-
-        function openAdminPrompt() {
-            var modalAdmin = document.getElementById("modal-admin");
-            modalAdmin.style.display = "block";
-        }
-
-        function checkAdminPassword(adminPass) {
-            var modalAdmin = document.getElementById("modal-admin");
-            var modalRegister = document.getElementById("modal-register");
-
-            var pass = document.getElementById("input-admin").value;
-
-            if (pass == adminPass) {
-                modalAdmin.style.display = "none";
-                modalRegister.style.display = "block";
-            }
-            else {
-                modalAdmin.style.display = "none";
-            }
-        }
-
-        window.addEventListener("click", function(event) {
-            var modalAdmin = document.getElementById("modal-admin");
-            var modalRegister = document.getElementById("modal-register");
-
-            if (event.target == modalRegister) {
-                modalRegister.style.display = "none";
-            }
-
-            if (event.target == modalAdmin) {
-                modalAdmin.style.display = "none";
-            }
-        });
-
-        document.addEventListener("keydown", function(event) {
-            var modalAdmin = document.getElementById("modal-admin");
-            var modalRegister = document.getElementById("modal-register");
-
-            if (event.keyCode == 27) {
-                modalRegister.style.display = "none";
-                modalAdmin.style.display = "none";
-            }
-        });
-
-        function pressToClose() {
-            var modalAdmin = document.getElementById("modal-admin");
-            var modalRegister = document.getElementById("modal-register");
-
-            modalRegister.style.display = "none";
-            modalAdmin.style.display = "none";
-        }
-    </script>
+    <script type="text/javascript" th:src="@{/scripts/log-in-scripts.js}"></script>
 
 </head>
 <body>
 
-    <div th:if="${param.error}">
-        Invalid Username and Password!
-    </div>
+    <div class="everything-container">
 
-    <div th:if="${param.logout}">
-        You have been logged out.
-    </div>
+        <div th:insert="~{fragments/welcome_login-modals :: modal-login-register-user}"></div>
+        <div th:insert="~{fragments/welcome_login-modals :: modal-admin-prompt}"></div>
 
-    <div th:if="${registerResult != null}">
-        <h3 th:text="${registerResult}"></h3>
-    </div>
-
-    <div th:if="${registerErrors != null && !registerErrors.isEmpty()}">
-        <h3>There are some Errors</h3>
-        <ul th:each="error : ${registerErrors}">
-            <li th:text="${error}"></li>
-        </ul>
-    </div>
-
-    <h2>You are visiting Daesan Vina Company Limited ERP Web Application</h2>
-
-    <div class="grid-login-prompt">
-        <div class="square-login-prompt">
-            <h3>Please Login to Proceed</h3>
+        <div th:if="${param.error}">
+            Invalid Username and Password!
         </div>
-        <div class="square-login-prompt">
-            <button class="button openModal" onclick="openAdminPrompt()">Open Register Form</button>
+
+        <hr>
+
+        <div th:if="${param.logout}">
+            You have been logged out.
+        </div>
+
+        <hr>
+
+        <div th:if="${registerResult != null}">
+            <h3 th:text="${registerResult}"></h3>
+        </div>
+
+        <hr>
+
+        <div th:if="${registerErrors != null && !registerErrors.isEmpty()}">
+            <h3>There are some Errors</h3>
+            <ul th:each="error : ${registerErrors}">
+                <li th:text="${error}"></li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <div class="ultra-grid-log-in">
+
+            <h2>You are visiting KhiemNguyen's ERP Web Application</h2>
+
+            <hr>
+
+            <div class="grid-login-prompt">
+                <div class="square-login-prompt">
+                    <h3>Please Log in to Proceed</h3>
+                </div>
+                <div class="square-login-prompt">
+                    <button class="button openModal" onclick="openAdminPrompt()">Open Register Form</button>
+                </div>
+            </div>
+
+            <hr>
+
+            <form class="login-form" th:action="@{/login/login}" method="post">
+                <div class="grid">
+                    <div class="square">
+                        <label class="input-label">User Name: </label>
+                    </div>
+                    <div class="square">
+                        <input class="input-text" type="text" name="username" autofocus placeholder="Enter Username" required autocomplete="off"/>
+                    </div>
+                    <div class="square">
+                        <label class="input-label">Password: </label>
+                    </div>
+                    <div>
+                        <input class="input-text" type="password" minlength="8" name="password" placeholder="Enter Password" required autocomplete="off"/>
+                    </div>
+                    <div class="square"></div>
+                    <div class="square">
+                        <input class="input-button" type="submit" value="Sign In"/>
+                    </div>
+
+                </div>
+            </form>
         </div>
     </div>
 
-    <div th:insert="~{/fragments/welcome_login-modals :: modal-login-register-user}"></div>
-    <div th:insert="~{/fragments/welcome_login-modals :: modal-admin-prompt}"></div>
-
-    <form class="login-form" th:action="@{/home/login}" method="post">
-        <div class="grid">
-            <div class="square">
-                <label class="input-label">User Name: </label>
-            </div>
-            <div class="square">
-                <input class="input-text" type="text" name="username" autofocus placeholder="Enter Username" required autocomplete="off"/>
-            </div>
-            <div class="square">
-                <label class="input-label">Password: </label>
-            </div>
-            <div>
-                <input class="input-text" type="password" minlength="8" name="password" placeholder="Enter Password" required autocomplete="off"/>
-            </div>
-            <div class="square"></div>
-            <div class="square">
-                <input class="input-button" type="submit" value="Sign In"/>
-            </div>
-
-        </div>
-    </form>
+    <div th:insert="~{fragments/header-footer :: footer}" class="footer"></div>
 </body>
 </html>

@@ -48,8 +48,11 @@
     grid-row-gap: 10px;
 
     position: fixed;
+
     top: 60px;
-    left: 20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
     padding: 50px;
     background-color: black;
 }
@@ -78,8 +81,11 @@ label {
 .grid-delete-contact {
     display: grid;
     position: fixed;
-    top: 200px;
-    left: 20%;
+
+    top: 60px;
+    left: 50%;
+    transform: translate(-50%, 0);
+
     grid-template-columns: 500px;
     background-color: black;
     padding: 50px;

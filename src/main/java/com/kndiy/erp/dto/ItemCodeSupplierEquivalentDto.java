@@ -3,10 +3,14 @@ package com.kndiy.erp.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class ItemCodeSupplierEquivalentDto {
 
     private Integer idItemCode;
@@ -20,59 +24,4 @@ public class ItemCodeSupplierEquivalentDto {
     @Pattern(regexp = "^?[0-9]*[.]?[0-9]+$", message = "Please enter a valid Floating point Equivalent!")
     private String equivalent;
 
-    public String getSourceUnit() {
-        return sourceUnit;
-    }
-
-    public void setSourceUnit(String sourceUnit) {
-        this.sourceUnit = sourceUnit;
-    }
-
-    public String getEquivalentUnit() {
-        return equivalentUnit;
-    }
-
-    public void setEquivalentUnit(String equivalentUnit) {
-        this.equivalentUnit = equivalentUnit;
-    }
-
-    public String getEquivalent() {
-        return equivalent;
-    }
-
-    public void setEquivalent(String equivalent) {
-        this.equivalent = equivalent;
-    }
-
-    public Integer getIdItemCode() {
-        return idItemCode;
-    }
-
-    public void setIdItemCode(Integer idItemCode) {
-        this.idItemCode = idItemCode;
-    }
-
-    public Integer getIdSupplier() {
-        return idSupplier;
-    }
-
-    public void setIdSupplier(Integer idSupplier) {
-        this.idSupplier = idSupplier;
-    }
-
-    public String getIdItemCodeSupplier() {
-        return idItemCodeSupplier;
-    }
-
-    public void setIdItemCodeSupplier(String idItemCodeSupplier) {
-        this.idItemCodeSupplier = idItemCodeSupplier;
-    }
-
-    public Integer getIdItemCodeSupplierEquivalent() {
-        return idItemCodeSupplierEquivalent;
-    }
-
-    public void setIdItemCodeSupplierEquivalent(Integer idItemCodeSupplierEquivalent) {
-        this.idItemCodeSupplierEquivalent = idItemCodeSupplierEquivalent;
-    }
 }

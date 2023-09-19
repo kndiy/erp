@@ -16,19 +16,19 @@
 
     <div class="everything-container">
 
-        <div th:insert="~{/fragments/header-footer :: header}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: new-item-code-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: delete-item-code-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: delete-item-type-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: delete-item-category-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: new-supplier-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: new-sell-price-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: delete-sell-price-contract-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: edit-item-code-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: edit-supplier-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: delete-supplier-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: edit-sell-price-modal}"></div>
-        <div th:insert="~{/fragments/item-code-modals :: remove-linked-contract-modal}"></div>
+        <div th:insert="~{fragments/header-footer :: header}"></div>
+        <div th:insert="~{fragments/item-code-modals :: new-item-code-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: delete-item-code-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: delete-item-type-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: delete-item-category-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: new-supplier-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: new-sell-price-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: delete-sell-price-contract-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: edit-item-code-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: edit-supplier-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: delete-supplier-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: edit-sell-price-modal}"></div>
+        <div th:insert="~{fragments/item-code-modals :: remove-linked-contract-modal}"></div>
 
 
 
@@ -57,30 +57,30 @@
 
         <div class="page-heading">
             <div class="grid-function-button">
-                <div class="black-square-flex square-function-button">
+                <div class="bg-square-flex square-function-button">
                     <h2>Item Code Section:</h2>
                 </div>
-                <div class="black-square-flex square-function-button">
+                <div class="bg-square-flex square-function-button">
                     <button onclick="openNewItemCodeModal()">
                         New Item Code
                     </button>
                 </div>
-                <div class="black-square-flex square-function-button">
+                <div class="bg-square-flex square-function-button">
                     <button onclick="openDeleteItemCodeModal()">
                         Delete Item Code
                     </button>
                 </div>
-                <div class="black-square-flex square-function-button">
+                <div class="bg-square-flex square-function-button">
                     <button onclick="openDeleteItemTypeModal()">
                         Delete Item Type
                     </button>
                 </div>
-                <div class="black-square-flex square-function-button">
+                <div class="bg-square-flex square-function-button">
                     <button onclick="openDeleteItemCategoryModal()">
                         Delete Item Category
                     </button>
                 </div>
-                <div class="black-square-flex square-function-button">
+                <div class="bg-square-flex square-function-button">
                     <button onclick="openDeleteSellPriceContractModal()">
                         Delete Sales Contract
                     </button>
@@ -232,7 +232,7 @@
                     <div class="square-flex price-square header-square">
                         <span>SALES CONTRACTS</span>
                     </div>
-                    <div class="square black-square-flex price-square"></div>
+                    <div class="square bg-square-flex price-square"></div>
                     <div class="square square-flex price-square header-square">
                         <span>FROM DATE</span>
                     </div>
@@ -296,7 +296,7 @@
         </div>
     </div>
 
-    <div class="footer" th:insert="~{/fragments/header-footer :: footer}"></div>
+    <div class="footer" th:insert="~{fragments/header-footer :: footer}"></div>
 
 </body>
 </html>

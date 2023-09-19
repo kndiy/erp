@@ -1,27 +1,15 @@
 package com.kndiy.erp.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class CompanyInfoDto {
     private String nameEn;
     private String hqAddress;
-
-    public String getNameEn() {
-        return nameEn;
-    }
-
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
-    }
-
-    public String getHqAddress() {
-        return hqAddress;
-    }
-
-    public void setHqAddress(String hqAddress) {
-        this.hqAddress = hqAddress;
-    }
 }

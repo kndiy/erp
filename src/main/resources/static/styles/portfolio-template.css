@@ -125,6 +125,7 @@ img {
 
 .center {
     justify-content: center;
+    align-items: center;
 }
 
 .vertical-text {
@@ -209,5 +210,23 @@ img {
 .logo-anchor:hover {
     color: #FFA933;
     box-shadow: 0px 0px 5px 5px #FFA933;
+}
+
+.reminder-grid {
+    display: grid;
+    grid-template-columns: 600px;
+    padding: 50px;
+    background-color: black;
+
+    top: 200px;
+    transform: translate(-50%, 0);
+    left: 50%;
+
+    position: absolute;
+}
+
+.reminder-square h1, .reminder-square h3 {
+    margin: 0;
+    margin-top: 10px;
 }
 

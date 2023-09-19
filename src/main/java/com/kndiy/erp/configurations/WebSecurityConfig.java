@@ -26,16 +26,18 @@ public class WebSecurityConfig {
 
         http
                 .csrf().disable()
+                .anonymous()
+                .and()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/", "/login", "/resume", "/files/**", "/styles/**", "/fonts/**", "/scripts/**", "/images/**", "/register").permitAll()
-                                .anyRequest().hasAuthority("ROLE_ADMIN") //has to manually set this up to let users with ROLE_ADMIN access the application after logging in
+                        authorize
+                                .requestMatchers("/", "/login-page", "/resume", "/files/**", "/styles/**", "/fonts/**", "/scripts/**", "/images/**", "/register").permitAll()
+                                .anyRequest().hasAnyAuthority("ROLE_ADMIN", "ROLE_USER") //has to manually set this up to let users with ROLE_ADMIN access the application after logging in
                 )
                 .formLogin(
                         form -> form
-                                .loginPage("/home")
-                                .loginProcessingUrl("/home/login")
-                                .defaultSuccessUrl("/home", true)
-                                .permitAll()
+                                .loginPage("/login-page").permitAll()
+                                .loginProcessingUrl("/login/login").permitAll()
+                                .defaultSuccessUrl("/welcome", true).permitAll()
                 )
                 .logout(
                         logout -> logout

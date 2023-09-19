@@ -14,10 +14,10 @@
 <body>
 
     <div  class="everything-container">
-        <div th:insert="~{/fragments/header-footer :: header}"></div>
-        <div th:insert="~{/fragments/company-modals :: modal-company-create-new}"></div>
-        <div th:insert="~{/fragments/company-modals :: modal-company-edit}"></div>
-        <div th:insert="~{/fragments/company-modals :: modal-company-delete}"></div>
+        <div th:insert="~{fragments/header-footer :: header}"></div>
+        <div th:insert="~{fragments/company-modals :: modal-company-create-new}"></div>
+        <div th:insert="~{fragments/company-modals :: modal-company-edit}"></div>
+        <div th:insert="~{fragments/company-modals :: modal-company-delete}"></div>
 
         <div th:if="${modifiedCompany != null}">
             <h3>Successfully Created Company: <span th:text="${modifiedCompany.nameEn}"></span></h3>
@@ -59,62 +59,63 @@
         </div>
 
         <hr>
-
-        <div class="grid-company" id="grid-company">
-            <div class="square-company">
-                <span class="table-heading">Chi Tiết</span>
-            </div>
-            <div class="square-company">
-                <span class="table-heading">TÊN CÔNG TY</span>
-            </div>
-            <div class="square-company">
-                <span class="table-heading">Loại/ lĩnh vực</span>
-            </div>
-            <div class="square-company">
-                <span class="table-heading">KH</span>
+        <div class="ultra-square">
+            <div class="grid-company" id="grid-company">
+                <div class="square-company">
+                    <span class="table-heading">Chi Tiết</span>
+                </div>
+                <div class="square-company">
+                    <span class="table-heading">TÊN CÔNG TY</span>
+                </div>
+                <div class="square-company">
+                    <span class="table-heading">Loại/ lĩnh vực</span>
+                </div>
+                <div class="square-company">
+                    <span class="table-heading">KH</span>
+                </div>
             </div>
         </div>
 
         <hr>
-
-        <div class="grid-company" th:each="company : ${companies}">
-            <div class="square-company">
-                <form th:action="@{/companies/__${company.idCompany}__/addresses}" id="idCompany" method="get">
-                    <input class="input-company-id" type="submit" th:value="${company.idCompany}"/>
-                </form>
-            </div>
-            <div class="square-company">
-                <span class="table-row" th:text="${company.nameEn}">nameEn</span>
-            </div>
-            <div class="square-company">
-                <span class="table-row" th:text="${company.companyType}">companyType</span>
-            </div>
-            <div class="square-company">
-                <span class="table-row" th:text="${company.abbreviation}">abbreviation</span>
-            </div>
-            <div class="square-company">
-                <button class="input input-company-id"
-                        th:data-idCompany="${company.idCompany}"
-                        th:data-nameEn="${company.nameEn}"
-                        th:data-nameVn="${company.nameVn}"
-                        th:data-companyType="${company.companyType}"
-                        th:data-industry="${company.companyIndustry}"
-                        th:data-abbreviation="${company.abbreviation}"
-                        onclick="openEditModal(this.getAttribute('data-idCompany'),
-                                                this.getAttribute('data-nameEn'),
-                                                this.getAttribute('data-nameVn'),
-                                                this.getAttribute('data-companyType'),
-                                                this.getAttribute('data-industry'),
-                                                this.getAttribute('data-abbreviation'))">Edit</button>
-            </div>
-            <div class="square-company">
-                <span class="table-row" th:text="${company.nameVn}">nameVn</span>
-            </div>
-            <div class="square-company">
-                <span class="table-row" th:text="${company.companyIndustry}">industry</span>
+        <div class="ultra-square">
+            <div class="grid-company" th:each="company : ${companies}">
+                <div class="square-company">
+                    <form th:action="@{/companies/__${company.idCompany}__/addresses}" id="idCompany" method="get">
+                        <input class="input-company-id" type="submit" th:value="${company.idCompany}"/>
+                    </form>
+                </div>
+                <div class="square-company">
+                    <span class="table-row" th:text="${company.nameEn}">nameEn</span>
+                </div>
+                <div class="square-company">
+                    <span class="table-row" th:text="${company.companyType}">companyType</span>
+                </div>
+                <div class="square-company">
+                    <span class="table-row" th:text="${company.abbreviation}">abbreviation</span>
+                </div>
+                <div class="square-company">
+                    <button class="input input-company-id"
+                            th:data-idCompany="${company.idCompany}"
+                            th:data-nameEn="${company.nameEn}"
+                            th:data-nameVn="${company.nameVn}"
+                            th:data-companyType="${company.companyType}"
+                            th:data-industry="${company.companyIndustry}"
+                            th:data-abbreviation="${company.abbreviation}"
+                            onclick="openEditModal(this.getAttribute('data-idCompany'),
+                                                    this.getAttribute('data-nameEn'),
+                                                    this.getAttribute('data-nameVn'),
+                                                    this.getAttribute('data-companyType'),
+                                                    this.getAttribute('data-industry'),
+                                                    this.getAttribute('data-abbreviation'))">Edit</button>
+                </div>
+                <div class="square-company">
+                    <span class="table-row" th:text="${company.nameVn}">nameVn</span>
+                </div>
+                <div class="square-company">
+                    <span class="table-row" th:text="${company.companyIndustry}">industry</span>
+                </div>
             </div>
         </div>
-
         <hr>
 
     </div>

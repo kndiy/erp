@@ -77,15 +77,21 @@
 .grid-new-inventory-in {
     display: grid;
     grid-template-columns: 260px 260px;
-    background-color: rgb(10,25,47);
+    background-color: black;
     position: fixed;
+
     top: 60px;
-    left: 20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
     grid-column-gap: 20px;
     grid-row-gap: 20px;
     padding: 50px;
 }
 
+.square-new-inventory-in {
+    background-color: black;
+}
 
 
 .black-square-flex select {
@@ -141,8 +147,11 @@
     display: grid;
     grid-template-columns: 500px;
     position: absolute;
+
     top: 60px;
-    left: 20%;
-    background-color: rgb(10,25,47);
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    background-color: black;
     padding: 50px;
 }

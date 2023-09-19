@@ -1,6 +1,5 @@
 package com.kndiy.erp.dto.deliveryDto;
 
-import com.kndiy.erp.wrapper.deliveryWrapper.SaleDeliveryDtoWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

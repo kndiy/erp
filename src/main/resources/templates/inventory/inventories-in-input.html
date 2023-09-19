@@ -14,8 +14,8 @@
 <body>
 
     <div class="everything-container">
-        <div th:insert="~{/fragments/header-footer :: header}"></div>
-        <div th:insert="~{/fragments/inventory-in-input-modals :: new-article-number}"></div>
+        <div th:insert="~{fragments/header-footer :: header}"></div>
+        <div th:insert="~{fragments/inventory-in-input-modals :: new-article-number}"></div>
 
         <div th:if="${results != null && !results.isEmpty()}">
             <div th:each="result : ${results}">
@@ -146,7 +146,7 @@
             </form>
         </div>
 
-        <div class="footer" th:insert="~{/fragments/header-footer :: footer}"></div>
+        <div class="footer" th:insert="~{fragments/header-footer :: footer}"></div>
     </div>
 
 </body>

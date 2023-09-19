@@ -6,7 +6,7 @@
 }
 
 .grid.header-grid {
-    margin-top: 20px;7
+    margin-top: 20px;
 }
 
 .equivalent-grid {
@@ -23,11 +23,6 @@
 }
 
 .new-equivalent-grid {
-
-}
-
-
-.new-equivalent-grid {
     display: grid;
     grid-template-columns: 500px;
     grid-row-gap: 20px;
@@ -36,8 +31,14 @@
     padding: 50px;
 
     position: absolute;
+
     top: 60px;
-    left: 20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.new-equivalent-square {
+    background-color: black;
 }
 
 .new-equivalent-square input[type='text'] {

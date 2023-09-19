@@ -13,10 +13,10 @@
 </head>
 <body>
     <div class="everything-container">
-        <div th:insert="~{/fragments/header-footer :: header}"></div>
-        <div th:insert="~{/fragments/inventory-in-modals :: new-inventory-in-modal}"></div>
-        <div th:insert="~{/fragments/inventory-in-modals :: edit-inventory-in-modal}"></div>
-        <div th:insert="~{/fragments/inventory-in-modals :: delete-inventory-in-modal}"></div>
+        <div th:insert="~{fragments/header-footer :: header}"></div>
+        <div th:insert="~{fragments/inventory-in-modals :: new-inventory-in-modal}"></div>
+        <div th:insert="~{fragments/inventory-in-modals :: edit-inventory-in-modal}"></div>
+        <div th:insert="~{fragments/inventory-in-modals :: delete-inventory-in-modal}"></div>
 
         <div th:if="${results != null && !results.isEmpty()}">
             <div th:each="result : ${results}">
@@ -41,13 +41,13 @@
 
         <div class="page-heading">
             <div class="grid-function-button">
-                <div class="black-square-flex square-function-button">
+                <div class="bg-square-flex square-function-button">
                     <h2>In-ventory Section:</h2>
                 </div>
-                <div class="black-square-flex square-function-button">
+                <div class="bg-square-flex square-function-button">
                     <button onclick="openNewInventoryInModal()">New In-ventory</button>
                 </div>
-                <div class="black-square-flex square-function-button">
+                <div class="bg-square-flex square-function-button">
                     <button onclick="openDeleteInventoryInModal()">Delete In-ventory</button>
                 </div>
             </div>
@@ -181,12 +181,7 @@
         <hr>
 
 
-        <div class="footer" th:insert="~{/fragments/header-footer :: footer}"></div>
+        <div class="footer" th:insert="~{fragments/header-footer :: footer}"></div>
     </div>
-
-    <script th:inline="javascript">
-        let inventoryMap = /*[[${foodMap}]]*/ {};
-    </script>
-
 </body>
 </html>

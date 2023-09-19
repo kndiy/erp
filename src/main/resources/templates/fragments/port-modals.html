@@ -9,11 +9,30 @@
     <div th:fragment="image-modal">
         <div class="modal image-modal" id="image-modal">
             <img class="image" th:src="@{/images/msaccess01.jpg}">
-            <h2 class="modal-heading">MS Access Application Image</h2>
             <span class="close-button" onclick="pressToClose()">&times;</span>
         </div>
     </div>
 
+    <div th:fragment="password-reminder">
+        <div class="modal password-reminder" id="password-reminder">
+            <div class="reminder-grid">
+                <div class="black-square-flex reminder-square">
+                    <h2 class="modal-heading">PASSWORD REMINDER</h2>
+                    <span class="close-button" onclick="pressToClose()">&times;</span>
+                </div>
+                <div class="black-square-flex reminder-square">
+                    <h3>Please Use below String to create your own account!</h3>
+                    <hr>
+                    <h1>852456!!!!</h1>
+                </div>
+                <div class="black-square-flex reminder-square">
+                    <form th:action="@{/home}" method="post">
+                        <input type="submit" value="To Deployment">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </body>

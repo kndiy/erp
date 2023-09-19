@@ -14,34 +14,74 @@
                 <img class="header-logo" th:src="@{/images/K_Logo.jpg}">
             </div>
             <div class="square-header">
-                <form th:action="@{/home}" id="goToHome" method="get">
+                <form th:action="@{/}" method="get">
+                    <input class="input-header" type="submit" value="My Pfl.">
+                </form>
+            </div>
+            <div class="square-header">
+                <form th:action="@{/welcome}" id="goToHome" method="get">
                     <input class="input-header" type="submit" value="Home">
                 </form>
             </div>
-            <div class="square-header">
-                <form th:action="@{/companies/}" id="goToCompany" method="get">
-                    <input class="input-header" type="submit" value="Company">
-                </form>
-            </div>
-            <div class="square-header">
-                <form th:action="@{/item-codes/}" id="goToItemCode" method="get">
-                    <input class="input-header" type="submit" value="Item Code">
-                </form>
-            </div>
-            <div class="square-header">
-                <form th:action="@{/inventories-in/}" id="goToInventory" method="get">
-                    <input class="input-header" type="submit" value="In-ventory">
-                </form>
-            </div>
-            <div class="square-header">
-                <form th:action="@{/sales/}" method="get">
-                    <input class="input-header" type="submit" value="Sales"/>
-                </form>
-            </div>
-            <div class="square-header">
-                <form th:action="@{/sales-reporting/}" method="get" id="header-sale-reporting-form">
-                    <input class="input-header" type="button" value="SalesRpt" onclick="openSalesReportingHeader()"/>
-                </form>
+            <div class="square-header-dropdown">
+                <input class="input-header" type="button" value="Menu">
+                <div class="header-dropdown-content-grid">
+                    <div class="header-dropdown-square">
+                        <span class="arrow-right"></span>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <form th:action="@{/companies/}" id="goToCompany" method="get">
+                            <input class="input-header" type="submit" value="Company">
+                        </form>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <h4 class="black-font">Entering Data related to Companies, Addresses and Contacts</h4>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <span class="arrow-right"></span>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <form th:action="@{/item-codes/}" id="goToItemCode" method="get">
+                            <input class="input-header" type="submit" value="Item Code">
+                        </form>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <h4 class="black-font">Inputting ItemCode entries and corresponding contracts</h4>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <span class="arrow-right"></span>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <form th:action="@{/inventories-in/}" id="goToInventory" method="get">
+                            <input class="input-header" type="submit" value="In-ventory">
+                        </form>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <h4 class="black-font">Managing Inventory Input transactions from Purchasing, Manufacturing, etc.</h4>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <span class="arrow-right"></span>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <form th:action="@{/sales/}" method="get">
+                            <input class="input-header" type="submit" value="Sales"/>
+                        </form>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <h4 class="black-font">Controlling Sales data, selecting inventory items from Inventory-In list, setting delivery destinations, etc.</h4>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <span class="arrow-right"></span>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <form th:action="@{/sales-reporting/}" method="get" id="header-sale-reporting-form">
+                            <input class="input-header" type="button" value="SalesRpt" onclick="openSalesReportingHeader()"/>
+                        </form>
+                    </div>
+                    <div class="header-dropdown-square">
+                        <h4 class="black-font">Reviewing delivery data from Sales operations, and printing corresponding notes</h4>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="header-logout">

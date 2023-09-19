@@ -21,3 +21,10 @@ function enlargeImage(imageTN) {
 
     modal.style.display = 'block';
 }
+
+function openPasswordReminder() {
+    let modal = document.getElementById('password-reminder');
+    addClosingAction(modal);
+
+    modal.style.display = 'block';
+}

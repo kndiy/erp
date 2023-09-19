@@ -24,8 +24,11 @@
 .grid-modal-register-user {
     display: grid;
     position: fixed;
-    top: 150px;
-    left: 150px;
+
+    top: 60px;
+    left: 50%;
+    transform: translate(-50%, 0);
+
     grid-template-column: 200px 200px;
     padding: 50px;
     background-color: black;
@@ -55,8 +58,9 @@
 
 .grid-admin {
     position: fixed;
-    top: 150px;
-    left: 200px;
+    top: 60px;
+    left: 50%;
+    transform: translate(-50%, 0);
     padding: 50px;
     background-color: black;
 }
@@ -97,7 +101,9 @@ input[type="file"] {
     background-color: #FF7333;
 }
 
-
-
+.ultra-grid-log-in {
+    width: 1fr;
+    max-width: 700px;
+}
 
 

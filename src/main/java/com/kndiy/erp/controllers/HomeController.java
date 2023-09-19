@@ -1,6 +1,6 @@
 package com.kndiy.erp.controllers;
 
-import com.kndiy.erp.dto.UserRoleDTO;
+import com.kndiy.erp.dto.UserRoleDto;
 import com.kndiy.erp.services.PortfolioService;
 import com.kndiy.erp.services.UserAuthorityService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,19 +32,31 @@ public class HomeController {
         return "home/port";
     }
 
+    @PostMapping("/home")
+    public String home(Principal principal) {
 
-    @GetMapping("/home")
-    public String welcome(Principal principal, Model model) {
-        model.addAttribute("userRoleDto", new UserRoleDTO());
+        return principal == null ? "redirect:/login-page" : "redirect:/welcome";
+    }
+
+    @GetMapping("/login-page")
+    public String loginPage(Model model) {
+
+        model.addAttribute("userRoleDto", new UserRoleDto());
         model.addAttribute("adminPass", "852456!!!!");
         model.addAttribute("allRoles", userAuthorityService.getAllRoles());
-        return  principal == null ? "home/login" : "home/welcome";   //logical name of a view,
+
+        return  "home/login";   //logical name of a view,
                             // spring will find a view named: "welcome.html" to response to the request at "/"
     }
 
+    @GetMapping("/welcome")
+    public String welcome() {
+
+        return "home/welcome";
+    }
 
     @PostMapping("/register")
-    public String registerNewUser(@Valid @ModelAttribute("userRoleDto") UserRoleDTO userRoleDto, Errors errors, RedirectAttributes redirectAttributes) {
+    public String registerNewUser(@Valid @ModelAttribute UserRoleDto userRoleDto, Errors errors, RedirectAttributes redirectAttributes) {
 
         if (!errors.hasErrors()) {
             String result = userAuthorityService.saveUser(userRoleDto);
@@ -55,7 +67,7 @@ public class HomeController {
             redirectAttributes.addFlashAttribute("registerErrors", registerErrors);
         }
 
-        return "redirect:/home";
+        return "redirect:/login-page";
     }
 
     @PostMapping("/resume")

@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="square square-modal-register-user">
-                        <input  type="text" th:field="*{username}" id="username" placeholder="Enter desired username" autocomplete="off" autofocus required/>
+                        <input type="text" th:field="*{username}" id="username" placeholder="Enter desired username" autocomplete="off" autofocus required/>
                     </div>
 
                     <div class="square square-modal-register-user">
@@ -32,8 +32,16 @@
                     </div>
                     <div class="square square-modal-register-user">
                         <input class="input-text" type="password" th:field="*{password}" id="password" placeholder="Enter desired password" autocomplete="off" required/>
+                        &nbsp&nbsp&nbsp
+                        <input class="checkbox" type="checkbox" onchange="showPassword(this)">
+                        <span>Hide/Un-hide</span>
                     </div>
-
+                    <div class="square square-modal-register-user">
+                        <label>Re-enter Your Password</label>
+                    </div>
+                    <div class="square square-modal-register-user">
+                        <input class="input-text" type="password" th:field="*{reEnterPassword}" id="re-password" placeholder="Re-enter your password" autocomplete="off" required/>
+                    </div>
                     <div class="square square-modal-register-user">
                         <label for="email">Email:</label>
                     </div>
@@ -49,7 +57,12 @@
                             <label class="label-user-role" th:text="${role}"></label>
                         </div>
                     </div>
-
+                    <div class="square square-modal-register-user">
+                        <label>Replace User?</label>
+                    </div>
+                    <div class="square square-modal-register-user">
+                        <input class="checkbox" type="checkbox" th:field="*{replaceUser}" id="replace-user"/>
+                    </div>
                     <div class="square square=modal-register-user"></div>
                     <div class="square square=modal-register-user">
                         <input type="submit" value="Register New User"/>
