@@ -43,7 +43,7 @@ public class PortfolioService {
     }
 
     private AmazonS3 getAmazonS3Client() {
-        AWSCredentials awsCredentials = new BasicAWSCredentials("AKIA3GCDGNP2LIYQFUS2", "qCxMpBv28y/AEllQ81wCuEuFR/lFEWEASjAq9XDt");
+        AWSCredentials awsCredentials = new BasicAWSCredentials("aaa","bbb");
 
         return AmazonS3ClientBuilder
                 .standard()
