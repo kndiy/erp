@@ -8,6 +8,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -19,8 +21,13 @@ import java.util.TreeMap;
 
 @Service
 @Slf4j
+@PropertySource(ignoreResourceNotFound = true, value = "classpath:application.yml")
 public class PortfolioService {
 
+    @Value("${ak}")
+    private String ak;
+    @Value("${sk}")
+    private String sk;
     public void serveResume(OutputStream outputStream) throws IOException {
 
         AmazonS3 amazonS3Client = getAmazonS3Client();
@@ -29,8 +36,6 @@ public class PortfolioService {
         String folderName = "cv/";
 
         TreeMap<String, String> s3ObjectKeysTreeMap = makeS3objectKeysTreeMap(amazonS3Client, bucketName, folderName);
-
-        System.out.println(s3ObjectKeysTreeMap);
 
         String key = s3ObjectKeysTreeMap.lastEntry().getValue();
         S3Object lastFile = amazonS3Client.getObject(new GetObjectRequest(bucketName, key));
@@ -43,7 +48,8 @@ public class PortfolioService {
     }
 
     private AmazonS3 getAmazonS3Client() {
-        AWSCredentials awsCredentials = new BasicAWSCredentials("aaa","bbb");
+
+        AWSCredentials awsCredentials = new BasicAWSCredentials(ak, sk);
 
         return AmazonS3ClientBuilder
                 .standard()
@@ -67,9 +73,7 @@ public class PortfolioService {
 
         for (S3ObjectSummary summary : summaryList) {
 
-            System.out.println(summary.getLastModified());
-
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddhhmmss");
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
             LocalDateTime localDateTime = summary.getLastModified().toInstant().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toLocalDateTime();
 
             String time = dtf.format(localDateTime);
