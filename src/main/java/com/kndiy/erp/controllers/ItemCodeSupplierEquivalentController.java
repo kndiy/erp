@@ -31,7 +31,10 @@ public class ItemCodeSupplierEquivalentController {
     @Autowired
     private ErrorHandlingService errorHandlingService;
 
-    @GetMapping("item-codes/item-code-supplier/{idItemCodeSupplier}/equivalents")
+    @GetMapping(value = {
+            "item-codes/item-code-supplier/{idItemCodeSupplier}/equivalents",
+            "item-codes/item-code-supplier/{idItemCodeSupplier}/equivalents/"
+    })
     public String showAllItemCodeSupplierEquivalent(Model model, @PathVariable(name = "idItemCodeSupplier") String idItemCodeSupplier) {
 
         List<String> results = (List<String>) model.asMap().get("results");

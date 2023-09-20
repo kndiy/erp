@@ -8,7 +8,6 @@ import com.kndiy.erp.repositories.CompanyRepository;
 import com.kndiy.erp.repositories.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,7 +24,7 @@ public class CompanyClusterService {
     private ContactRepository contactRepository;
 
     public TreeSet<Company> getAllCompanies() {
-        Comparator<Company> comp = Comparator.comparingInt(Company::getIdCompany);
+        Comparator<Company> comp = Comparator.comparing(Company::getNameEn);
         TreeSet<Company> companies = new TreeSet<>(comp);
 
         companies.addAll(companyRepository.findAll());
@@ -71,21 +70,15 @@ public class CompanyClusterService {
         return companyIndustries;
     }
 
-    public String getCompanyAbbreviationByID(Integer id) {
-        Company company = companyRepository.findById(id).orElse(null);
-
-        if (company == null) {
-            return "";
-        }
-
-        return company.getAbbreviation();
-    }
-
-    public TreeSet<Address> getAddressesByCompanyID(Integer id) {
-        Comparator<Address> comp = Comparator.comparingInt(Address::getIdAddress);
+    public TreeSet<Address> getAddressesByCompanyID(Integer idCompany) {
+        Comparator<Address> comp = Comparator.comparing(Address::getAddressType);
         TreeSet<Address> addresses = new TreeSet<>(comp);
 
-        addresses.addAll(addressRepository.findByCompanyId(id));
+        List<Address> addressList = addressRepository.findByCompanyId(idCompany);
+        if (addressList == null) {
+            addressList = new ArrayList<>();
+        }
+        addresses.addAll(addressList);
 
         return addresses;
     }
@@ -103,7 +96,7 @@ public class CompanyClusterService {
         return check;
     }
 
-    public String editCompany(Company company) {
+    public Company editCompany(List<String> results, Company company) {
         Company curEditing = companyRepository.findById(company.getIdCompany()).orElse(null);
 
         if (curEditing != null) {
@@ -115,26 +108,21 @@ public class CompanyClusterService {
             companyRepository.save(curEditing);
         }
         else {
-            return "No such existing Company!";
+            results.add("No such existing Company!");
+            return null;
         }
 
-        return "Successfully edited new Company named: " + curEditing.getNameEn();
+        results.add("Successfully edited new Company named: " + curEditing.getNameEn());
+        return curEditing;
     }
 
     public void deleteCompanyById(Integer idCompany) {
+
         companyRepository.deleteById(idCompany);
     }
 
-    public ArrayList<String> getModifiedCompanyErrors(Errors errors) {
-        ArrayList<String> res = new ArrayList<>();
-
-        errors.getFieldErrors().forEach(error -> res.add(error.getDefaultMessage()));
-
-        return res;
-    }
-
     public TreeSet<Contact> getContactsByAddressId(Integer id) {
-        Comparator<Contact> comp = Comparator.comparingInt(Contact::getIdContact);
+        Comparator<Contact> comp = Comparator.comparing(Contact::getContactName);
         TreeSet<Contact> res = new TreeSet<>(comp);
         res.addAll(contactRepository.findAllByAddressID(id));
         return res;
@@ -159,81 +147,71 @@ public class CompanyClusterService {
     public Address saveAddress(Address address) {
         return addressRepository.save(address);
     }
-    public String editAddress(Address address) {
+    public Address editAddress(List<String> results, Address address) {
         Address editingAddress = addressRepository.findById(address.getIdAddress()).orElse(null);
 
-        if (editingAddress != null) {
-            editingAddress.setAddressName(address.getAddressName());
-            editingAddress.setTaxCode(address.getTaxCode());
-            editingAddress.setAddressType(address.getAddressType());
-            editingAddress.setAddressVn(address.getAddressVn());
-            editingAddress.setAddressEn(address.getAddressEn());
-            editingAddress.setDistance(address.getDistance());
-            editingAddress.setRepresentative(address.getRepresentative());
-            editingAddress.setOutsideCity(address.getOutsideCity());
+        if (editingAddress == null) {
+            results.add("Could not find such existing Address");
+            return null;
+        }
 
-            saveAddress(editingAddress);
-        }
-        else {
-            return "Could not find such existing Address";
-        }
-        return "Successfully edited address named: " + editingAddress.getAddressName();
+        editingAddress.setAddressName(address.getAddressName());
+        editingAddress.setTaxCode(address.getTaxCode());
+        editingAddress.setAddressType(address.getAddressType());
+        editingAddress.setAddressVn(address.getAddressVn());
+        editingAddress.setAddressEn(address.getAddressEn());
+        editingAddress.setDistance(address.getDistance());
+        editingAddress.setRepresentative(address.getRepresentative());
+        editingAddress.setOutsideCity(address.getOutsideCity());
+        editingAddress = addressRepository.save(editingAddress);
+        results.add("Successfully edited address named: " + editingAddress.getAddressName());
+
+        return editingAddress;
     }
 
-    public String addNewAddress(Address address, Integer idCompany) {
+    public Address addNewAddress(List<String> results, Address address, Integer idCompany) {
+
         Address checkExistingAddress = addressRepository.findByAddressName(address.getAddressName());
         if (checkExistingAddress != null) {
-            return "Address already exists at ID " + checkExistingAddress.getIdAddress();
+            results.add("Address already exists at ID " + checkExistingAddress.getIdAddress());
+            return checkExistingAddress;
         }
-        else {
-            address.setCompany(companyRepository.findCompanyByCompanyId(idCompany));
-            address = saveAddress(address);
-        }
-        return "Successfully created new Address named: " + address.getAddressName() + ", at ID: " + address.getIdAddress();
+
+        address.setCompany(companyRepository.findCompanyByCompanyId(idCompany));
+        address = saveAddress(address);
+
+        results.add("Successfully created new Address named: " + address.getAddressName() + ", at ID: " + address.getIdAddress());
+        return address;
     }
 
-    public ArrayList<String> getModifiedAddressErrors(Errors errors) {
-        ArrayList<String> res = new ArrayList<>();
-
-        errors.getFieldErrors().forEach(error -> res.add(error.getDefaultMessage()));
-
-        return res;
-    }
-
-    public String deleteAddressById(Integer id) {
-        Address address = addressRepository.findById(id).orElse(null);
+    public boolean deleteAddressById(List<String> results, Integer idAddress) {
+        Address address = addressRepository.findById(idAddress).orElse(null);
 
         if (address != null) {
-            addressRepository.deleteById(id);
+            addressRepository.deleteById(idAddress);
         }
         else {
-            return "No such existing Address!";
+            results.add("No such existing Address!");
+            return false;
         }
-        return "Successfully deleted Address named: " + address.getAddressName();
+        results.add("Successfully deleted Address named: " + address.getAddressName());
+        return true;
     }
 
-    public ArrayList<String> getModifiedContactErrors(Errors errors) {
-        ArrayList<String> res = new ArrayList<>();
-
-        errors.getFieldErrors().forEach(error -> res.add(error.getDefaultMessage()));
-
-        return res;
-    }
-    public String addNewContact(Contact contact, Integer idAddress) {
+    public Contact addNewContact(List<String> results, Contact contact, Integer idAddress) {
         Contact check = contactRepository.findByContactNameAndAddress(contact.getContactName(), idAddress);
 
         if (check == null) {
+            results.add("Successfully created Contact named: " + contact.getContactName());
             contact.setAddress(addressRepository.findByIdAddress(idAddress));
-            contactRepository.save(contact);
-        }
-        else {
-            return "Contact with name: " + contact.getContactName() + " already exists in Address: " + addressRepository.findByIdAddress(idAddress).getAddressName();
+            return contactRepository.save(contact);
         }
 
-        return "Successfully created Contact named: " + contact.getContactName();
+        results.add("Contact with name: " + contact.getContactName() + " already exists in Address: " + addressRepository.findByIdAddress(idAddress).getAddressName());
+        return check;
     }
 
-    public String editContact(Contact contact, Integer idAddress) {
+    public Contact editContact(List<String> results, Contact contact, Integer idAddress) {
         Contact check = contactRepository.findByContactNameAndAddress(contact.getContactName(), idAddress);
 
         if (check != null) {
@@ -243,26 +221,25 @@ public class CompanyClusterService {
             check.setPhone1(contact.getPhone1());
             check.setPhone2(contact.getPhone2());
             check.setBankAccount(contact.getBankAccount());
-
-            contactRepository.save(check);
+            results.add("Successfully edited contact named: " + contact.getContactName() + " of Address: " + addressRepository.findByIdAddress(idAddress).getAddressName());
+            return contactRepository.save(check);
         }
-        else {
-            return "No such existing Contact named: " + contact.getContactName();
-        }
-
-        return "Successfully edited contact named: " + contact.getContactName() + " of Address: " + addressRepository.findByIdAddress(idAddress).getAddressName();
+        results.add("No such existing Contact named: " + contact.getContactName());
+        return null;
     }
 
-    public String deleteContactById(Integer idContact) {
+    public boolean deleteContactById(List<String> results, Integer idContact) {
         Contact check = contactRepository.findById(idContact).orElse(null);
 
         if (check != null) {
             contactRepository.deleteById(idContact);
         }
         else {
-            return "No such existing Contact";
+            results.add("No such existing Contact");
+            return false;
         }
-        return "Successfully deleted Contact named: " + check.getContactName();
+        results.add("Successfully deleted Contact named: " + check.getContactName());
+        return true;
     }
 
     public List<Company> findCompaniesByCompanyType(String companyType) {
@@ -347,5 +324,13 @@ public class CompanyClusterService {
 
     public Contact findContactByIdContact(String idContact) {
         return contactRepository.findById(Integer.parseInt(idContact)).orElse(null);
+    }
+
+    public Company getCompanyById(Integer idCompany) {
+        return companyRepository.findCompanyByCompanyId(idCompany);
+    }
+
+    public Address getAddressById(Integer idAddress) {
+        return addressRepository.findByIdAddress(idAddress);
     }
 }

@@ -18,26 +18,12 @@
         <div th:insert="~{fragments/contact-modals :: new-contact-modal}"></div>
         <div th:insert="~{fragments/contact-modals :: edit-contact-modal}"></div>
         <div th:insert="~{fragments/contact-modals :: delete-contact-modal}"></div>
-
-        <div th:if="${result != null}">
-            <h4 th:text="${result}"></h4>
-        </div>
-
-        <hr>
-
-        <div th:if="${fieldErrors != null && !fieldErrors.isEmpty()}" >
-            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
-            <div th:each="error : ${fieldErrors}">
-                <ul>
-                    <li th:text="${error}"></li>
-                </ul>
-            </div>
-        </div>
+        <div th:insert="~{fragments/error-fragments :: error-message}"></div>
 
         <hr>
 
         <div class="page-heading">
-            <h2>Contacts of Address: <span th:text="${addressName}"></span>; from Company: <span th:text="${companyName}"></span></h2>
+            <h2>Contacts of Address: <span th:text="${address.addressName}"></span>; from Company: <span th:text="${company.nameEn}"></span></h2>
         </div>
 
         <hr>

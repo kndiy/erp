@@ -7,7 +7,7 @@
     <link th:href="@{/styles/inventory-in-template.css}" rel="stylesheet"/>
     <link th:href="@{/styles/template.css}" rel="stylesheet"/>
 
-    <script type="text/javascript" th:src="@{/scripts/inventory-in-scripts.js}"></script>
+    <script th:src="@{/scripts/inventory-in-scripts.js}" type="text/javascript"></script>
     <script th:src="@{/scripts/api/Generals.js}" type="text/javascript"></script>
 
 </head>
@@ -17,25 +17,7 @@
         <div th:insert="~{fragments/inventory-in-modals :: new-inventory-in-modal}"></div>
         <div th:insert="~{fragments/inventory-in-modals :: edit-inventory-in-modal}"></div>
         <div th:insert="~{fragments/inventory-in-modals :: delete-inventory-in-modal}"></div>
-
-        <div th:if="${results != null && !results.isEmpty()}">
-            <div th:each="result : ${results}">
-                <ul>
-                    <li th:text="${result}"></li>
-                </ul>
-            </div>
-        </div>
-
-        <hr>
-
-        <div th:if="${errors != null && !errors.isEmpty()}" >
-            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
-            <div th:each="error : ${errors}">
-                <ul>
-                    <li th:text="${error}"></li>
-                </ul>
-            </div>
-        </div>
+        <div th:insert="~{fragments/error-fragments :: error-message}"></div>
 
         <hr>
 

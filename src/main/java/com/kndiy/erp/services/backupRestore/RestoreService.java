@@ -185,7 +185,7 @@ public class RestoreService {
         address.setOutsideCity(fieldMap.get("outsideCity").getAsBoolean());
         address.setDistance(fieldMap.get("distance") == null ? null : fieldMap.get("distance").getAsFloat());
 
-        log.info(companyClusterService.addNewAddress(address, company.getIdCompany()));
+        companyClusterService.addNewAddress(results, address, company.getIdCompany());
     }
     private void persistingContact(JsonObject fieldMap) {
 
@@ -201,7 +201,7 @@ public class RestoreService {
         contact.setBankAccount(fieldMap.get("bankAccount").getAsString());
         contact.setPhone2((fieldMap.get("phone2").getAsString()));
 
-        log.info(companyClusterService.addNewContact(contact, address.getIdAddress()));
+        companyClusterService.addNewContact(results, contact, address.getIdAddress());
     }
 
     private void persistingItemCategory(JsonObject fieldMap) {

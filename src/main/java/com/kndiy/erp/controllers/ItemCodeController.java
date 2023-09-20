@@ -38,8 +38,10 @@ public class ItemCodeController {
     @Autowired
     private ErrorHandlingService errorHandlingService;
 
-    @GetMapping(value = {"/item-codes/",
-            "/item-codes"})
+    @GetMapping(value = {
+            "/item-codes/",
+            "/item-codes"
+    })
     public String showItemCodes(Model model) {
         
         model.addAttribute("itemCategories", itemCategoryService.findAllItemCategories());
@@ -55,10 +57,12 @@ public class ItemCodeController {
         model.addAttribute("itemSellPriceDto", new ItemSellPriceDto());
         model.addAttribute("itemCodeSupplierEquivalentDto", new ItemCodeSupplierEquivalentDto());
 
-
         return "item-code/item-codes";
     }
-    @GetMapping("/item-codes/idItemCategory={idItemCategory}")
+    @GetMapping(value = {
+            "/item-codes/idItemCategory={idItemCategory}",
+            "/item-codes/idItemCategory={idItemCategory}/",
+    })
     public String filterItemCodesByItemCategory(Model model, @PathVariable("idItemCategory") Integer idItemCategory) {
         model.addAttribute("itemCategories", itemCategoryService.findAllItemCategories());
         model.addAttribute("itemTypes", itemTypeService.findAllItemTypes());
@@ -75,7 +79,10 @@ public class ItemCodeController {
 
         return "item-code/item-codes";
     }
-    @GetMapping("/item-codes/idItemType={idItemType}")
+    @GetMapping(value = {
+            "/item-codes/idItemType={idItemType}",
+            "/item-codes/idItemType={idItemType}/"
+    })
     public String filterItemCodesByItemType(Model model, @PathVariable("idItemType") Integer idItemType) {
         model.addAttribute("itemCategories", itemCategoryService.findAllItemCategories());
         model.addAttribute("itemTypes", itemTypeService.findAllItemTypes());

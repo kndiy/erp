@@ -34,7 +34,10 @@ public class InventoryOutController {
     @Autowired
     private SaleLotService saleLotService;
 
-    @GetMapping("/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/lots/{idSaleLot}/inventories-out/")
+    @GetMapping(value = {
+            "/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/lots/{idSaleLot}/inventories-out/",
+            "/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/lots/{idSaleLot}/inventories-out"
+    })
     public String addNewInventoriesOutWindow(Model model,
                                              @PathVariable(name = "idSaleContainer") Integer idSaleContainer,
                                              @PathVariable(name = "idSaleArticle") Integer idSaleArticle,

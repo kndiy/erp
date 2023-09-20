@@ -7,7 +7,7 @@
     <div th:fragment="address-edit-modal">
         <div class="modal modal-edit" id="address-edit-modal">
 
-            <form th:action="@{addresses/edit}" method="post" th:object="${address}">
+            <form th:action="@{/companies/__${company.idCompany}__/addresses/edit}" method="post" th:object="${address}">
                 <div class="grid grid-address-edit">
                     <div class="square-delete-address">
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -71,7 +71,7 @@
     <div th:fragment="address-new-modal">
         <div class="modal modal-edit" id="address-new-modal">
 
-            <form th:action="@{addresses/new}" method="post" th:object="${address}">
+            <form th:action="@{/companies/__${company.idCompany}__/addresses/new}" method="post" th:object="${address}">
                 <div class="grid grid-address-edit">
                     <div class="square-delete-address">
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -136,7 +136,7 @@
 
         <div class="modal modal-delete" id="delete-address-modal">
 
-            <form th:action="@{addresses/delete}" th:object="${idAddress}" method="post">
+            <form th:action="@{/companies/__${company.idCompany}__/addresses/delete}" th:object="${idAddress}" method="post">
 
                 <div class="grid-delete-address">
 

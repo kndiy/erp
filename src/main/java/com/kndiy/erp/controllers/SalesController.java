@@ -59,13 +59,22 @@ public class SalesController {
 
     @GetMapping(value = {
             "/sales/",
+            "/sales",
             "/sales/{idSale}/",
+            "/sales/{idSale}",
             "/sales/{idSale}/articles/",
+            "/sales/{idSale}/articles",
             "/sales/{idSale}/articles/{idSaleArticle}/",
+            "/sales/{idSale}/articles/{idSaleArticle}",
             "/sales/{idSale}/articles/{idSaleArticle}/containers/",
+            "/sales/{idSale}/articles/{idSaleArticle}/containers",
             "/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/",
+            "/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}",
             "/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/lots/",
-            "/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/lots/{idSaleLot}/"})
+            "/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/lots",
+            "/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/lots/{idSaleLot}/",
+            "/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/lots/{idSaleLot}"
+    })
     public String showSalesData(Model model) {
 
         Set<Integer> idSaleSet = new HashSet<>();

@@ -13,6 +13,8 @@ spring:
         #properties:
         #    hibernate:
         #       format_sql: true
+    thymeleaf:
+        prefix: classpath:/templates/
 
 server:
     port: 5000

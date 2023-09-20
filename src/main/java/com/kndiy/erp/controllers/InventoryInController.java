@@ -34,7 +34,10 @@ public class InventoryInController {
     @Autowired
     private CompanyClusterService companyClusterService;
 
-    @GetMapping("/inventories-in/")
+    @GetMapping(value = {
+            "/inventories-in/",
+            "/inventories-in",
+    })
     public String showAllInventoriesIn(Model model) {
 
         Set<Integer> idInventoryInSet = new HashSet<>();
@@ -50,7 +53,10 @@ public class InventoryInController {
         return "inventory/inventories-in";
     }
 
-    @GetMapping("/inventories-in/idInventoryIn={idInventoryIn}/inventories-article-number={articleNumber}")
+    @GetMapping(value = {
+            "/inventories-in/idInventoryIn={idInventoryIn}/inventories-article-number={articleNumber}",
+            "/inventories-in/idInventoryIn={idInventoryIn}/inventories-article-number={articleNumber}/",
+    })
     public String showAddNewInventoriesWindow(Model model, @PathVariable(name = "idInventoryIn") Integer idInventoryIn, @PathVariable(name = "articleNumber") Integer articleNumber) {
 
         InventoryDtoWrapperDto inventoryDtoWrapperDto = (InventoryDtoWrapperDto) model.asMap().get("submittedWrapperDto");
@@ -97,7 +103,10 @@ public class InventoryInController {
         return "inventory/inventories-in-input";
     }
 
-    @GetMapping("/inventories-in/edit/idInventoryIn={idInventoryIn}/inventories-article-number={articleNumber}")
+    @GetMapping(value = {
+            "/inventories-in/edit/idInventoryIn={idInventoryIn}/inventories-article-number={articleNumber}",
+            "/inventories-in/edit/idInventoryIn={idInventoryIn}/inventories-article-number={articleNumber}/"
+    })
     public String showEditInventoriesWindow(Model model, @PathVariable(name = "idInventoryIn") Integer idInventoryIn, @PathVariable(name = "articleNumber") Integer articleNumber) {
 
         InventoryDtoWrapperDto inventoryDtoWrapperDto = inventoryService.getInventoryDtoWrapperDtoByIdInventoryIn(idInventoryIn);

@@ -31,7 +31,10 @@ public class SalesReportPrintingController {
     @Autowired
     private ErrorHandlingService errorHandlingService;
 
-    @GetMapping("/sales-reporting/{dateRestriction}/")
+    @GetMapping(value = {
+            "/sales-reporting/{dateRestriction}/",
+            "/sales-reporting/{dateRestriction}"
+    })
     public String showSalesReports(Model model, @PathVariable(name = "dateRestriction") String dateRestriction) {
 
         String[] dateArr = dateRestriction.replace("From_", "").split("_To_");

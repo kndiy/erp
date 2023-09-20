@@ -13,7 +13,7 @@
 
     <div th:fragment="new-contact-modal">
         <div class="modal new-contact-modal" id="new-contact-modal">
-            <form th:action="@{contacts/new}" method="post" th:object="${contact}">
+            <form th:action="@{/companies/__${company.idCompany}__/addresses/__${address.idAddress}__/contacts/new}" method="post" th:object="${contact}">
                 <div class="grid grid-new-contact">
                     <div class="square square-new-contact">
                         <h2 class="modal-heading">CREATING NEW CONTACT</h2>
@@ -63,7 +63,7 @@
 
     <div th:fragment="edit-contact-modal">
         <div class="modal edit-contact-modal" id="edit-contact-modal">
-            <form th:action="@{contacts/edit}" method="post" th:object="${contact}">
+            <form th:action="@{/companies/__${company.idCompany}__/addresses/__${address.idAddress}__/contacts/edit}" method="post" th:object="${contact}">
                 <div class="grid grid-new-contact">
                     <div class="square square-new-contact">
                         <h2 class="modal-heading">EDITING CONTACT</h2>
@@ -115,7 +115,7 @@
 
     <div th:fragment="delete-contact-modal">
         <div class="modal delete-contact-modal" id="delete-contact-modal">
-            <form th:action="@{contacts/delete}" th:object="${idContact}" method="post">
+            <form th:action="@{/companies/__${company.idCompany}__/addresses/__${address.idAddress}__/contacts/delete}" th:object="${idContact}" method="post">
                 <div class="grid-delete-contact">
                     <div class="contact">
                         <span class="close-button" onclick="pressToClose()">&times;</span>

@@ -32,13 +32,19 @@ public class HomeController {
         return "home/port";
     }
 
-    @PostMapping("/home")
+    @PostMapping(value = {
+            "/home",
+            "/home/"
+    })
     public String home(Principal principal) {
 
         return principal == null ? "redirect:/login-page" : "redirect:/welcome";
     }
 
-    @GetMapping("/login-page")
+    @GetMapping(value = {
+            "/login-page",
+            "/login-page/"
+    })
     public String loginPage(Model model) {
 
         model.addAttribute("userRoleDto", new UserRoleDto());
@@ -49,7 +55,10 @@ public class HomeController {
                             // spring will find a view named: "welcome.html" to response to the request at "/"
     }
 
-    @GetMapping("/welcome")
+    @GetMapping(value = {
+            "/welcome",
+            "/welcome/"
+    })
     public String welcome() {
 
         return "home/welcome";
