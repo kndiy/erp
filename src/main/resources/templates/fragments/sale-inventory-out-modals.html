@@ -9,7 +9,7 @@
     <div th:fragment="delete-inventory-out">
         <div class="modal delete-inventory-out-modal" id="delete-inventory-out-modal">
             <form th:action="@{inventories-out/delete}" method="post" th:object="${idInventoryOut}">
-                <div class="grid-delete">
+                <div class="modal-grid grid-delete">
                     <div class="black-square-flex square-delete">
                         <h2 class="modal-heading">DELETE INVENTORY OUT</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>

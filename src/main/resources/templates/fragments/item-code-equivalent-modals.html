@@ -16,7 +16,7 @@
     <div th:fragment="new-equivalent">
         <div class="modal new-equivalent-modal" id="new-equivalent-modal">
             <form th:action="@{equivalents/new}" th:object="${itemCodeSupplierEquivalentDto}" method="post">
-                <div class="new-equivalent-grid">
+                <div class="modal-grid new-equivalent-grid">
                     <div class="black-square-flex new-equivalent-square">
                         <h2 class="modal-heading">ADD NEW EQUIVALENT</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -110,7 +110,7 @@
     <div th:fragment="edit-equivalent">
         <div class="modal new-equivalent-modal" id="edit-equivalent-modal">
             <form th:action="@{equivalents/edit}" th:object="${itemCodeSupplierEquivalentDto}" method="post">
-                <div class="new-equivalent-grid">
+                <div class="modal-grid new-equivalent-grid">
                     <div class="black-square-flex new-equivalent-square">
                         <h2 class="modal-heading">ADD NEW EQUIVALENT</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>

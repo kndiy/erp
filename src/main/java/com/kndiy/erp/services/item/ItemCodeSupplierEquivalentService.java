@@ -87,8 +87,6 @@ public class ItemCodeSupplierEquivalentService {
 
         results.add("Successfully added new ItemCodeSupplierEquivalent");
 
-        log.info(results.toString());
-
         return results;
     }
 

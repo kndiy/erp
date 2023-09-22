@@ -12,7 +12,6 @@ import com.kndiy.erp.entities.inventoryCluster.InventoryOut;
 import com.kndiy.erp.entities.itemCodeCluster.ItemCodeSupplier;
 import com.kndiy.erp.entities.salesCluster.SaleArticle;
 import com.kndiy.erp.entities.salesCluster.SaleLot;
-import com.kndiy.erp.others.MismatchedUnitException;
 import com.kndiy.erp.others.Quantity;
 import com.kndiy.erp.services.item.ItemCodeSupplierEquivalentService;
 import com.kndiy.erp.services.item.ItemCodeSupplierService;
@@ -132,6 +131,7 @@ public class InventoryService {
         inventory.setInventoryIn(inventoryIn);
         inventory.setItemCode(itemCode);
         inventory.setStoredAtAddress(storedAt);
+        inventory.setPlacementInWarehouse(inventoryDto.getPlacementInWarehouse());
         inventory.setNumberInBatch(inventoryDto.getNumberInBatch());
         inventory.setInitQuantity(new Quantity(inventoryDto.getInitQuantity(), inventoryDto.getUnit()).toString());
         inventory.setRemainingQuantity(inventory.getInitQuantity());
@@ -275,6 +275,7 @@ public class InventoryService {
             inventory.setInventoryIn(inventoryIn);
             inventory.setItemCode(itemCode);
             inventory.setStoredAtAddress(storedAt);
+            inventory.setPlacementInWarehouse(inventoryDto.getPlacementInWarehouse());
             inventory.setNumberInBatch(inventoryDto.getNumberInBatch());
             inventory.setInitQuantity(new Quantity(inventoryDto.getInitQuantity(), inventoryDto.getUnit()).toString());
             inventory.setRemainingQuantity(inventory.getInitQuantity());
@@ -332,28 +333,25 @@ public class InventoryService {
         return results;
     }
 
-    public List<Inventory> findRemainingByIdSaleArticleAndIdSaleLot(List<String> results, Integer idSaleArticle, Integer idSaleLot) {
+    public List<Inventory> findRemainingByIdSaleLot(SaleLot saleLot) {
 
-        SaleArticle saleArticle = saleArticleService.findByIdSaleArticle(results, idSaleArticle);
-        if (saleArticle == null) {
-            return new ArrayList<>();
-        }
-        ItemCode itemCode = saleArticle.getItemCode();
-
-        SaleLot saleLot = saleLotService.findByIdSaleLot(results, idSaleLot);
-        if (saleLot == null) {
-            return new ArrayList<>();
-        }
+        ItemCode itemCode = saleLot.getSaleContainer().getSaleArticle().getItemCode();
         Company supplier = saleLot.getSupplier();
 
         return inventoryRepository.findRemainingByItemCodeAndSupplier(itemCode, supplier);
     }
 
-    public InventoryOutDtoWrapper mapInventoriesToInventoryOutDtoWrapper(List<String> results, Integer idSaleArticle, Integer idSaleLot) throws MismatchedUnitException {
+    public InventoryOutDtoWrapper mapInventoriesToInventoryOutDtoWrapper(List<String> results, Integer idSaleLot) {
 
         List<InventoryOutDto> inventoryOutDtoList = new ArrayList<>();
 
-        List<Inventory> inventoryList = findRemainingByIdSaleArticleAndIdSaleLot(results, idSaleArticle, idSaleLot);
+        SaleLot saleLot = saleLotService.findByIdSaleLot(results, idSaleLot);
+        if (saleLot == null) {
+            results.add("Could not find SaleLot with Id: " + idSaleLot);
+            return null;
+        }
+
+        List<Inventory> inventoryList = findRemainingByIdSaleLot(saleLot);
 
         for (int i = 0; i < inventoryList.size(); i ++) {
             Inventory inventory = inventoryList.get(i);
@@ -361,7 +359,6 @@ public class InventoryService {
             InventoryOutDto inventoryOutDto = mapInventoryToInventoryOutDto(inventory);
 
             ItemCode itemCode = inventory.getItemCode();
-            SaleLot saleLot = saleLotService.findByIdSaleLot(results, idSaleLot);
             Company supplier = saleLot.getSupplier();
             ItemCodeSupplier itemCodeSupplier = itemCodeSupplierService.findByItemCodeAndSupplier(results, itemCode, supplier);
 
@@ -370,8 +367,9 @@ public class InventoryService {
 
             String equivalentValue = itemCodeSupplierEquivalentService.findEquivalentValueByItemCodeSupplierAndUnits(results, itemCodeSupplier, inventoryUnit, saleUnit);
             if (equivalentValue.equals("1")) {
-                return new InventoryOutDtoWrapper(List.of(), idSaleLot);
+                return null;
             }
+
             inventoryOutDto.setEquivalentValue(equivalentValue);
             inventoryOutDto.setEquivalentUnit(saleUnit);
 
@@ -381,11 +379,11 @@ public class InventoryService {
 
             inventoryOutDtoList.add(inventoryOutDto);
         }
-
         return new InventoryOutDtoWrapper(inventoryOutDtoList, idSaleLot);
     }
 
     private InventoryOutDto mapInventoryToInventoryOutDto(Inventory inventory) {
+
         InventoryOutDto inventoryOutDto = new InventoryOutDto();
 
         inventoryOutDto.setIdInventory(inventory.getIdInventory());

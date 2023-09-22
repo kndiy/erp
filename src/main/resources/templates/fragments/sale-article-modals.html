@@ -149,7 +149,7 @@
     <div th:fragment="delete-article">
         <div class="modal delete-modal" id="delete-article-modal">
             <form th:action="@{delete}" th:object="${idSaleArticle}" method="post">
-                <div class="grid-delete">
+                <div class="modal-grid grid-delete">
                     <div class="black-square-flex square-delete">
                         <h2 class="modal-heading">DELETE SALE ARTICLE</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>

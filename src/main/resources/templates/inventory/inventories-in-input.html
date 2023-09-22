@@ -87,6 +87,7 @@
             </div>
 
             <hr>
+
             <form th:action="@{/inventories-in/new-inventories/new}" method="post" th:object="${inventoryDtoWrapperDto}" id="form-inventory">
                 <div class="grid-inventory-input" th:each="inventoryDTO, itemStat : *{inventoryDtoList}">
                     <div class="square-flex square-inventory-input">

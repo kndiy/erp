@@ -8,7 +8,7 @@
     <div th:fragment="new-item-code-modal">
         <div class="modal new-item-code-modal" id="new-item-code-modal">
             <form th:object="${itemCategoryTypeCodeDto}" th:action="@{/item-codes/new}" method="post">
-                <div class="grid-new-item-code">
+                <div class="modal-grid grid-new-item-code">
                     <div class="square-new-item-code">
                         <h2 class="modal-heading">ADDING NEW ITEM CODE</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -65,7 +65,7 @@
 
             <form th:action="@{/item-codes/delete}" th:object="${idItemCode}" method="post">
 
-                <div class="grid-modal-delete">
+                <div class="modal-grid grid-modal-delete">
                     <div class="square-modal-delete">
                         <h2 class="modal-heading">DELETING ITEM CODE</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -100,7 +100,7 @@
 
             <form th:action="@{/item-codes/delete-item-type}" th:object="${idItemType}" method="post">
 
-                <div class="grid-modal-delete">
+                <div class="modal-grid grid-modal-delete">
                     <div class="square-modal-delete">
                         <h2 class="modal-heading">DELETING ITEM TYPE</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -134,7 +134,7 @@
 
             <form th:action="@{/item-codes/delete-item-category}" th:object="${idItemCategory}" method="post">
 
-                <div class="grid-modal-delete">
+                <div class="modal-grid grid-modal-delete">
                     <div class="square-modal-delete">
                         <h2 class="modal-heading">DELETING ITEM CATEGORY</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -165,7 +165,7 @@
     <div th:fragment="new-supplier-modal">
         <div class="modal new-supplier-modal" id="new-supplier-modal">
             <form th:action="@{/item-codes/add-new-item-code-supplier}" th:object="${itemCodeSupplierDto}" method="post">
-                <div class="grid-new-supplier-modal">
+                <div class="modal-grid grid-new-supplier-modal">
                     <div class="square-new-supplier">
                         <h2 class="modal-heading">NEW ITEM CODE SUPPLIER</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -207,7 +207,7 @@
     <div th:fragment="new-sell-price-modal">
         <div class="modal new-sell-price-modal" id="new-sell-price-modal">
             <form th:action="@{/item-codes/add-new-item-sell-price}" th:object="${itemSellPriceDto}" method="post">
-                <div class="grid-new-sell-price">
+                <div class="modal-grid grid-new-sell-price">
                     <div class="black-square-flex square-new-sell-price">
                         <h2 class="modal-heading">NEW SALES CONTRACT</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -222,6 +222,7 @@
                         <label>Contract Name</label>
                         <hr>
                         <select th:field="*{itemSellPriceContract}" id="new-sell-price-select-contract" onchange="onchangeNewSellPriceSelectContract()">
+                            <option th:value="0"></option>
                             <option th:each="itemSellPrice : ${itemSellPrices}" th:text="${itemSellPrice.itemSellPriceContract + ' '
                             + itemSellPrice.itemSellPriceAmount + ' ' + itemSellPrice.itemSellPriceUnit}" th:value="${itemSellPrice.idItemSellPrice}"></option>
                             <option th:value="OTHER..." th:text="OTHER..."></option>
@@ -230,8 +231,7 @@
                                th:field="*{itemSellPriceContract}"
                                class="square-new-sell-price-hidden input-new-sell-price-contract"
                                style="display: none"
-                               id="new-sell-price-contract-input"
-                        >
+                               id="new-sell-price-contract-input">
                     </div>
                     <div class="black-square-flex square-new-sell-price square-new-sell-price-hidden" style="display: none">
                         <label>Please Select Customer</label>
@@ -263,7 +263,6 @@
                     <div class="black-square-flex square-new-sell-price">
                         <input type="submit" value="Link to Contract">
                     </div>
-
                 </div>
             </form>
         </div>
@@ -278,7 +277,7 @@
     <div th:fragment="delete-sell-price-contract-modal">
         <div class="modal delete-item-code-modal" id="delete-item-sell-price-contract-modal">
             <form th:action="@{/item-codes/delete-sell-price-contract}" th:object="${idItemSellPrice}" method="post">
-                <div class="grid-modal-delete">
+                <div class="modal-grid grid-modal-delete">
                     <div class="square-modal-delete">
                         <h2 class="modal-heading">DELETING SALE CONTRACT</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -310,7 +309,7 @@
     <div th:fragment="edit-item-code-modal">
         <div class="modal new-item-code-modal" id="edit-item-code-modal">
             <form th:object="${itemCategoryTypeCodeDto}" th:action="@{/item-codes/edit}" method="post">
-                <div class="grid-new-item-code">
+                <div class="modal-grid grid-new-item-code">
                     <div class="square-new-item-code">
                         <h2 class="modal-heading">ADDING NEW ITEM CODE</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -369,7 +368,7 @@
     <div th:fragment="edit-supplier-modal">
         <div class="modal new-supplier-modal" id="edit-supplier-modal">
             <form th:action="@{/item-codes/edit-item-code-supplier}" th:object="${itemCodeSupplierDto}" method="post">
-                <div class="grid-new-supplier-modal">
+                <div class="modal-grid grid-new-supplier-modal">
                     <div class="square-new-supplier">
                         <h2 class="modal-heading">EDIT ITEM CODE SUPPLIER</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -413,7 +412,7 @@
     <div th:fragment="delete-supplier-modal">
         <div class="modal delete-item-code-modal" id="delete-supplier-modal">
             <form th:action="@{/item-codes/delete-item-code-supplier}" method="post">
-                <div class="grid-modal-delete">
+                <div class="modal-grid grid-modal-delete">
                     <div class="square-modal-delete">
                         <h2 class="modal-heading">DELETING ITEM CODE SUPPLIER</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -450,7 +449,7 @@
     <div th:fragment="edit-sell-price-modal">
         <div class="modal new-sell-price-modal" id="edit-sell-price-modal">
             <form th:action="@{/item-codes/edit-sales-contract}" th:object="${itemSellPriceDto}" method="post">
-                <div class="grid-new-sell-price">
+                <div class="modal-grid grid-new-sell-price">
                     <div class="black-square-flex square-new-sell-price">
                         <h2 class="modal-heading">EDIT SALES CONTRACT</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -515,7 +514,7 @@
 
             <form th:action="@{/item-codes/remove-linked-contract}" method="post">
 
-                <div class="grid-modal-delete">
+                <div class="modal-grid grid-modal-delete">
                     <div class="black-square-flex square-modal-delete">
                         <h2 class="modal-heading">REMOVING LINKED CONTRACT</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>

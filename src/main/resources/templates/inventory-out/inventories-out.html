@@ -15,25 +15,7 @@
 <body>
     <div class="everything-container">
         <div th:insert="~{fragments/header-footer :: header}"></div>
-
-        <div th:if="${results != null && !results.isEmpty()}">
-            <div th:each="result : ${results}">
-                <ul>
-                    <li th:text="${result}"></li>
-                </ul>
-            </div>
-        </div>
-
-        <hr>
-
-        <div th:if="${errors != null && !errors.isEmpty()}" >
-            <h3 th:text="'There are errors while ' + ${errorType} + ':'"></h3>
-            <div th:each="error : ${errors}">
-                <ul>
-                    <li th:text="${error}"></li>
-                </ul>
-            </div>
-        </div>
+        <div th:insert="~{fragments/error-fragments :: error-message}"></div>
 
         <hr>
 
@@ -152,7 +134,7 @@
                 </div>
 
 
-                <form th:action="@{new}" method="post" th:object="${inventoryOutDtoWrapper}" id="new-form" onkeypress="return event.keyCode != 13;">
+                <form th:action="@{new}" method="post" th:object="${inventoryOutDtoWrapper}" id="new-form">
                     <div class="grid inventory-out-grid main" th:each="dto, stat : *{inventoryOutDtoList}">
                         <div class="square inventory-out-square main">
                             <input type="text" readonly th:field="*{inventoryOutDtoList[__${stat.index}__].idInventory}">

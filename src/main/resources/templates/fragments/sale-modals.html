@@ -8,7 +8,7 @@
     <div th:fragment="new-sale">
         <div class="modal new-sale-modal" id="new-sale-modal">
             <form th:action="@{/sales/new}" method="post" th:object="${saleDto}">
-                <div class="grid-new-sale">
+                <div class="modal-grid grid-new-sale black">
                     <div class="black-square-flex square-new-sale">
                         <h2 class="modal-heading">NEW SALE ORDER</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -77,7 +77,7 @@
     <div th:fragment="edit-sale">
         <div class="modal new-sale-modal" id="edit-sale-modal">
             <form th:action="@{edit}" method="post" th:object="${saleDto}">
-                <div class="grid-new-sale">
+                <div class="modal-grid grid-new-sale">
                     <div class="black-square-flex square-new-sale">
                         <h2 class="modal-heading">EDIT SALE DATA</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>
@@ -153,7 +153,7 @@
     <div th:fragment="delete-sale">
         <div class="modal delete-modal" id="delete-sale-modal">
             <form th:action="@{delete}" th:object="${idSale}" method="post">
-                <div class="grid-delete">
+                <div class="modal-grid grid-delete">
                     <div class="black-square-flex square-delete">
                         <h2 class="modal-heading">DELETE SALE DATA</h2>
                         <span class="close-button" onclick="pressToClose()">&times;</span>

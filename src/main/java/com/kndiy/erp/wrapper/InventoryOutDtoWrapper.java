@@ -20,5 +20,7 @@ public class InventoryOutDtoWrapper {
     private Integer idWarehouseTransfer;
 
     public InventoryOutDtoWrapper(List<InventoryOutDto> inventoryOutDtoList, Integer idSaleLot) {
+        this.inventoryOutDtoList = inventoryOutDtoList;
+        this.idSaleLot = idSaleLot;
     }
 }

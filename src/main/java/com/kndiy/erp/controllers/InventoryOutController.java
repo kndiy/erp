@@ -51,7 +51,7 @@ public class InventoryOutController {
         }
 
         if (inventoryOutDtoWrapper == null) {
-            inventoryOutDtoWrapper = inventoryService.mapInventoriesToInventoryOutDtoWrapper(results, idSaleArticle, idSaleLot);
+            inventoryOutDtoWrapper = inventoryService.mapInventoriesToInventoryOutDtoWrapper(results, idSaleLot);
         }
 
         model.addAttribute("purpose", saleLotService.createPurpose(results, idSaleLot));
@@ -82,7 +82,7 @@ public class InventoryOutController {
     }
 
     @PostMapping("/sales/{idSale}/articles/{idSaleArticle}/containers/{idSaleContainer}/lots/{idSaleLot}/inventories-out/delete")
-    String deleteInventoriesOut(Integer idInventoryOut, RedirectAttributes redirectAttributes) throws MismatchedUnitException {
+    String deleteInventoriesOut(Integer idInventoryOut, RedirectAttributes redirectAttributes) {
 
         List<String> results = new ArrayList<>();
 

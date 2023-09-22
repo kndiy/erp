@@ -12,7 +12,7 @@
         <div class="modal modal-register" id="modal-register">
 
             <form th:action="@{/register}" method="post" th:object="${userRoleDto}">
-                <div class="grid grid-modal-register-user">
+                <div class="modal-grid grid grid-modal-register-user">
 
                     <div class="square square-modal-register-user">
                         <h3>Registering new User</h3>
@@ -76,7 +76,7 @@
     <div th:fragment="modal-admin-prompt">
         <div class="modal modal-admin" id="modal-admin">
 
-            <div class="grid grid-admin">
+            <div class="modal-grid grid-admin">
                 <div class="square square-admin">
                     <h3>Only an Admin can add new User</h3>
                     <span class="close-button" onclick="pressToClose()">&times;</span>
