@@ -61,7 +61,7 @@ public class SalesReportPrintingController {
         return "reporting/sales-reporting";
     }
 
-    @PostMapping("sales-reporting/{dateRestriction}/check-wrapper")
+    @PostMapping("/sales-reporting/{dateRestriction}/check-wrapper")
     public String checkWrapperDeliveryNote(@Valid @ModelAttribute SaleDeliveryDtoWrapper saleDeliveryDtoWrapper, Errors errors, RedirectAttributes redirectAttributes) {
 
         if (errors.hasErrors()) {
@@ -72,11 +72,12 @@ public class SalesReportPrintingController {
             redirectAttributes.addFlashAttribute("saleDeliveryDtoWrapper", saleDeliveryDtoWrapper);
             redirectAttributes.addFlashAttribute("reportName", saleDeliveryDtoWrapper.getReportName());
         }
+
         return "redirect:/sales-reporting/{dateRestriction}/";
     }
 
 
-    @PostMapping("/sales-reporting/{dateRestriction}/print-note")
+    @PostMapping("/sales-reporting/print-note")
     public void printDeliveryNote(HttpServletResponse response, @ModelAttribute SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws IOException, MismatchedUnitException {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd");
@@ -93,7 +94,7 @@ public class SalesReportPrintingController {
         }
 
         response.setContentType("application/pdf");
-        response.setHeader("Content-disposition","inline; filename=" + fileName);
+        response.setHeader("Content-disposition","attachment; filename=" + fileName);
         response.setCharacterEncoding("UTF-8");
 
         OutputStream outputStream = response.getOutputStream();
@@ -102,7 +103,7 @@ public class SalesReportPrintingController {
         response.flushBuffer();
     }
 
-    @PostMapping("/sales-reporting/{dateRestriction}/print-both")
+    @PostMapping("/sales-reporting/print-both")
     public void printAccountSettlingNote(HttpServletResponse response, @ModelAttribute SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws IOException, MismatchedUnitException {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd");
@@ -111,7 +112,7 @@ public class SalesReportPrintingController {
         String fileName = dtf.format(deliveryDate) + "_DeliveryNoteAndLabels.zip";
 
         response.setContentType("application/zip");
-        response.setHeader("Content-disposition","inline; filename=" + fileName);
+        response.setHeader("Content-disposition","attachment; filename=" + fileName);
         response.setCharacterEncoding("UTF-8");
 
         OutputStream outputStream = response.getOutputStream();

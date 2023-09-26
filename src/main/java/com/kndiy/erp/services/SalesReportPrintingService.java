@@ -222,11 +222,21 @@ public class SalesReportPrintingService {
         Address customerHQ = companyClusterService.findHQAddressByCompanyNameEn(customer.getNameEn());
 
         Contact saleSourceLandLine = companyClusterService.findLandLineContactByHQAddressName(saleSourceHQ.getAddressName());
+
+
+
         Contact receiver = saleLot.getReceiver();
 
         saleDeliveryHeaderDto.setSaleSourceNameVn(saleSource.getNameVn());
         saleDeliveryHeaderDto.setSaleSourceHQAddress(saleSourceHQ.getAddressVn());
-        saleDeliveryHeaderDto.setSaleSourceLandLine(saleSourceLandLine.getPhone1());
+
+        if (saleSourceLandLine != null) {
+            saleDeliveryHeaderDto.setSaleSourceLandLine(saleSourceLandLine.getPhone1());
+        }
+        else {
+            saleDeliveryHeaderDto.setSaleSourceLandLine("Err: Please add a landline!");
+        }
+
         saleDeliveryHeaderDto.setCustomerNameVn(customer.getNameVn());
         saleDeliveryHeaderDto.setCustomerHQAddress(customerHQ.getAddressVn());
         saleDeliveryHeaderDto.setDeliverToAddressName(receiver.getAddress().getAddressName());

@@ -58,15 +58,18 @@ window.addEventListener('load', function() {
         let actionArr = form.action.split('/');
 
         if (reportName == 'both') {
+            actionArr.pop();
             actionArr[actionArr.length - 1] = 'print-both';
         }
         else {
+            actionArr.pop();
             actionArr[actionArr.length - 1] = 'print-note';
         }
 
         form.action = actionArr.join('/');
         form.submit();
         form.action = originalAction;
-    }
 
+        reportName.value = "";
+    }
 });
