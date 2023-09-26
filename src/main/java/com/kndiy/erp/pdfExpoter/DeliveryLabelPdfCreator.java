@@ -54,7 +54,8 @@ public class DeliveryLabelPdfCreator {
 
         PdfFont[] myriadFonts = new PdfFont[FONT_TYPES];
         for (int i = 0; i < FONT_TYPES; i ++) {
-            myriadFonts[i] = PdfFontFactory.createFont(fontResources[i].getFile().getAbsolutePath(), PdfEncodings.IDENTITY_H, true);
+            byte[] fontBytes = fontResources[i].getContentAsByteArray();
+            myriadFonts[i] = PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H, true);
         }
         this.regular = myriadFonts[0];
         this.bold = myriadFonts[1];

@@ -72,7 +72,9 @@
             <hr>
 
             <div class="ultra-square delivery-summary">
-                <form th:action="@{/sales-reporting/__${'From_' + #temporals.format(fromDate, 'yyyy-MM-dd') + '_To_' + #temporals.format(toDate, 'yyyy-MM-dd')}__/check-wrapper}" method="post" th:object="${saleDeliveryDtoWrapper}" id="print-form">
+                <form th:action="@{/sales-reporting/__${'From_' + #temporals.format(fromDate, 'yyyy-MM-dd') + '_To_' + #temporals.format(toDate, 'yyyy-MM-dd')}__/check-wrapper}"
+                      method="post"
+                      th:object="${saleDeliveryDtoWrapper}" id="print-form">
 
                     <div class="grid date-turn-grid">
                         <div class="square flex direction-column bg-color date-turn-square"></div>

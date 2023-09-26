@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -78,7 +80,7 @@ public class SalesReportPrintingController {
 
 
     @PostMapping("/sales-reporting/print-note")
-    public void printDeliveryNote(HttpServletResponse response, @ModelAttribute SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws IOException, MismatchedUnitException {
+    public void printDeliveryNote(HttpServletResponse response, @ModelAttribute SaleDeliveryDtoWrapper saleDeliveryDtoWrapper, Errors errors, RedirectAttributes redirectAttributes) throws IOException, MismatchedUnitException {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd");
         LocalDate deliveryDate = saleDeliveryDtoWrapper.getDeliveryDate();

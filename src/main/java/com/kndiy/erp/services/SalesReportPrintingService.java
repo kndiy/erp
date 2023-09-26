@@ -181,6 +181,37 @@ public class SalesReportPrintingService {
         }
     }
 
+    public byte[] serveNoteBytes(SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws MismatchedUnitException, IOException {
+
+        TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> containerMap = mapSaleContainerData(saleDeliveryDtoWrapper);
+        TreeMap<String, SaleDeliveryDtoItemTypeWrapper> itemTypeMap = mapItemTypeData(containerMap);
+
+        SaleDeliveryHeaderDto saleDeliveryHeaderDto = makeSaleDeliveryHeaderDto(saleDeliveryDtoWrapper, itemTypeMap);
+
+        String reportName = saleDeliveryDtoWrapper.getReportName();
+
+        byte[] fileBytes = null;
+
+        switch (reportName) {
+            case "delivery-note" -> {
+                DeliveryNotePdfCreator deliveryNotePdfCreator = new DeliveryNotePdfCreator(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+                fileBytes = deliveryNotePdfCreator.create();
+            }
+            case "delivery-label" -> {
+                DeliveryLabelPdfCreator deliveryLabelPdfCreator = new DeliveryLabelPdfCreator(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+                fileBytes = deliveryLabelPdfCreator.create();
+            }
+            case "account-settling-note" -> {
+                AccountSettlingNotePdfCreator accountSettlingNotePdfCreator = new AccountSettlingNotePdfCreator(containerMap, itemTypeMap, saleDeliveryHeaderDto);
+                fileBytes = accountSettlingNotePdfCreator.create();
+            }
+            case "both" -> {
+            }
+        }
+
+        return fileBytes;
+    }
+
     private void printFinalPdf(byte[] fileBytes, OutputStream responseOutputStream) throws IOException {
 
         for (byte aByte : fileBytes) {
@@ -370,8 +401,6 @@ public class SalesReportPrintingService {
     }
 
 
-
-
     private TreeMap<List<String>, SaleDeliveryDtoContainerWrapper> mapSaleContainerData(SaleDeliveryDtoWrapper saleDeliveryDtoWrapper) throws MismatchedUnitException {
 
         TreeSet<Integer> idSaleContainerSet = makeIdContainerSet(saleDeliveryDtoWrapper);
@@ -445,8 +474,8 @@ public class SalesReportPrintingService {
             Quantity sellRate = new Quantity(itemSellPrice.getItemSellPriceAmount(), itemSellPrice.getItemSellPriceUnit(), RoundingMode.DOWN, 2);
 
             saleDeliveryDto.setInventoryOutDtoTreeSet(new TreeSet<>(inventoryOutDtoList));
-            saleDeliveryDto.setLotQuantity(lotQuantity.toString());
-            saleDeliveryDto.setLotEquivalent(lotEquivalent.toString());
+            saleDeliveryDto.setLotQuantity(lotQuantity == null ? "0" : lotQuantity.toString());
+            saleDeliveryDto.setLotEquivalent(lotEquivalent == null ? "0" : lotEquivalent.toString());
             saleDeliveryDto.setLotRolls(lotRolls);
             saleDeliveryDto.setLotColor(saleLot.getOrderColor());
             saleDeliveryDto.setLotStyle(saleLot.getOrderStyle());
@@ -639,7 +668,7 @@ public class SalesReportPrintingService {
 
             SaleDeliveryDto saleDeliveryDto = iterator.next();
 
-            if (reportName.equals("delivery-note") &&
+            if ((reportName.equals("delivery-note") || reportName.equals("delivery-label") || reportName.equals("both")) &&
                     (!saleDeliveryDto.getSaleSource().equals(saleSource) ||
                     !saleDeliveryDto.getCustomer().equals(customer) ||
                     !saleDeliveryDto.getDeliveryDate().equals(deliveryDate) ||

@@ -71,10 +71,12 @@ public class PortfolioService {
             summaryList.addAll(listing.getObjectSummaries());
         }
 
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime localDateTime;
+
         for (S3ObjectSummary summary : summaryList) {
 
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-            LocalDateTime localDateTime = summary.getLastModified().toInstant().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toLocalDateTime();
+            localDateTime = summary.getLastModified().toInstant().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toLocalDateTime();
 
             String time = dtf.format(localDateTime);
 

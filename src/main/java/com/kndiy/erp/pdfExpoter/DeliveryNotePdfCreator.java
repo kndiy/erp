@@ -59,8 +59,10 @@ public class DeliveryNotePdfCreator {
         };
 
         PdfFont[] cambriaFonts = new PdfFont[FONT_TYPES];
+
         for (int i = 0; i < FONT_TYPES; i ++) {
-            cambriaFonts[i] = PdfFontFactory.createFont(fontResources[i].getFile().getAbsolutePath(), PdfEncodings.IDENTITY_H, true);
+            byte[] fontByte = fontResources[i].getContentAsByteArray();
+            cambriaFonts[i] = PdfFontFactory.createFont(fontByte, PdfEncodings.IDENTITY_H, true);
         }
         this.regular = cambriaFonts[0];
         this.bold = cambriaFonts[1];
@@ -94,8 +96,6 @@ public class DeliveryNotePdfCreator {
 
         return byteArrayOutputStream.toByteArray();
     }
-
-
 
     private void makePdf(Document document, PdfDocument pdfDocument) throws IOException {
 
@@ -461,8 +461,8 @@ public class DeliveryNotePdfCreator {
         Cell cell;
 
         //Write Logo Image
-        String logoPath = new ClassPathResource("\\static\\images\\ds.jpg").getFile().getAbsolutePath();
-        ImageData logoData = ImageDataFactory.create(logoPath);
+        byte[] logoBytes = new ClassPathResource("\\static\\images\\K_Logo.jpg").getContentAsByteArray();
+        ImageData logoData = ImageDataFactory.create(logoBytes);
         Image logo = new Image(logoData);
         cell = new Cell(3, 1).add(logo.setAutoScale(true)).setBorder(Border.NO_BORDER);
         table.addCell(cell);

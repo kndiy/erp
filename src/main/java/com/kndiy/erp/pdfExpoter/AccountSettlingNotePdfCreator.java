@@ -61,7 +61,8 @@ public class AccountSettlingNotePdfCreator {
 
         PdfFont[] cambriaFonts = new PdfFont[FONT_TYPES];
         for (int i = 0; i < FONT_TYPES; i ++) {
-            cambriaFonts[i] = PdfFontFactory.createFont(fontResources[i].getFile().getAbsolutePath(), PdfEncodings.IDENTITY_H, true);
+            byte[] fontBytes = fontResources[i].getContentAsByteArray();
+            cambriaFonts[i] = PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H, true);
         }
         this.regular = cambriaFonts[0];
         this.bold = cambriaFonts[1];
@@ -500,8 +501,6 @@ public class AccountSettlingNotePdfCreator {
 
     private Table makeHeaderTable() throws IOException {
 
-        float smallLeading = 0.8f;
-
         Table table = new Table(new float[] {1.5f, 1.5f, 2, 1, 3, 0.5f, 3})
                 .useAllAvailableWidth()
                 .setFont(regular).setFontSize(10);
@@ -512,8 +511,8 @@ public class AccountSettlingNotePdfCreator {
         Paragraph paragraph;
 
         //Write Logo Image
-        String logoPath = new ClassPathResource("\\static\\images\\ds.jpg").getFile().getAbsolutePath();
-        ImageData logoData = ImageDataFactory.create(logoPath);
+        byte[] logoBytes = new ClassPathResource("\\static\\images\\K_Logo.jpg").getContentAsByteArray();
+        ImageData logoData = ImageDataFactory.create(logoBytes);
         Image logo = new Image(logoData);
         cell = new Cell(3, 1).add(logo.setAutoScale(true)).setBorder(Border.NO_BORDER);
         table.addCell(cell);
