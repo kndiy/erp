@@ -18,6 +18,7 @@ public class ItemCodeSupplierEquivalent {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_item_code_supplier_equivalent")
     private Integer idItemCodeSupplierEquivalent;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumns({
@@ -25,10 +26,13 @@ public class ItemCodeSupplierEquivalent {
             @JoinColumn(name = "id_company")
     })
     private ItemCodeSupplier itemCodeSupplier;
+
     @Column(name = "equivalent")
     private String equivalent;
+
     @Column(name = "equivalent_unit")
     private String equivalentUnit;
+
     @Column(name = "source_unit")
     private String sourceUnit;
 

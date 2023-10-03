@@ -26,12 +26,6 @@ public class HomeController {
     @Autowired
     private PortfolioService portfolioService;
 
-    @GetMapping("/")
-    public String port(Model model) {
-
-        return "home/port";
-    }
-
     @PostMapping(value = {
             "/home",
             "/home/"
@@ -42,6 +36,7 @@ public class HomeController {
     }
 
     @GetMapping(value = {
+            "/",
             "/login-page",
             "/login-page/"
     })
